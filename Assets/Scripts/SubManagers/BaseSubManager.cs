@@ -13,25 +13,32 @@ namespace SubManager
         //Methods-------
         public void Awake()
         {
+            GameManager.OnInitComplete += OnPostInit;
+
             InitializeSubManager();
-            if (GameManager.instance.debugMode)
-            {
-                Debug.Log(thisSubType.ToString() + " has Initialized.");
-            }
+
+
         }
 
-        //each sub manager will need to override this:
+        //each sub manager will need to override these:
+
+        //use this to set local data
         public virtual void InitializeSubManager()
-        {                                                                     
+        {
             thisSubType = GameManager.GameSubManagerTypes.None;
-            Debug.Log(thisSubType.ToString() + " is not overriding the Init method.");
-        } 
-        
+            Debug.Log(thisSubType.ToString() + " is not overriding the InitializeSubManager() method.");
+        }
+
+        //runs on the post init event from the gamemanager
+        //use this to start communicating with other subManagers
+        public virtual void OnPostInit()
+        {
+            Debug.Log("Some SubManager is running a default event (OnPostInit()), needs to override!");
+        }
 
 
+    }
 
-    } 
-    
 
 
 }

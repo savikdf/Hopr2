@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #region SubManager Using Directives
 using SubManager;
@@ -19,6 +20,10 @@ public class GameManager : MonoBehaviour
     public bool debugMode = false;
 
     public static GameManager instance;
+
+    //Sub Managers init complete event
+    public delegate void InitCompleteAction();
+    public static event InitCompleteAction OnInitComplete;
 
     //Types of states the game can exist in
     public enum GamesStates
@@ -53,6 +58,9 @@ public class GameManager : MonoBehaviour
         //Instantiate all sub managers
         setupErroredOut = DeploySubManagers();
 
+        if (setupErroredOut)
+            Debug.LogAssertion("GameManager Failed to Initialize.");
+
     }
 
     bool DeploySubManagers()
@@ -62,10 +70,11 @@ public class GameManager : MonoBehaviour
         {
             //loop through all of the gamestates, and
             for (int i = 0; i < Enum.GetNames(typeof(GameSubManagerTypes)).Length; i++)
-            {
-
+            { 
                 AddSubManagerSuccess((GameSubManagerTypes)i);
             }
+            //call the post init event
+            OnInitComplete(); 
         }
         catch (Exception ex)
         {
@@ -127,6 +136,20 @@ public class GameManager : MonoBehaviour
         }
 
         return true;
+    }
+
+
+    //DEBUGING
+    private void Update()
+    {
+        if (debugMode)
+        {
+            //WILL RELOAD THE SCENE
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SceneManager.LoadScene(0);
+            }
+        }
     }
 
 }
