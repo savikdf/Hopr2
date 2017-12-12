@@ -31,7 +31,7 @@ Shader "Gene_Shades/HopR_Effect"
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
+				float2 texcoord : TEXCOORD0;
 				float3 normal : NORMAL;
 			};
 
@@ -199,7 +199,7 @@ Shader "Gene_Shades/HopR_Effect"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.tex = v.uv;
+				o.tex = v.texcoord.xy;
 
 			
 				//Normal Direction
@@ -252,9 +252,12 @@ Shader "Gene_Shades/HopR_Effect"
 			float dither2y = ditherMap(i.lightFinal.y, float3(i.pos.xy, 1.0));
 			float dither2z = ditherMap(i.lightFinal.z, float3(i.pos.xy, 1.0));
 
-			float3 dither2 = float3(dither2x, dither2y, dither2z);
+			float3 dither2 = floor(float3(dither2x, dither2y, dither2z));
 
-			return float4(dither2, 1.0);
+			fixed nDotL = saturate(dot(i.normalDir, i.lightDir.xyz));
+
+			float3 final = dither2;
+			return float4(final, 1.0);
 			}
 			ENDCG
 		}
