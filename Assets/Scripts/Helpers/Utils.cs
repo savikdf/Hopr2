@@ -70,8 +70,8 @@ public static class Utils
     public static bool circlePointCollision(float x, float y, Vector2 vec, Vector2 c0, float rad0)
     {
         //if particle isnt used, use vector points instead
-        float circx = (c0 == null) ? vec.x : c0.x;
-        float circy = (c0 == null) ? vec.y : c0.y;
+        float circx = c0.x;
+        float circy = c0.y;
         float radius = rad0;
 
         return Utils.distanceXY(x, y, circx, circy) < radius;
