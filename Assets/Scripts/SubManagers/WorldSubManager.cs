@@ -2,32 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SubManager;
+using SubManager.Player;
 using SubManager.World.Platforms;
 
 namespace SubManager.World
 {
     public class WorldSubManager : BaseSubManager
-    {
-        public static WorldSubManager instance;
-
+    {                   
         #region Variables
+        //instance
+        public static WorldSubManager instance;
+                  
         //data vars
         public Material plat_Y = null;
         public Material plat_N = null;
         public GameObject prefab_platform;
-
-
-        //plaform vars
         short maxPlatformSpawnAmount = 30;
         float distanceAppart = 1.1f;
         int amountSpawned = 0;
+        Vector3 moveSpeed = new Vector3(0, -0.1f, 0);
+
+        //plaform vars    
+        bool isSpinning = true;     //when is false, stops the spin coroutine
+        bool isMoving = true;       //when is false, stops the move coroutine
         public enum PlatformTypes
         {
             Normal
-        }
-
-
-        List<Platform> platforms;
+        }       
+        public List<Platform> platforms;
         Vector3 spawnVec3;
         GameObject trashObject;
 
@@ -51,6 +53,7 @@ namespace SubManager.World
         //METHODS
         public override void InitializeSubManager()
         {
+            //setting
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.World;
 
@@ -73,8 +76,14 @@ namespace SubManager.World
 
         public override void OnPostInit()
         {
-            SpawnInitialPlatforms();
+            //Start routines
+            SpawnInitialPlatforms();            //spawns
+            StartCoroutine(SpinPlatforms());    //spins
+        }
 
+        public override void OnGameStart()
+        {
+            StartCoroutine(MovePlatforms());    //moves    
         }
 
         #endregion
@@ -88,6 +97,7 @@ namespace SubManager.World
             for (int i = 0; i < maxPlatformSpawnAmount; i++)
             {
                 SpawnSingle();
+                ApplyRandomSkew(platforms[i]);
             }
         }
 
@@ -106,19 +116,65 @@ namespace SubManager.World
 
         }
 
+        void ApplyRandomSkew(Platform platToSkew)
+        {
+            platToSkew.transform.Rotate(new Vector3(0, Random.Range(-180f, 180f), 0));   
+        }
 
-        ////DEBUG METHODS
-        //private void Update()
-        //{
-        //    if (GameManager.instance.debugMode)
-        //    {
-        //        if (Input.GetKeyDown(KeyCode.Space))
-        //        {
-        //            SpawnPlatforms();
-        //        }
-        //    }           
-        //}
+        IEnumerator SpinPlatforms()
+        {
+            while (isSpinning)
+            {
+                //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
+                for (int i = 0; i < platforms.Count; i++)
+                {
+                    if (platforms[i] != null)
+                    {
+                        platforms[i].transform.Rotate(
+                         new Vector3(0, GetPlatformSpeed(platforms[i].thisPlatformType), 0)
+                         );
+                    }                             
+                } 
+                yield return null;
+            }
+
+        }
+
+        IEnumerator MovePlatforms()
+        {
+            while (isSpinning)
+            {
+                //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
+                for (int i = 0; i < platforms.Count; i++)
+                {
+                    if (platforms[i] != null)
+                    {
+                        platforms[i].transform.position += moveSpeed;
+                    }
+                }
+                yield return null;
+            }
+        }
+
+        //DEBUG
+        private void Update()
+        {
+            if (GameManager.instance.debugMode)
+            {
+                if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    //move player index up
+                }
+                if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    //move player index down
+                }
+            }
+        }
+
         #endregion
+
+
 
     }
 }

@@ -17,13 +17,11 @@ using SubManager.World;
 
 public class GameManager : MonoBehaviour
 {
-    public bool debugMode = false;
-
+    #region Variables
     public static GameManager instance;
+    public bool debugMode = false;
+    bool setupErroredOut;
 
-    //Sub Managers init complete event
-    public delegate void InitCompleteAction();
-    public static event InitCompleteAction OnInitComplete;
 
     //Types of states the game can exist in
     public enum GamesStates
@@ -47,9 +45,37 @@ public class GameManager : MonoBehaviour
         Ad,
         Purchase,
         Social
-    }
+    }           
 
-    bool setupErroredOut;
+    #endregion
+
+    #region Properties
+
+    //nothing here yet
+
+    #endregion
+
+    #region Events
+
+    //Sub Managers init complete event
+    public delegate void InitCompleteAction();
+    public static event InitCompleteAction OnInitComplete;
+
+    //OnGameLoad event
+    public delegate void GameLoadAction();
+    public static event GameLoadAction OnGameLoad;
+
+    //OnGameStart event
+    public delegate void GameStartAction();
+    public static event GameStartAction OnGameStart;
+
+    //OnGameEnd event       aka.Player_Dead
+    public delegate void GameEndAction();
+    public static event GameEndAction OnGameEnd;
+
+    #endregion
+
+    #region Methods
 
     private void Awake()
     {
@@ -59,7 +85,19 @@ public class GameManager : MonoBehaviour
         setupErroredOut = DeploySubManagers();
 
         if (setupErroredOut)
+        {
             Debug.LogAssertion("GameManager Failed to Initialize.");
+
+        }  
+        else
+        {
+            //call the post init event
+            OnInitComplete();
+
+            //call the on game load event
+            OnGameLoad();
+
+        }
 
     }
 
@@ -70,11 +108,9 @@ public class GameManager : MonoBehaviour
         {
             //loop through all of the gamestates, and
             for (int i = 0; i < Enum.GetNames(typeof(GameSubManagerTypes)).Length; i++)
-            { 
+            {
                 AddSubManagerSuccess((GameSubManagerTypes)i);
             }
-            //call the post init event
-            OnInitComplete(); 
         }
         catch (Exception ex)
         {
@@ -138,10 +174,17 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
+    #endregion
 
-    //DEBUGING
+    #region Debug
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            debugMode = !debugMode;
+        }
+
         if (debugMode)
         {
             //WILL RELOAD THE SCENE
@@ -151,5 +194,15 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 50;
+        if (debugMode)
+            GUILayout.Label("DEBUG MODE", style);
+    }
+
+    #endregion
 
 }

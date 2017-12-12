@@ -12,7 +12,7 @@ namespace SubManager.World.Platforms
         Transform[] sides;
         bool[] sides_data;
 
-        WorldSubManager.PlatformTypes thisPlatformType;
+        public WorldSubManager.PlatformTypes thisPlatformType;
 
 
 
