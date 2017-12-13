@@ -1,23 +1,43 @@
 fileFormatVersion: 2
-guid: d48e2074fc2526e4fab25fc8bbc07ce0
-timeCreated: 1513078076
+guid: 649414420db3e6444858a99d1d2de3ae
+timeCreated: 1513207538
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
+    100002: lithbot_body
+    100004: lithbot_l_arm
+    100006: lithbot_l_leg
+    100008: lithbot_r_arm
+    100010: lithbot_r_leg
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
-    7400000: Default Take
-    9500000: //RootNode
+    400002: lithbot_body
+    400004: lithbot_l_arm
+    400006: lithbot_l_leg
+    400008: lithbot_r_arm
+    400010: lithbot_r_leg
+    2300000: lithbot_body
+    2300002: lithbot_l_arm
+    2300004: lithbot_l_leg
+    2300006: lithbot_r_arm
+    2300008: lithbot_r_leg
+    3300000: lithbot_body
+    3300002: lithbot_l_arm
+    3300004: lithbot_l_leg
+    3300006: lithbot_r_arm
+    3300008: lithbot_r_leg
+    4300000: lithbot_l_leg
+    4300002: lithbot_r_leg
+    4300004: lithbot_l_arm
+    4300006: lithbot_r_arm
+    4300008: lithbot_body
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material
-    second: {fileID: 2100000, guid: 36cbde21b05a711428a4e8c423cda9c6, type: 2}
+      name: lithbot_m
+    second: {fileID: 2100000, guid: ae14cdce39d89de439967d3447d2a592, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -89,7 +109,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
