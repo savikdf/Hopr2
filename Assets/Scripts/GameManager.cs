@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         Ad,
         Purchase,
         Social
-    }           
+    }
 
     #endregion
 
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogAssertion("GameManager Failed to Initialize.");
 
-        }  
+        }
         else
         {
             //call the post init event
@@ -149,7 +149,8 @@ public class GameManager : MonoBehaviour
 
                     break;
                 case GameSubManagerTypes.Purchase:
-                    Debug.Log("Purchases not setup yet.");
+                    if(debugMode)
+                        Debug.Log("Purchases not setup yet.");
 
                     break;
                 case GameSubManagerTypes.Social:
@@ -190,6 +191,43 @@ public class GameManager : MonoBehaviour
             //WILL RELOAD THE SCENE
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                //unsub all from the events of the game
+                if (OnInitComplete != null)
+                {
+                    foreach (var d in OnInitComplete.GetInvocationList())
+                    {
+                        OnInitComplete -= (d as InitCompleteAction);
+                    }
+                }
+
+                if (OnGameLoad != null)
+                {
+                    foreach (var d in OnGameLoad.GetInvocationList())
+                    {
+                        OnGameLoad -= (d as GameLoadAction);
+                    }
+                }
+
+                if (OnGameStart != null)
+                {
+                    foreach (var d in OnGameStart.GetInvocationList())
+                    {
+                        OnGameStart -= (d as GameStartAction);
+                    }
+                }
+
+                if (OnGameEnd != null)
+                {
+                    foreach (var d in OnGameEnd.GetInvocationList())
+                    {
+                        OnGameEnd -= (d as GameEndAction);
+                    }
+                }
+
+
+
+
+
                 SceneManager.LoadScene(0);
             }
         }

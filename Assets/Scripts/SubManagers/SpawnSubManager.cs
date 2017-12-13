@@ -11,7 +11,6 @@ namespace SubManager.Spawn
     {
         public static SpawnSubManager instance;
 
-        Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);
 
         #region Overrides
         public override void InitializeSubManager()
@@ -57,15 +56,7 @@ namespace SubManager.Spawn
             {
                 case "one":
                     //TODO: actually SPAWN the player, not just relocate
-
-                    //moves the player to their spawn platform
-                    PlayerSubManager.instance.Player_PH.transform.SetParent(
-                        WorldSubManager.instance.platforms[PlayerSubManager.instance.playerSpawnIndex].transform
-                    );
-
-                    //puts them in the middle of the platform they spawn on
-                    PlayerSubManager.instance.Player_PH.transform.localPosition = Vector3.zero + offsetVec3;
-
+                    PlayerSubManager.instance.SetPlayerOnPlatform(PlayerSubManager.instance.playerSpawnIndex);
 
                     break;
                 case "two":

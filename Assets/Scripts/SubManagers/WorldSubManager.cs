@@ -81,9 +81,19 @@ namespace SubManager.World
             StartCoroutine(SpinPlatforms());    //spins
         }
 
+        public override void OnGameLoad()
+        {
+
+        }
+
         public override void OnGameStart()
         {
             StartCoroutine(MovePlatforms());    //moves    
+        }
+    
+        public override void OnGameEnd()
+        {
+
         }
 
         #endregion

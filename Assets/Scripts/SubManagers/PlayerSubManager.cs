@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using SubManager;
 using SubManager.Spawn;
+using SubManager.World;
+using System;
 
 namespace SubManager.Player
 {
@@ -14,6 +16,7 @@ namespace SubManager.Player
         //Data Vars
         public short playerSpawnIndex = 2;  //what platform they spawn on
         public int currentIndex;
+        public Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);    
 
         //TODO: Real Player.
         private GameObject player_PH;
@@ -26,7 +29,12 @@ namespace SubManager.Player
 
         #endregion
 
+        #region Properties
 
+
+
+        #endregion
+                                                                                  
         #region Overrides
         public override void InitializeSubManager()
         {
@@ -62,40 +70,77 @@ namespace SubManager.Player
         //begin input detection
         public override void OnGameStart()
         {
-
-
+                    
         }
 
         //player dies, this runs after
         public override void OnGameEnd()
         {
-
-
+                     
         }
 
         #endregion
 
         #region Specific Methods 
-        void PlayerJumped(bool isUp)
+
+        void OnPlayerJump(bool isUp)
         {
-            if (isUp)
+            try
             {
-                //moves up
-
-
+                if (isUp && Player_PH != null)
+                {
+                    //moves player index up
+                    currentIndex++;
+                    SetPlayerOnPlatform(currentIndex);
+                }
+                else if (!isUp && Player_PH != null)
+                {
+                    //moves down... wont happen in vanilla.
+                    currentIndex--;
+                    SetPlayerOnPlatform(currentIndex);
+                    Debug.LogWarning("Player Cannot Move Down Yet!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-
-                
-
-                //moves down... wont happen in vanilla.
-                Debug.LogWarning("Player Cannot Move Down Yet!");
+                Debug.Log(ex.Message);
             }
 
         }
 
+        //TEMP
+        public void SetPlayerOnPlatform(int platIndex)            
+        {
+            //sets the parent of the player to platform
+            PlayerSubManager.instance.Player_PH.transform.SetParent(
+                         WorldSubManager.instance.platforms[platIndex].transform
+                     );
 
+            //puts them in the middle of the platform they spawn on
+            PlayerSubManager.instance.Player_PH.transform.localPosition = Vector3.zero + offsetVec3;  
+
+        }                                          
+
+        #endregion
+
+        #region Debug Commands
+
+        //Press Up To move the player up
+        //Press Down to move the player down   
+        private void Update()
+        {
+            if (GameManager.instance.debugMode)
+            {
+                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+                {
+                    OnPlayerJump(true);
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+                {
+                    OnPlayerJump(false);
+                }  
+            }
+        }
 
         #endregion
     }

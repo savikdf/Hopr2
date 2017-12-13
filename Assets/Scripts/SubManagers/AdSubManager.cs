@@ -13,6 +13,27 @@ namespace SubManager.Ad
            
         }
 
+
+        public override void OnPostInit()
+        {
+            
+        }
+
+        public override void OnGameLoad()
+        {
+
+        }
+
+        public override void OnGameStart()
+        {
+
+        }
+
+        public override void OnGameEnd()
+        {
+
+        }
+
     }
 }
 

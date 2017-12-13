@@ -11,6 +11,26 @@ namespace SubManager.Camera
         {
             thisSubType = GameManager.GameSubManagerTypes.Camera;
   
+        }  
+
+        public override void OnPostInit()
+        {
+
+        }
+
+        public override void OnGameLoad()
+        {
+
+        }
+
+        public override void OnGameStart()
+        {
+
+        }
+
+        public override void OnGameEnd()
+        {
+
         }
 
     }

@@ -80,10 +80,7 @@ namespace SubManager
         PLATFORMS are moved on the GAME_START
 
         PLAYER is spawned on the GAME_LOAD  --> ensures platforms exist to be placed on
-        PLAYER controls activate on GAME_START
-
-
-
+        PLAYER controls activate on GAME_START  
 
         */
         #endregion

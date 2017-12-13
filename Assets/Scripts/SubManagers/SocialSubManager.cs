@@ -12,6 +12,26 @@ namespace SubManager.Social
             thisSubType = GameManager.GameSubManagerTypes.Social;
             
         }
+
+        public override void OnPostInit()
+        {
+
+        }
+
+        public override void OnGameLoad()
+        {
+
+        }
+
+        public override void OnGameStart()
+        {
+
+        }
+
+        public override void OnGameEnd()
+        {
+
+        }
     }
 }
 
