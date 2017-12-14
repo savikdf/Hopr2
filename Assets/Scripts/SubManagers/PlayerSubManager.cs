@@ -16,7 +16,7 @@ namespace SubManager.Player
         //Data Vars
         public short playerSpawnIndex = 2;  //what platform they spawn on
         public int currentIndex;
-        public Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);    
+        public Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);
 
         //TODO: Real Player.
         private GameObject player_PH;
@@ -34,16 +34,16 @@ namespace SubManager.Player
 
 
         #endregion
-                                                                                  
+
         #region Overrides
         public override void InitializeSubManager()
         {
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Player;
-            
+
 
             //PLACEHOLDER:
-            
+
             player_PH = (player_PH == null) ?
                 GameObject.Find("Player_PH") : player_PH;
             if (player_PH == null)
@@ -63,20 +63,20 @@ namespace SubManager.Player
         public override void OnGameLoad()
         {
             currentIndex = playerSpawnIndex;
-            SpawnSubManager.instance.SpawnPlayer("one");   
+            SpawnSubManager.instance.SpawnPlayer("one");
 
         }
 
         //begin input detection
         public override void OnGameStart()
         {
-                    
+
         }
 
         //player dies, this runs after
         public override void OnGameEnd()
         {
-                     
+
         }
 
         #endregion
@@ -87,18 +87,27 @@ namespace SubManager.Player
         {
             try
             {
-                if (isUp && Player_PH != null)
+                //todo: but check bool in
+                if (true)
                 {
-                    //moves player index up
-                    currentIndex++;
-                    SetPlayerOnPlatform(currentIndex);
+                    if (isUp && Player_PH != null)
+                    {
+                        //moves player index up
+                        currentIndex++;
+                        SetPlayerOnPlatform(currentIndex);
+                    }
+                    else if (!isUp && Player_PH != null)
+                    {
+                        //moves down... wont happen in vanilla.
+                        currentIndex--;
+                        SetPlayerOnPlatform(currentIndex);
+                        Debug.LogWarning("Player Cannot Move Down Yet!");
+                    }
                 }
-                else if (!isUp && Player_PH != null)
+                else
                 {
-                    //moves down... wont happen in vanilla.
-                    currentIndex--;
-                    SetPlayerOnPlatform(currentIndex);
-                    Debug.LogWarning("Player Cannot Move Down Yet!");
+                    //player just jumped into a red, they should die now.
+                    Debug.Log("You're Dead Now");
                 }
             }
             catch (Exception ex)
@@ -109,7 +118,7 @@ namespace SubManager.Player
         }
 
         //TEMP
-        public void SetPlayerOnPlatform(int platIndex)            
+        public void SetPlayerOnPlatform(int platIndex)
         {
             //sets the parent of the player to platform
             PlayerSubManager.instance.Player_PH.transform.SetParent(
@@ -117,9 +126,9 @@ namespace SubManager.Player
                      );
 
             //puts them in the middle of the platform they spawn on
-            PlayerSubManager.instance.Player_PH.transform.localPosition = Vector3.zero + offsetVec3;  
+            PlayerSubManager.instance.Player_PH.transform.localPosition = Vector3.zero + offsetVec3;
 
-        }                                          
+        }
 
         #endregion
 
@@ -138,7 +147,7 @@ namespace SubManager.Player
                 if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
                 {
                     OnPlayerJump(false);
-                }  
+                }
             }
         }
 

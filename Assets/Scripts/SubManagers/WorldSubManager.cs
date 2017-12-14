@@ -4,6 +4,8 @@ using UnityEngine;
 using SubManager;
 using SubManager.Player;
 using SubManager.World.Platforms;
+using System;
+using System.Linq;
 
 namespace SubManager.World
 {
@@ -45,6 +47,25 @@ namespace SubManager.World
                     return 0.6f;
             }
             return 100f;
+        }
+
+        public bool IsPlatformAboveJumpable
+        {
+            get
+            {
+                try
+                {
+                    //get the platform above the player
+                    Platform plat = platforms[PlayerSubManager.instance.currentIndex];
+                    //check which side is closest to the camera (lowest z distance value at center of mass)
+                    return plat.sides_data[Array.IndexOf(plat.sides, plat.sides.Min(x => x.transform.position.z))];
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log("IsPlatformAboveJumpable: " + ex.Message);
+                    return false;
+                }                 
+            }
         }
 
         #endregion
@@ -128,7 +149,7 @@ namespace SubManager.World
 
         void ApplyRandomSkew(Platform platToSkew)
         {
-            platToSkew.transform.Rotate(new Vector3(0, Random.Range(-180f, 180f), 0));   
+            platToSkew.transform.Rotate(new Vector3(0, UnityEngine.Random.Range(-180f, 180f), 0));   
         }
 
         IEnumerator SpinPlatforms()

@@ -9,8 +9,8 @@ namespace SubManager.World.Platforms
     public class Platform : MonoBehaviour
     {
         //hodler of side objects, and their bools
-        Transform[] sides;
-        bool[] sides_data;
+        public Transform[] sides;
+        public bool[] sides_data;
 
         public WorldSubManager.PlatformTypes thisPlatformType;
 
