@@ -11,12 +11,13 @@ Shader "Gene_Shades/HopR_Effect"
 	SubShader
 	{
 		Tags { "LightMode" = "ForwardBase" }
+		Cull Off
 		LOD 100
 		 
 		Pass
 		{
 			CGPROGRAM
-
+	
 			#pragma vertex vert
 			#pragma fragment frag
 			// make fog work
