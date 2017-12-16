@@ -112,48 +112,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &705699238
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -2.6806386
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -1.0331721
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 2.7261825
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4583309197888862, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1098965981
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +164,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.12
+  orthographic size: 5.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -306,7 +264,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1306852521
 GameObject:
@@ -400,7 +358,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1714612635
 MonoBehaviour:

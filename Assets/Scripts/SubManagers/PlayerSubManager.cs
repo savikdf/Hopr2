@@ -85,36 +85,40 @@ namespace SubManager.Player
 
         void OnPlayerJump(bool isUp)
         {
+            //determine if they player CAN jump, if yes, go for it
+            //if NO, the death sequence will need to be run
             try
             {
                 //todo: but check bool in
-                if (true)
+                if (isUp && Player_PH != null && WorldSubManager.instance.IsPlatformAboveJumpable)
                 {
-                    if (isUp && Player_PH != null)
-                    {
-                        //moves player index up
-                        currentIndex++;
-                        SetPlayerOnPlatform(currentIndex);
-                    }
-                    else if (!isUp && Player_PH != null)
-                    {
-                        //moves down... wont happen in vanilla.
-                        currentIndex--;
-                        SetPlayerOnPlatform(currentIndex);
-                        Debug.LogWarning("Player Cannot Move Down Yet!");
-                    }
+                    //moves player index up
+                    currentIndex++;
+                    SetPlayerOnPlatform(currentIndex);
+                }
+                else if (!isUp && Player_PH != null && WorldSubManager.instance.IsPlatformBelowJumpable)
+                {
+                    //moves down... wont happen in vanilla.
+                    currentIndex--;
+                    SetPlayerOnPlatform(currentIndex);
+                    Debug.LogWarning("Player Cannot Move Down Yet!");
                 }
                 else
                 {
                     //player just jumped into a red, they should die now.
-                    Debug.Log("You're Dead Now");
+                    OnPlayerDeath();
                 }
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
+                Debug.Log("OnPlayerJump(): " + ex.Message);
             }
 
+        }
+
+        void OnPlayerDeath()
+        {
+            Debug.Log("You're Dead Now");
         }
 
         //TEMP

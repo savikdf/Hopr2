@@ -10,11 +10,11 @@ using System.Linq;
 namespace SubManager.World
 {
     public class WorldSubManager : BaseSubManager
-    {                   
+    {
         #region Variables
         //instance
         public static WorldSubManager instance;
-                  
+
         //data vars
         public Material plat_Y = null;
         public Material plat_N = null;
@@ -30,7 +30,7 @@ namespace SubManager.World
         public enum PlatformTypes
         {
             Normal
-        }       
+        }
         public List<Platform> platforms;
         Vector3 spawnVec3;
         GameObject trashObject;
@@ -51,20 +51,39 @@ namespace SubManager.World
 
         public bool IsPlatformAboveJumpable
         {
+            //can they player go through the platform above them?
             get
             {
                 try
                 {
-                    //get the platform above the player
-                    Platform plat = platforms[PlayerSubManager.instance.currentIndex];
-                    //check which side is closest to the camera (lowest z distance value at center of mass)
-                    return plat.sides_data[Array.IndexOf(plat.sides, plat.sides.Min(x => x.transform.position.z))];
+                    Platform plat = platforms[PlayerSubManager.instance.currentIndex + 1];
+                    return plat.sides.MinObject(x => x.transform.position.z).isPassable;
+
                 }
                 catch (Exception ex)
                 {
                     Debug.Log("IsPlatformAboveJumpable: " + ex.Message);
                     return false;
-                }                 
+                }
+            }
+        }
+
+        public bool IsPlatformBelowJumpable
+        {
+            //can the player fall through the platform they are standing on?
+            get
+            {
+                try
+                {
+                    Platform plat = platforms[PlayerSubManager.instance.currentIndex];
+                    return plat.sides.MinObject(x => x.transform.position.z).isPassable;
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log("IsPlatformBelowJumpable: " + ex.Message);
+                    return false;
+                }
             }
         }
 
@@ -111,7 +130,7 @@ namespace SubManager.World
         {
             StartCoroutine(MovePlatforms());    //moves    
         }
-    
+
         public override void OnGameEnd()
         {
 
@@ -134,38 +153,53 @@ namespace SubManager.World
 
         void SpawnSingle()
         {
-            //spawn the platform and add it to the platform list
-            //awake() in the platform will run and set itself up
-            trashObject = Instantiate(prefab_platform, spawnVec3, Quaternion.identity) as GameObject;
-            trashObject.name = string.Format("Platform #{0}", amountSpawned.ToString());
-            platforms.Add(trashObject.GetComponent<Platform>());
+            try
+            {
+                //spawn the platform and add it to the platform list
+                //awake() in the platform will run and set itself up
+                trashObject = Instantiate(prefab_platform, spawnVec3, Quaternion.identity) as GameObject;
+                trashObject.name = string.Format("Platform #{0}", amountSpawned.ToString());
+                platforms.Add(trashObject.GetComponent<Platform>());
 
 
-            //moves the spawn postion up as they spawn
-            amountSpawned++;
-            spawnVec3.y = amountSpawned * distanceAppart;
+                //moves the spawn postion up as they spawn
+                amountSpawned++;
+                spawnVec3.y = amountSpawned * distanceAppart;
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("SpawnSingle(): " + ex.Message);
+            }
+
 
         }
 
         void ApplyRandomSkew(Platform platToSkew)
         {
-            platToSkew.transform.Rotate(new Vector3(0, UnityEngine.Random.Range(-180f, 180f), 0));   
+            platToSkew.transform.Rotate(new Vector3(0, UnityEngine.Random.Range(-180f, 180f), 0));
         }
 
         IEnumerator SpinPlatforms()
         {
             while (isSpinning)
             {
-                //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
-                for (int i = 0; i < platforms.Count; i++)
+                try
                 {
-                    if (platforms[i] != null)
+                    //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
+                    for (int i = 0; i < platforms.Count; i++)
                     {
-                        platforms[i].transform.Rotate(
-                         new Vector3(0, GetPlatformSpeed(platforms[i].thisPlatformType), 0)
-                         );
-                    }                             
-                } 
+                        if (platforms[i] != null)
+                        {
+                            platforms[i].transform.Rotate(
+                             new Vector3(0, GetPlatformSpeed(platforms[i].thisPlatformType), 0)
+                             );
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log("SpinPlatforms(): " + ex.Message);
+                }
                 yield return null;
             }
 
@@ -187,19 +221,13 @@ namespace SubManager.World
             }
         }
 
-        //DEBUG
+        //DEBUG COMMANDS
         private void Update()
         {
             if (GameManager.instance.debugMode)
             {
-                if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    //move player index up
-                }
-                if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    //move player index down
-                }
+
+
             }
         }
 
