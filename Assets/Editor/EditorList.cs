@@ -64,7 +64,7 @@ public static class EditorList {
 
                     EditorGUI.indentLevel -= 1;
 
-                    EditorGUILayout.PropertyField(MyListRef.FindPropertyRelative("Name"));
+                    EditorGUILayout.PropertyField(MyListRef.FindPropertyRelative("name"));
                     EditorGUILayout.PropertyField(MyListRef.FindPropertyRelative("Disc"));
                 }
                 EditorGUI.indentLevel -= 1;

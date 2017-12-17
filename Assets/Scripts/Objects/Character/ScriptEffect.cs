@@ -1,12 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using System.Linq;
 
-[System.Serializable]
-public class ScriptEffect : BaseEffect {
+[Serializable]
+public class ScriptEffect : BaseEffect
+{
+
+    public ScriptEffect instance;
+
+    public ScriptEffect() : base()
+    {
+    }
+
     public ScriptEffect(float _duration) : base(_duration)
     {
+        instance = new ScriptEffect();
         base.name = this.GetType().Name;
     }
 }

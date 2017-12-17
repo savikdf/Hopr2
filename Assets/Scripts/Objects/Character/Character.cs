@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public struct Character
 {
+    public string name;
     public Model Model;
     public List<BaseEffect> Effects;
-    public string Name;
     public string Disc;
 
 }
