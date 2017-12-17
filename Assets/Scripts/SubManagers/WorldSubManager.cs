@@ -25,8 +25,8 @@ namespace SubManager.World
         Vector3 moveSpeed = new Vector3(0, -0.1f, 0);
 
         //plaform vars    
-        bool isSpinning = true;     //when is false, stops the spin coroutine
-        bool isMoving = true;       //when is false, stops the move coroutine
+        bool isSpinning;     //when is false, stops the spin coroutine
+        bool isMoving;       //when is false, stops the move coroutine
         public enum PlatformTypes
         {
             Normal
@@ -118,12 +118,12 @@ namespace SubManager.World
         {
             //Start routines
             SpawnInitialPlatforms();            //spawns
-            StartCoroutine(SpinPlatforms());    //spins
         }
 
         public override void OnGameLoad()
-        {
-
+        {                                              
+            isSpinning = true;
+            StartCoroutine(SpinPlatforms());    //spins 
         }
 
         public override void OnGameStart()

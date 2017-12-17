@@ -12,6 +12,7 @@ using SubManager.Player;
 using SubManager.Social;
 using SubManager.Spawn;
 using SubManager.World;
+using SubManager.Menu;
 
 #endregion
 
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public bool debugMode = false;
     bool setupErroredOut;
-
+    public bool isLoading; //menu submanager tracks this for its loading UI    
 
     //Types of states the game can exist in
     public enum GamesStates
@@ -44,7 +45,8 @@ public class GameManager : MonoBehaviour
         World,
         Ad,
         Purchase,
-        Social
+        Social,
+        Menu
     }
 
     #endregion
@@ -69,7 +71,7 @@ public class GameManager : MonoBehaviour
     public delegate void GameStartAction();
     public static event GameStartAction OnGameStart;
 
-    //OnGameEnd event       aka.Player_Dead
+    //OnGameEnd event       aka.Player_Died_Event
     public delegate void GameEndAction();
     public static event GameEndAction OnGameEnd;
 
@@ -81,13 +83,13 @@ public class GameManager : MonoBehaviour
     {
         //setting up the instance 
         instance = (instance == null) ? this : instance;
+        isLoading = true;
         //Instantiate all sub managers
         setupErroredOut = DeploySubManagers();
 
         if (setupErroredOut)
         {
             Debug.LogAssertion("GameManager Failed to Initialize.");
-
         }
         else
         {
@@ -96,7 +98,7 @@ public class GameManager : MonoBehaviour
 
             //call the on game load event
             OnGameLoad();
-
+            isLoading = false;
         }
 
     }
@@ -149,12 +151,15 @@ public class GameManager : MonoBehaviour
 
                     break;
                 case GameSubManagerTypes.Purchase:
-                    if(debugMode)
-                        Debug.Log("Purchases not setup yet.");
+                    //NOT SETUP YET
 
                     break;
                 case GameSubManagerTypes.Social:
                     this.gameObject.AddComponent<SocialSubManager>();
+
+                    break;
+                case GameSubManagerTypes.Menu:
+                    this.gameObject.AddComponent<MenuSubManager>();
 
                     break;
                 case GameSubManagerTypes.None:
@@ -175,6 +180,49 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
+    public void StartGameEndEvent()
+    {
+        OnGameEnd();
+    }
+
+    public void ClearAndReloadScene()
+    {
+        //unsub all from the events of the game
+        if (OnInitComplete != null)
+        {
+            foreach (var d in OnInitComplete.GetInvocationList())
+            {
+                OnInitComplete -= (d as InitCompleteAction);
+            }
+        }
+
+        if (OnGameLoad != null)
+        {
+            foreach (var d in OnGameLoad.GetInvocationList())
+            {
+                OnGameLoad -= (d as GameLoadAction);
+            }
+        }
+
+        if (OnGameStart != null)
+        {
+            foreach (var d in OnGameStart.GetInvocationList())
+            {
+                OnGameStart -= (d as GameStartAction);
+            }
+        }
+
+        if (OnGameEnd != null)
+        {
+            foreach (var d in OnGameEnd.GetInvocationList())
+            {
+                OnGameEnd -= (d as GameEndAction);
+            }
+        }
+
+        SceneManager.LoadScene(0);
+    }
+
     #endregion
 
     #region Debug
@@ -191,44 +239,7 @@ public class GameManager : MonoBehaviour
             //WILL RELOAD THE SCENE
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                //unsub all from the events of the game
-                if (OnInitComplete != null)
-                {
-                    foreach (var d in OnInitComplete.GetInvocationList())
-                    {
-                        OnInitComplete -= (d as InitCompleteAction);
-                    }
-                }
-
-                if (OnGameLoad != null)
-                {
-                    foreach (var d in OnGameLoad.GetInvocationList())
-                    {
-                        OnGameLoad -= (d as GameLoadAction);
-                    }
-                }
-
-                if (OnGameStart != null)
-                {
-                    foreach (var d in OnGameStart.GetInvocationList())
-                    {
-                        OnGameStart -= (d as GameStartAction);
-                    }
-                }
-
-                if (OnGameEnd != null)
-                {
-                    foreach (var d in OnGameEnd.GetInvocationList())
-                    {
-                        OnGameEnd -= (d as GameEndAction);
-                    }
-                }
-
-
-
-
-
-                SceneManager.LoadScene(0);
+                ClearAndReloadScene();
             }
         }
     }

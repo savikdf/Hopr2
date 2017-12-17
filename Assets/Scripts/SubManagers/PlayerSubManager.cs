@@ -90,17 +90,17 @@ namespace SubManager.Player
             try
             {
                 //todo: but check bool in
-                if (isUp && Player_PH != null && WorldSubManager.instance.IsPlatformAboveJumpable)
+                if (isUp && WorldSubManager.instance.IsPlatformAboveJumpable)
                 {
                     //moves player index up
+                    SetPlayerOnPlatform(currentIndex + 1);
                     currentIndex++;
-                    SetPlayerOnPlatform(currentIndex);
                 }
-                else if (!isUp && Player_PH != null && WorldSubManager.instance.IsPlatformBelowJumpable)
+                else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)
                 {
                     //moves down... wont happen in vanilla.
-                    currentIndex--;
-                    SetPlayerOnPlatform(currentIndex);
+                    SetPlayerOnPlatform(currentIndex - 1);
+                    currentIndex--;           
                     Debug.LogWarning("Player Cannot Move Down Yet!");
                 }
                 else
@@ -111,17 +111,21 @@ namespace SubManager.Player
             }
             catch (Exception ex)
             {
+                //kill them. They can reach this if you jump off the last platform (aka break things)
+                OnPlayerDeath();             
                 Debug.Log("OnPlayerJump(): " + ex.Message);
             }
 
         }
 
+        //this is called when the the player SHOULD die
         void OnPlayerDeath()
-        {
+        {                                              
+            GameManager.instance.StartGameEndEvent();
             Debug.Log("You're Dead Now");
         }
 
-        //TEMP
+        //TEMP, not linked with animation yet TODO: link
         public void SetPlayerOnPlatform(int platIndex)
         {
             //sets the parent of the player to platform
