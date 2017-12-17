@@ -2,9 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleEffect : Effect {
+[System.Serializable]
+public class ParticleEffect : BaseEffect
+{
+    public ParticleSystem p;
 
-    public ParticleEmitter ParticleE { get; set; }
+    public ParticleEffect(float _duration, GameObject o) : base(_duration)
+    {
+       base.name = this.GetType().Name;
+        GameObject pObject = new GameObject();
+       pObject.name = this.GetType().Name;
 
-    public ParticleEffect(ParticleEmitter _particleE){ ParticleE = _particleE; }
+       p = pObject.AddComponent<ParticleSystem>();
+       p.Stop();
+
+       var main = p.main;
+       main.duration = base.duration;
+       pObject.transform.root.parent = o.transform;
+    }
 }

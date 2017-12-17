@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+[System.Serializable]
+public struct Character
 {
-    public Model Model { get; set; }
-    public Effect[] Effects { get; set; }
-    public string Name { get; set; }
-    public string Disc { get; set; }
+    public Model Model;
+    public List<BaseEffect> Effects;
+    public string Name;
+    public string Disc;
 
 }

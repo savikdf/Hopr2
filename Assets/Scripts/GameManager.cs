@@ -46,7 +46,8 @@ public class GameManager : MonoBehaviour
         Ad,
         Purchase,
         Social,
-        Menu
+        Menu,
+        Character
     }
 
     #endregion
@@ -165,6 +166,12 @@ public class GameManager : MonoBehaviour
                 case GameSubManagerTypes.None:
                     //nothing needs to happen hear. this is used for catching errors in the
                     //sub manager init proccess
+                    break;
+
+                case GameSubManagerTypes.Character:
+                    this.gameObject.AddComponent<CharacterManager>();
+                    //
+                    //
                     break;
                 default:
                     Debug.Log("GameManager hit a default for " + subtype.ToString());
