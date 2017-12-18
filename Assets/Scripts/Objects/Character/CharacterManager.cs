@@ -9,7 +9,7 @@ public class CharacterManager : BaseSubManager
 {
     public Character[] characters;
 
-    public static uint index = 1;
+    public static uint index = 0;
 
     public static Character ActiveCharacter;
 
@@ -21,7 +21,7 @@ public class CharacterManager : BaseSubManager
             if(chars.Effects.Count == 0)
             {
                 chars.Effects.Add(new ScriptEffects.JumpEffect(2.0f));     
-                chars.Effects.Add(new ScriptEffects.PuffEffect(2.0f, chars.Model.mainObject));
+                chars.Effects.Add(new ScriptEffects.ArmsMovment(2.0f));
             }
             
         }
@@ -32,5 +32,34 @@ public class CharacterManager : BaseSubManager
     public Character GetCurrentActiveCharacter()
     {
         return characters[0];
+    }
+
+
+    //runs on the post init event from the gamemanager
+    //use this to start communicating with other subManagers
+    public override void OnPostInit()
+    {
+
+    }
+
+    //runs on the game load event from the gamemanager
+    //use this to begin the setup of the game
+    public override void OnGameLoad()
+    {
+
+    }
+
+    //runs on the game start event from the gamemanager
+    //use this to begin the process of the game
+    public override void OnGameStart()
+    {
+
+    }
+
+    //runs on the game start event from the gamemanager
+    //use this to begin the process of the game
+    public override void OnGameEnd()
+    {
+
     }
 }

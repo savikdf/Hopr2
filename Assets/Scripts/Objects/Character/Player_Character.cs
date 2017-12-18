@@ -7,15 +7,22 @@ public class Player_Character : MonoBehaviour
     public float GRAVITY = -9.8f;
 
     public Character player_Character;
+    public GameObject playerModelObject;
+    public Model playerModel;
+
     public bool Animating;
     public bool Moving;
-    public bool Grounded;
-    public bool Jumping;
+    public bool Grounded = true;
+    public bool Jumping = false;
 
     Vector3 vector;
     Vector3 fallVel;
 
     public float jumpPower;
+    float currentLerpTime;
+
+    float lerpTime = 4.0f;
+
 
     [Range(0, 55)]
     public float jumpPowerMultiplier;
@@ -37,23 +44,90 @@ public class Player_Character : MonoBehaviour
 
     void LateUpdate()
     {
-            if (transform.position.y > 0 && !Jumping)
-            {
-                fallVel += new Vector3(0, GRAVITY, 0) * Time.deltaTime * 1.2f;
+        Jump();
+        Gravity();
+    }
 
-                transform.position += fallVel;
-                Grounded = false;
-            }
-            else if (transform.position.y <= 0)
+    void Jump()
+    {
+        if (Jumping)
+        {
+            Grounded = false;
+            float yValue = 0;
+
+
+            float dist = Mathf.Abs(transform.position.y - jumpPower);
+
+            if (dist > 5.0f)
             {
-                Grounded = true;
-                fallVel = Vector3.zero;
+                //  if (jumpPower > 0)
+                //  {
+                //      float interation = (Time.deltaTime * Time.deltaTime) * jumpPower * 5;
+                //
+                //
+                //      yValue = Mathf.Lerp(transform.position.y, jumpPower, interation);
+                //
+                //      transform.position =  new Vector3(transform.position.x, yValue, transform.position.z);
+                //  }
+                if (jumpPower > 0)
+                {
+                    currentLerpTime += Time.deltaTime;
+
+                    if (currentLerpTime > lerpTime)
+                    {
+                        currentLerpTime = lerpTime;
+                    }
+
+                    float perc = currentLerpTime / lerpTime;
+                    perc = Mathf.Sin(perc * Mathf.PI * 0.5f);
+
+                    yValue = Mathf.Lerp(transform.position.y, jumpPower, perc);
+                    
+                    transform.position =  new Vector3(transform.position.x, yValue, transform.position.z);
+                }
+
+
             }
+            else
+            {
+                Jumping = false;
+            }
+
+
+        }
+
+        #region Effect
+
+            if (Jumping && !Grounded)
+            {
+                player_Character.Effects[1].Up(playerModel.Larm.transform, playerModel.Rarm.transform);
+            }
+            else if (Grounded)
+            {
+                player_Character.Effects[1].Reset(playerModel.Larm.transform, playerModel.Rarm.transform);
+            }
+
+        #endregion
+    }
+
+    void Gravity()
+    {
+        if (transform.position.y > 0 && !Jumping)
+        {
+            fallVel += new Vector3(0, GRAVITY, 0) * Time.deltaTime * 1.2f;
+
+            transform.position += fallVel;
+            Grounded = false;
+        }
+        else if (transform.position.y <= 0)
+        {
+            Grounded = true;
+            fallVel = Vector3.zero;
+        }
     }
 
 	void Update ()
     {
-
 
 
         if (!Input.GetKey(KeyCode.Space))
@@ -65,32 +139,13 @@ public class Player_Character : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space))
         {
             Jumping = true;
+         
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpPower = 0;
-            
-        }
-
-
-        if(Grounded)
-        {
-            Quaternion rot = new Quaternion();
-            rot.eulerAngles = new Vector3(0, 0, 0);
-
-            player_Character.Model.Larm.transform.rotation = rot;
-            player_Character.Model.Rarm.transform.rotation = rot;
-
-        }
-        else
-        {
-            Quaternion rot = new Quaternion();
-            rot.eulerAngles = new Vector3(180, 0, 0);
-
-            player_Character.Model.Larm.transform.rotation = rot;
-            player_Character.Model.Rarm.transform.rotation = rot;
-
+            currentLerpTime = 0;
         }
 
         if (!Jumping && Grounded)
@@ -131,31 +186,6 @@ public class Player_Character : MonoBehaviour
 
             LerpMove(vector, Time.deltaTime, 5);
         }
-
-
-        if(Jumping)
-        {
-            float yValue = 0;
-
-
-            float dist = Mathf.Abs(transform.position.y - jumpPower);
-
-            if (dist > 2.7f)
-            {
-                if(jumpPower > 0)
-                    yValue = Mathf.Lerp(transform.position.y, jumpPower, Time.deltaTime * (jumpPower/25));
-
-                transform.position = new Vector3(transform.position.x, yValue, transform.position.z);
-            }
-            else
-            {
-                Jumping = false;
-            }
-
-
-        }
-
-        Debug.Log(Jumping);
     }
 
     void LerpMove(Vector3 newPos, float delta, float speed)
@@ -173,14 +203,19 @@ public class Player_Character : MonoBehaviour
             transform.position = newPos;
         }
 
-
-
     }
 
     void InitRender()
     {
-        GameObject model = Instantiate(player_Character.Model.mainObject, this.transform.position, Quaternion.identity);
-        model.transform.parent = this.transform;
-        model.name = player_Character.name;
+        playerModelObject = Instantiate(player_Character.Model.mainObject, this.transform.position, Quaternion.identity);
+        playerModelObject.transform.parent = this.transform;
+        playerModelObject.name = player_Character.name;
+
+
+        playerModel.Body = playerModelObject.transform.GetChild(0).gameObject;//Instantiate(player_Character.Model.Body, this.transform.position, Quaternion.identity);
+        playerModel.Larm = playerModelObject.transform.GetChild(1).gameObject;
+        playerModel.Lleg = playerModelObject.transform.GetChild(2).gameObject;
+        playerModel.Rarm = playerModelObject.transform.GetChild(3).gameObject;
+        playerModel.Rleg = playerModelObject.transform.GetChild(4).gameObject;
     }
 }

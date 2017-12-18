@@ -20,3 +20,4 @@ public class ScriptEffect : BaseEffect
         base.name = this.GetType().Name;
     }
 }
+ 

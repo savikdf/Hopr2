@@ -78,9 +78,38 @@ namespace ScriptEffects {
 
     }
 
+    public class ArmsMovment : BaseEffect
+    {
+        public Transform target;
+
+        public ArmsMovment(float _duration) : base(_duration)
+        {
+
+        }
+
+        public override void Up(Transform l, Transform r)
+        {
+            Quaternion rot = new Quaternion();
+            rot.eulerAngles = new Vector3(180, 0, 0);
+
+            l.rotation = rot;
+            r.rotation = rot;
+        }
+
+        public override void Reset(Transform l, Transform r)
+        {
+            Quaternion rot = new Quaternion();
+            rot.eulerAngles = new Vector3(0, 0, 0);
+
+            l.rotation = rot;
+            r.rotation = rot;
+        }
+
+    }
+
 }
 
-namespace ScriptEffects
+namespace ParticleEffects
 {
     [System.Serializable]
     public class PuffEffect : ParticleEffect

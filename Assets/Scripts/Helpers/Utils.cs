@@ -170,6 +170,29 @@ public static class Utils
         return pFinal;
     }
 
+    /// <summary>
+    /// t = Time,
+    /// b = startValue;
+    /// c = change value
+    /// d = duration;
+    /// 
+    /// </summary>
+    /// <param name="t">Time</param>
+    /// <param name="b"></param>
+    /// <param name="c"></param>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    public static float QuadraticEaseOut(float t, float b, float c, float d)
+    {
+        //T = current time;
+        //b = start value
+        //c = return value/Change Value
+        //d = duration
+
+        t /= d;
+        return -c * t * (t - 2) + b;
+    }
+
     public static Vector2 controlPointAdjust(Vector2 p0, Vector2 p1, Vector2 p2)
     {
         Vector2 cp = new Vector2();

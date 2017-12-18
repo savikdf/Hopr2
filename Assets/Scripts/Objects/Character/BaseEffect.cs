@@ -49,4 +49,13 @@ public class BaseEffect  {
         p = _p;
     }
 
+    public virtual void Up(Transform l, Transform r)
+    {
+
+    }
+
+    public virtual void Reset(Transform l, Transform r)
+    {
+
+    }
 }
