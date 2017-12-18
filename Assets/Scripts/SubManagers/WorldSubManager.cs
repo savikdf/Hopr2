@@ -22,7 +22,7 @@ namespace SubManager.World
         short maxPlatformSpawnAmount = 30;
         float distanceAppart = 1.1f;
         int amountSpawned = 0;
-        Vector3 moveSpeed = new Vector3(0, -0.1f, 0);
+        Vector3 moveSpeed = new Vector3(0, -0.01f, 0);
 
         //plaform vars    
         bool isSpinning;     //when is false, stops the spin coroutine

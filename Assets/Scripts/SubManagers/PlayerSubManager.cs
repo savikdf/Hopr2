@@ -121,7 +121,7 @@ namespace SubManager.Player
         //this is called when the the player SHOULD die
         void OnPlayerDeath()
         {                                              
-            GameManager.instance.StartGameEndEvent();
+            GameManager.instance.StartEvent("OnGameEnd");
             Debug.Log("You're Dead Now");
         }
 

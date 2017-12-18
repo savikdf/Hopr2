@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using SubManager;
 using System;
+using System.Linq;
+using SubManager.Player;
 
 namespace SubManager.Menu
 {
@@ -16,9 +18,9 @@ namespace SubManager.Menu
 
         public enum MenuStates
         {
-            None,
             Loading,
             Main,
+            Intra,
             Death,
             Character,
             Setting
@@ -34,7 +36,7 @@ namespace SubManager.Menu
         int CurrentMenuIndex
         {
             get { return (int)currentMenuState; }
-        }                  
+        }
 
         #endregion
 
@@ -58,9 +60,16 @@ namespace SubManager.Menu
                             menus.Add(menuHolder.transform.Find(string.Format("Menu_{0}", (MenuStates)i)).GetComponent<Canvas>());
                         //naming convention is type_Menu
                     }
-
+                    if (menus != null && menus.Count > 0)
+                    {
+                        //sets up all the button events for each canvas
+                        for (int i = 0; i < menus.Count; i++)
+                        {
+                            SetButtonEvents(menus[i]);
+                        }
+                    }
                     //Turn to the loading screen
-                    SwitchMenu(MenuStates.Main); 
+                    SwitchMenu(MenuStates.Main);
                 }
                 else
                 {
@@ -71,7 +80,7 @@ namespace SubManager.Menu
             catch (Exception ex)
             {
                 Debug.Log("Menu.InitializeSubManager():  " + ex.Message);
-            }  
+            }
         }
 
         public override void OnPostInit()
@@ -80,58 +89,118 @@ namespace SubManager.Menu
         }
 
         public override void OnGameLoad()
-        {  
-
+        {
+            //show the main menu, the place where everything converges
+            SwitchMenu(MenuStates.Main);
         }
 
         public override void OnGameStart()
         {
-
+            //show the ingame menu
+            SwitchMenu(MenuStates.Intra);
         }
 
         public override void OnGameEnd()
         {
-                   
+            //enable the death screen
+            SwitchMenu(MenuStates.Death);
         }
 
         #endregion
 
         #region Specific Methods
 
+        public void SetButtonEvents(Canvas setCanvas)
+        {
+            try
+            {
+                Button[] buttons = setCanvas.GetComponentsInChildren<Button>();
+                if (buttons != null && buttons.Length != 0)
+                {
+                    for (int i = 0; i < buttons.Length; i++)
+                    {
+                        buttons[i].gameObject.AddComponent<DynamicButton>();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("SetBUttonEvents(): " + ex.Message);
+            }
+
+        }
+
+        public void OnButtonPress(string name)
+        {
+            Debug.Log("Button pressed: " + name);
+            switch (name)
+            {
+                #region Main
+                case "Button_Main_Play":
+                    GameManager.instance.StartEvent("OnGameStart");
+                    break;
+                case "Button_Main_Character":
+                    SwitchMenu(MenuSubManager.MenuStates.Character);
+                    break;
+
+                #endregion
+
+                #region Character
+
+                case "Character_Back":
+                    SwitchMenu(MenuSubManager.MenuStates.Character);
+                    break;
+                    #endregion
+
+                    #region Intra
+
+
+                    #endregion
+
+            }
+
+        }
+
         public void SwitchMenu(MenuStates toState)
         {
+            if (toState == MenuStates.Intra)
+            {
+                Debug.Log("no");
+            }
             //will always switch to loading menu if the Gamemanager is still loading
             //and then que the next menu transition while loading isn't complete
             if (GameManager.instance.isLoading && toState != MenuStates.Loading && !isMenuQued)
             {
+                if (GameManager.instance.debugMode)
+                    Debug.Log("Queing Menu of type: " + toState.ToString());
                 isMenuQued = true;
+                //override set the loading screen while other qued
                 StartCoroutine(MenuQued(toState));
                 toState = MenuStates.Loading;
             }
             //disables all the menus first, before turning on the specific one
-            for(int i = 0; i < menus.Count; i++)
+            for (int i = 0; i < menus.Count; i++)
             {
-                if (i == (int)toState)   
-                {
-                    //this is the menu being switch to
-                    menus[i].enabled = true;
-                    continue;
-                }
-                menus[i].enabled = false; 
-            }              
+                menus[i].enabled = false;
+            }
+            menus.Single(x => x.name == string.Format("Menu_{0}", toState.ToString())).enabled = true;
         }
 
         //ques a menu if the gamemanager isn't done loading
         IEnumerator MenuQued(MenuStates queState)
         {
             while (GameManager.instance.isLoading)
-            {     
+            {
                 yield return null;
             }
+
+            if (GameManager.instance.debugMode)
+                Debug.Log("Un-Queing Menu of type: " + queState.ToString());
+
             isMenuQued = false;
             SwitchMenu(queState);
-        }                        
-        
+        }
+
         #endregion
 
         #region Debug Commands

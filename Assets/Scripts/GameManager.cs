@@ -24,17 +24,6 @@ public class GameManager : MonoBehaviour
     bool setupErroredOut;
     public bool isLoading; //menu submanager tracks this for its loading UI    
 
-    //Types of states the game can exist in
-    public enum GamesStates
-    {
-        Init,
-        Load,
-        Game,
-        Post,
-        Ad,
-        Purchase,
-    }
-
     //Types for sub managers
     public enum GameSubManagerTypes
     {
@@ -187,10 +176,26 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public void StartGameEndEvent()
+   public void StartEvent(string eventName)
     {
-        OnGameEnd();
+        switch (eventName)
+        {
+            case "OnInitComplete":
+
+                break;
+
+            case "OnGameLoad":
+
+                break;
+            case "OnGameStart":
+                OnGameStart();
+                break;
+            case "OnGameEnd":
+                OnGameEnd();
+                break;
+        }
     }
+    
 
     public void ClearAndReloadScene()
     {
