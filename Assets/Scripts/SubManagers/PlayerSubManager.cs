@@ -14,7 +14,7 @@ namespace SubManager.Player
         public static PlayerSubManager instance;
 
         //Data Vars
-        public short playerSpawnIndex = 2;  //what platform they spawn on
+        public short playerSpawnIndex = 0;  //what platform they spawn on
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);
 
@@ -95,12 +95,14 @@ namespace SubManager.Player
                     //moves player index up
                     SetPlayerOnPlatform(currentIndex + 1);
                     currentIndex++;
+                    //tell the world manager that the player has jumped
+                    WorldSubManager.instance.OnPlayerJumped();
                 }
                 else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)
                 {
                     //moves down... wont happen in vanilla.
-                    SetPlayerOnPlatform(currentIndex - 1);
-                    currentIndex--;           
+                    //SetPlayerOnPlatform(currentIndex - 1);
+                    //currentIndex--;           
                     Debug.LogWarning("Player Cannot Move Down Yet!");
                 }
                 else

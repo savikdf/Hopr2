@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 #region SubManager Using Directives
 using SubManager;
 using SubManager.Ad;
-using SubManager.Camera;
+using SubManager.CameraMan;
 using SubManager.Player;
 using SubManager.Social;
 using SubManager.Spawn;
@@ -23,6 +23,15 @@ public class GameManager : MonoBehaviour
     public bool debugMode = false;
     bool setupErroredOut;
     public bool isLoading; //menu submanager tracks this for its loading UI    
+
+    //states of the game
+    public enum GameStates
+    {
+        Pre,
+        Intra,
+        Post
+    }
+    public GameStates currentGameState;
 
     //Types for sub managers
     public enum GameSubManagerTypes
@@ -74,6 +83,7 @@ public class GameManager : MonoBehaviour
         //setting up the instance 
         instance = (instance == null) ? this : instance;
         isLoading = true;
+        currentGameState = GameStates.Pre;
         //Instantiate all sub managers
         setupErroredOut = DeploySubManagers();
 
@@ -173,7 +183,7 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-        return true;
+        return true;                                                  
     }
 
    public void StartEvent(string eventName)

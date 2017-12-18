@@ -150,10 +150,18 @@ namespace SubManager.Menu
                 case "Character_Back":
                     SwitchMenu(MenuSubManager.MenuStates.Character);
                     break;
-                    #endregion
+                #endregion
 
-                    #region Intra
+                #region Intra
 
+
+                #endregion
+
+                #region Death
+                case "Button_Death_Retry":
+                    GameManager.instance.ClearAndReloadScene();
+
+                    break;
 
                     #endregion
 

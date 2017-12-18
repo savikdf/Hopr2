@@ -20,8 +20,8 @@ namespace SubManager.World
         public Material plat_N = null;
         public GameObject prefab_platform;
         short maxPlatformSpawnAmount = 30;
-        float distanceAppart = 1.1f;
         int amountSpawned = 0;
+        float distanceAppart = 1.1f;
         Vector3 moveSpeed = new Vector3(0, -0.01f, 0);
 
         //plaform vars    
@@ -128,12 +128,14 @@ namespace SubManager.World
 
         public override void OnGameStart()
         {
+            isMoving = true;
             StartCoroutine(MovePlatforms());    //moves    
         }
 
         public override void OnGameEnd()
         {
-
+            //stop the move coroutine
+            isMoving = false;
         }
 
         #endregion
@@ -207,7 +209,7 @@ namespace SubManager.World
 
         IEnumerator MovePlatforms()
         {
-            while (isSpinning)
+            while (isMoving)
             {
                 //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
                 for (int i = 0; i < platforms.Count; i++)
@@ -221,6 +223,11 @@ namespace SubManager.World
             }
         }
 
+        public void OnPlayerJumped() {
+          
+
+        }
+
         //DEBUG COMMANDS
         private void Update()
         {
@@ -231,10 +238,7 @@ namespace SubManager.World
             }
         }
 
-        #endregion
-
-
-
+        #endregion 
     }
 }
 
