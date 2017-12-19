@@ -5,24 +5,25 @@ using UnityEngine;
 [System.Serializable]
 public class ParticleEffect : BaseEffect
 {
-    public ParticleSystem p;
-    
-    public ParticleEffect(float _duration, GameObject o) : base(_duration)
+    public ParticleEffect(float _duration) : base(_duration)
+    {
+        base.name = this.GetType().Name;
+    }
+
+    public ParticleEffect(float _duration, ParticleSystem _ps) : base(_duration)
     {
        base.name = this.GetType().Name;
-       GameObject pObject = new GameObject();
-       pObject.name = this.GetType().Name;
-
-       p = pObject.AddComponent<ParticleSystem>();
-       p.Stop();
-
-       var main = p.main;
-       main.duration = base.duration;
-       main.playOnAwake = true;
+       ps = _ps;
     }
 
     public override void Play()
     {
-        p.Play();
+        ps.Play();
     }
+
+    public void SetParticleSystem(ParticleSystem _ps)
+    {
+        ps = _ps;
+    }
+
 }

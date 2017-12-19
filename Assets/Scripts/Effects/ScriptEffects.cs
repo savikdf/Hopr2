@@ -7,7 +7,6 @@ namespace ScriptEffects {
     [System.Serializable]
     public class JumpEffect : ScriptEffect
     {
-        public Transform target;
         float yValue;
         float storedY;
         float smallStopMargin = 0.01f;
@@ -19,12 +18,12 @@ namespace ScriptEffects {
 
         public override void Play(float delta, float speed)
         {
-            storedY = target.localScale.y;
+            storedY = t.localScale.y;
             try
             {
                 if (yValue > smallStopMargin)
                 {
-                    yValue = Mathf.Lerp(target.localScale.y, 0, delta * speed);
+                    yValue = Mathf.Lerp(t.localScale.y, 0, delta * speed);
                 }
                 else
                 {
@@ -33,19 +32,19 @@ namespace ScriptEffects {
             }
             catch
             {
-                Debug.Log("No transform Assigned, Please Use JumpAffect.SetTarget");
+                Debug.Log("No transform Assigned, Please Use JumpAffect.Sett");
             }
 
             Debug.Log("Making an Effect from JumpEffect");
 
-            target.localScale = new Vector3(target.localScale.x, yValue, target.localScale.z);
+            t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
         }
 
 
 
         public override void Rewind(float delta, float speed)
         {
-            storedY = target.localScale.y;
+            storedY = t.localScale.y;
             try
             {
                 if (yValue < bigStopMargin)
@@ -59,17 +58,17 @@ namespace ScriptEffects {
             }
             catch
             {
-                Debug.Log("No transform Assigned, Please Use JumpAffect.SetTarget");
+                Debug.Log("No transform Assigned, Please Use JumpAffect.Sett");
             }
 
-            Debug.Log("Rewinding an Effect from JumpEffect");
+            //Debug.Log("Rewinding an Effect from JumpEffect");
 
-            target.localScale = new Vector3(target.localScale.x, yValue, target.localScale.z);
+            t.localScale = new Vector3((1.0f - Mathf.Sqrt(yValue)) + 1, yValue, (1.0f - Mathf.Sqrt(yValue)) + 1);
         }
 
-        public override void SetTarget(Transform _target)
+        public override void Set(Transform _p)
         {
-            target = _target;
+            base.t = _p;
         }
     }
 
@@ -78,10 +77,8 @@ namespace ScriptEffects {
 
     }
 
-    public class ArmsMovment : BaseEffect
+    public class ArmsMovment : ScriptEffect
     {
-        public Transform target;
-
         public ArmsMovment(float _duration) : base(_duration)
         {
 
@@ -106,22 +103,28 @@ namespace ScriptEffects {
         }
 
     }
-
 }
 
 namespace ParticleEffects
 {
     [System.Serializable]
-    public class PuffEffect : ParticleEffect
+    public static class ParticleEffectLoad
     {
-        public PuffEffect(float _duration, GameObject _o) : base(_duration, _o)
+        public static ParticleSystem PuffLoad()
         {
-
+            return (Resources.Load("Prefabs/Effects/PuffEffect", typeof(GameObject)) as GameObject).GetComponent<ParticleSystem>();
         }
+    }
+}
 
-        public override void Play()
+namespace TrailEffects
+{
+    [System.Serializable]
+    public static class TrailEffectLoad
+    {
+        public static TrailRenderer SmokeTrialLoad()
         {
-            Debug.Log("Making an Effect from PuffEffect");
+            return (Resources.Load("Prefabs/Effects/SmokeTrial", typeof(GameObject)) as GameObject).GetComponent<TrailRenderer>();
         }
     }
 }

@@ -16,7 +16,6 @@ public class ScriptEffect : BaseEffect
 
     public ScriptEffect(float _duration) : base(_duration)
     {
-        instance = new ScriptEffect();
         base.name = this.GetType().Name;
     }
 }

@@ -7,10 +7,14 @@ public class BaseEffect  {
 
     public string name;
     public float duration;
-    public Transform p;
+    public Transform t;
+
+    public ParticleSystem ps;
+    public TrailRenderer tr;
 
     public BaseEffect()
     {
+
     }
 
     public BaseEffect(float _duration)
@@ -44,9 +48,9 @@ public class BaseEffect  {
 
     }
 
-    public virtual void SetTarget(Transform _p)
+    public virtual void Set(Transform _t)
     {
-        p = _p;
+        t = _t;
     }
 
     public virtual void Up(Transform l, Transform r)

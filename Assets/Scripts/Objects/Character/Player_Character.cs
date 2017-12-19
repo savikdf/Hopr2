@@ -15,6 +15,9 @@ public class Player_Character : MonoBehaviour
     public bool Grounded = true;
     public bool Jumping = false;
 
+    public ParticleSystem puff;
+    public TrailRenderer trail;
+
     Vector3 vector;
     Vector3 fallVel;
 
@@ -38,9 +41,23 @@ public class Player_Character : MonoBehaviour
         player_Character = CharacterManager.ActiveCharacter;
 
         InitRender();
-        player_Character.Effects[0].SetTarget(this.transform);
+    
+
+        player_Character.Effects[0].Set(this.transform);
+
+        InitEffects();
     }
 	
+
+    void InitEffects()
+    {
+
+        puff = Instantiate(player_Character.Effects[2].ps);
+        puff.transform.parent = this.transform;
+
+        trail = Instantiate(player_Character.Effects[3].tr);
+        trail.transform.parent = this.transform;
+    }
 
     void LateUpdate()
     {
@@ -60,24 +77,19 @@ public class Player_Character : MonoBehaviour
 
             if (dist > 5.0f)
             {
-                //  if (jumpPower > 0)
-                //  {
-                //      float interation = (Time.deltaTime * Time.deltaTime) * jumpPower * 5;
-                //
-                //
-                //      yValue = Mathf.Lerp(transform.position.y, jumpPower, interation);
-                //
-                //      transform.position =  new Vector3(transform.position.x, yValue, transform.position.z);
-                //  }
                 if (jumpPower > 0)
                 {
+
+                    if(jumpPower > 50)
+                    puff.Emit(400);
+
                     currentLerpTime += Time.deltaTime;
 
                     if (currentLerpTime > lerpTime)
                     {
                         currentLerpTime = lerpTime;
                     }
-
+     
                     float perc = currentLerpTime / lerpTime;
                     perc = Mathf.Sin(perc * Mathf.PI * 0.5f);
 
