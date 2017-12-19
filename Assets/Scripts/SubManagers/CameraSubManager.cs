@@ -9,6 +9,7 @@ namespace SubManager.CameraMan
     public class CameraSubManager : BaseSubManager
     {
         #region Variables
+        public static CameraSubManager instance;
         bool followPlayer = false;
         float damping = 0.9f;
         Camera mainCamera;
@@ -19,6 +20,7 @@ namespace SubManager.CameraMan
 
         public override void InitializeSubManager()
         {
+            instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Camera;
             mainCamera = GameObject.FindObjectOfType<Camera>();
             offsetVec3 = new Vector3(0, 2.8f, -10f);

@@ -45,6 +45,8 @@ namespace SubManager.Menu
         public override void InitializeSubManager()
         {
             instance = (instance == null) ? this : instance;
+            thisSubType = GameManager.GameSubManagerTypes.Menu;
+
             menus = new List<Canvas>();
             try
             {
@@ -132,7 +134,9 @@ namespace SubManager.Menu
 
         public void OnButtonPress(string name)
         {
-            Debug.Log("Button pressed: " + name);
+            if(GameManager.instance.debugMode)
+                Debug.Log("Button pressed: " + name);
+
             switch (name)
             {
                 #region Main
@@ -171,16 +175,12 @@ namespace SubManager.Menu
 
         public void SwitchMenu(MenuStates toState)
         {
-            if (toState == MenuStates.Intra)
-            {
-                Debug.Log("no");
-            }
             //will always switch to loading menu if the Gamemanager is still loading
             //and then que the next menu transition while loading isn't complete
             if (GameManager.instance.isLoading && toState != MenuStates.Loading && !isMenuQued)
             {
-                if (GameManager.instance.debugMode)
-                    Debug.Log("Queing Menu of type: " + toState.ToString());
+                //if (GameManager.instance.debugMode)
+                //    Debug.Log("Queing Menu of type: " + toState.ToString());
                 isMenuQued = true;
                 //override set the loading screen while other qued
                 StartCoroutine(MenuQued(toState));
@@ -202,8 +202,8 @@ namespace SubManager.Menu
                 yield return null;
             }
 
-            if (GameManager.instance.debugMode)
-                Debug.Log("Un-Queing Menu of type: " + queState.ToString());
+            //if (GameManager.instance.debugMode)
+            //    Debug.Log("Un-Queing Menu of type: " + queState.ToString());
 
             isMenuQued = false;
             SwitchMenu(queState);

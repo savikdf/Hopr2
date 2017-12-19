@@ -14,26 +14,31 @@ public class CharacterManager : BaseSubManager
 
     public override void InitializeSubManager()
     {
-
-        foreach (Character chars in characters)
+        if(characters != null && characters.Length > 0)
         {
-            if(chars.Effects.Count == 0)
+            foreach (Character chars in characters)
             {
-                chars.Effects.Add(new ScriptEffects.JumpEffect(2.0f));     
-                chars.Effects.Add(new ScriptEffects.ArmsMovment(2.0f));
+                if (chars.Effects.Count == 0)
+                {
+                    chars.Effects.Add(new ScriptEffects.JumpEffect(2.0f));
+                    chars.Effects.Add(new ScriptEffects.ArmsMovment(2.0f));
 
-                chars.Effects.Add(new ParticleEffect(2.0f, ParticleEffects.ParticleEffectLoad.PuffLoad()));
-                chars.Effects.Add(new TrailEffect(2.0f, TrailEffects.TrailEffectLoad.SmokeTrialLoad()));
+                    chars.Effects.Add(new ParticleEffect(2.0f, ParticleEffects.ParticleEffectLoad.PuffLoad()));
+                    chars.Effects.Add(new TrailEffect(2.0f, TrailEffects.TrailEffectLoad.SmokeTrialLoad()));
+                }
+
             }
-            
-        }
 
-        ActiveCharacter = characters[index];
+            ActiveCharacter = characters[index];
+        }        
     }
 
     public Character GetCurrentActiveCharacter()
     {
-        return characters[0];
+        if(characters != null)
+            return characters[0];
+
+        return new Character();
     }
 
 

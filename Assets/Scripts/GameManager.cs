@@ -13,6 +13,7 @@ using SubManager.Social;
 using SubManager.Spawn;
 using SubManager.World;
 using SubManager.Menu;
+using SubManager.Difficulty;
 
 #endregion
 
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     //states of the game
     public enum GameStates
     {
+        Setup,
         Pre,
         Intra,
         Post
@@ -45,7 +47,8 @@ public class GameManager : MonoBehaviour
         Purchase,
         Social,
         Menu,
-        Character
+        Character,
+        Difficulty
     }
 
     #endregion
@@ -83,7 +86,7 @@ public class GameManager : MonoBehaviour
         //setting up the instance 
         instance = (instance == null) ? this : instance;
         isLoading = true;
-        currentGameState = GameStates.Pre;
+        currentGameState = GameStates.Setup;
         //Instantiate all sub managers
         setupErroredOut = DeploySubManagers();
 
@@ -94,11 +97,12 @@ public class GameManager : MonoBehaviour
         else
         {
             //call the post init event
-            OnInitComplete();
+            StartEvent("OnInitComplete");
 
             //call the on game load event
             OnGameLoad();
             isLoading = false;
+            currentGameState = GameStates.Pre;
         }
 
     }
@@ -162,16 +166,20 @@ public class GameManager : MonoBehaviour
                     this.gameObject.AddComponent<MenuSubManager>();
 
                     break;
+                case GameSubManagerTypes.Character:
+                    this.gameObject.AddComponent<CharacterManager>();
+                  
+                    break;
+                case GameSubManagerTypes.Difficulty:
+                    this.gameObject.AddComponent<DifficultySubManager>();
+                    
+                    break;
                 case GameSubManagerTypes.None:
                     //nothing needs to happen hear. this is used for catching errors in the
                     //sub manager init proccess
                     break;
 
-                case GameSubManagerTypes.Character:
-                    this.gameObject.AddComponent<CharacterManager>();
-                    //
-                    //
-                    break;
+                
                 default:
                     Debug.Log("GameManager hit a default for " + subtype.ToString());
                     break;
@@ -191,16 +199,22 @@ public class GameManager : MonoBehaviour
         switch (eventName)
         {
             case "OnInitComplete":
-
+                //this is just for the submanagers to finalize things  
+                OnInitComplete();        
                 break;
 
             case "OnGameLoad":
-
+                currentGameState = GameStates.Pre;
+                OnGameLoad(); 
                 break;
+
             case "OnGameStart":
+                currentGameState = GameStates.Intra;
                 OnGameStart();
                 break;
+
             case "OnGameEnd":
+                currentGameState = GameStates.Post;
                 OnGameEnd();
                 break;
         }
@@ -271,7 +285,11 @@ public class GameManager : MonoBehaviour
         GUIStyle style = new GUIStyle();
         style.fontSize = 50;
         if (debugMode)
+        {
             GUILayout.Label("DEBUG MODE", style);
+            GUILayout.Label("Invincibility_F2: " + PlayerSubManager.instance.isInvincible.ToString(), style);
+        }
+      
     }
 
     #endregion

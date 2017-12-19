@@ -12,9 +12,12 @@ namespace SubManager.Player
     {
         #region Variables
         public static PlayerSubManager instance;
+        bool isPlayerAlive = true;
+        [HideInInspector]
+        public bool isInvincible = false;
 
         //Data Vars
-        public short playerSpawnIndex = 0;  //what platform they spawn on
+        public short playerSpawnIndex = 1;  //what platform they spawn on
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);
 
@@ -64,7 +67,7 @@ namespace SubManager.Player
         {
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
-
+            isPlayerAlive = true;
         }
 
         //begin input detection
@@ -76,7 +79,7 @@ namespace SubManager.Player
         //player dies, this runs after
         public override void OnGameEnd()
         {
-
+            isPlayerAlive = false;
         }
 
         #endregion
@@ -89,42 +92,51 @@ namespace SubManager.Player
             //if NO, the death sequence will need to be run
             try
             {
-                //todo: but check bool in
-                if (isUp && WorldSubManager.instance.IsPlatformAboveJumpable)
+
+
+                if (isPlayerAlive && GameManager.instance.currentGameState == GameManager.GameStates.Intra)
                 {
-                    //moves player index up
-                    SetPlayerOnPlatform(currentIndex + 1);
-                    currentIndex++;
-                    //tell the world manager that the player has jumped
-                    WorldSubManager.instance.OnPlayerJumped();
+                    if (isUp && WorldSubManager.instance.IsPlatformAboveJumpable)
+                    {
+                        //moves player index up
+                        SetPlayerOnPlatform(currentIndex + 1);
+                        currentIndex++;
+                        //tell the world manager that the player has jumped
+                        WorldSubManager.instance.OnPlayerJumped();
+                    }
+                    else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)
+                    {
+                        //moves down... wont happen in vanilla.
+                        //SetPlayerOnPlatform(currentIndex - 1);
+                        //currentIndex--;           
+                        Debug.LogWarning("Player Cannot Move Down Yet!");
+                    }
+                    else
+                    {
+                        //player just jumped into a red, they should die now.
+                        OnPlayerDeath();
+                    }
                 }
-                else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)
+                //if they jump when its the main screen it will start the game, but not jump them? yah. yah that sounds good.
+                else if (GameManager.instance.currentGameState == GameManager.GameStates.Pre)
                 {
-                    //moves down... wont happen in vanilla.
-                    //SetPlayerOnPlatform(currentIndex - 1);
-                    //currentIndex--;           
-                    Debug.LogWarning("Player Cannot Move Down Yet!");
+                    GameManager.instance.StartEvent("OnGameStart");
                 }
-                else
-                {
-                    //player just jumped into a red, they should die now.
-                    OnPlayerDeath();
-                }
+
             }
             catch (Exception ex)
             {
                 //kill them. They can reach this if you jump off the last platform (aka break things)
-                OnPlayerDeath();             
+                OnPlayerDeath();
                 Debug.Log("OnPlayerJump(): " + ex.Message);
-            }
-
+            } 
         }
 
-        //this is called when the the player SHOULD die
+        //this is called when the the player SHOULD die, maybe they have an ex macina moment that saves them? hmm...
         void OnPlayerDeath()
-        {                                              
-            GameManager.instance.StartEvent("OnGameEnd");
-            Debug.Log("You're Dead Now");
+        {
+            if(!isInvincible || !GameManager.instance.debugMode)   
+                GameManager.instance.StartEvent("OnGameEnd");
         }
 
         //TEMP, not linked with animation yet TODO: link
@@ -157,6 +169,10 @@ namespace SubManager.Player
                 if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
                 {
                     OnPlayerJump(false);
+                }
+                if (Input.GetKeyDown(KeyCode.F2))
+                {
+                    isInvincible = !isInvincible;
                 }
             }
         }

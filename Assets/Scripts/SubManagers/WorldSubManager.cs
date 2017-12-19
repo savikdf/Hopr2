@@ -21,8 +21,7 @@ namespace SubManager.World
         public GameObject prefab_platform;
         short maxPlatformSpawnAmount = 30;
         int amountSpawned = 0;
-        float distanceAppart = 1.1f;
-        Vector3 moveSpeed = new Vector3(0, -0.01f, 0);
+        public float distanceAppart = 1.1f;
 
         //plaform vars    
         bool isSpinning;     //when is false, stops the spin coroutine
@@ -34,19 +33,21 @@ namespace SubManager.World
         public List<Platform> platforms;
         Vector3 spawnVec3;
         GameObject trashObject;
+        GameObject platHolder;
+        Platform cyclePlat;
 
         #endregion
 
         #region Properties
-        //PROPERTIES
-        float GetPlatformSpeed(PlatformTypes type)
+
+        Vector3 MoveSpeed
         {
-            switch (type)
+            get
             {
-                case PlatformTypes.Normal:
-                    return 0.6f;
+                //TODO: get the movespeed from the difficulty sub manager
+                //will be based on the amount spawned
+                return new Vector3(0, 0.01f, 0) * -1;
             }
-            return 100f;
         }
 
         public bool IsPlatformAboveJumpable
@@ -121,7 +122,7 @@ namespace SubManager.World
         }
 
         public override void OnGameLoad()
-        {                                              
+        {
             isSpinning = true;
             StartCoroutine(SpinPlatforms());    //spins 
         }
@@ -144,12 +145,13 @@ namespace SubManager.World
 
         void SpawnInitialPlatforms()
         {
+            platHolder = new GameObject(name:"Platform_Holder");
             platforms = new List<Platform>();
             spawnVec3 = Vector3.zero;
             for (int i = 0; i < maxPlatformSpawnAmount; i++)
             {
                 SpawnSingle();
-                ApplyRandomSkew(platforms[i]);
+                ApplyRandomSkew(platforms[i]);  //puts a random skew on the new platform
             }
         }
 
@@ -160,7 +162,9 @@ namespace SubManager.World
                 //spawn the platform and add it to the platform list
                 //awake() in the platform will run and set itself up
                 trashObject = Instantiate(prefab_platform, spawnVec3, Quaternion.identity) as GameObject;
+                trashObject.transform.SetParent(platHolder.transform);
                 trashObject.name = string.Format("Platform #{0}", amountSpawned.ToString());
+                trashObject.GetComponent<Platform>().platformIndex = amountSpawned;
                 platforms.Add(trashObject.GetComponent<Platform>());
 
 
@@ -193,7 +197,7 @@ namespace SubManager.World
                         if (platforms[i] != null)
                         {
                             platforms[i].transform.Rotate(
-                             new Vector3(0, GetPlatformSpeed(platforms[i].thisPlatformType), 0)
+                             new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
                              );
                         }
                     }
@@ -216,16 +220,22 @@ namespace SubManager.World
                 {
                     if (platforms[i] != null)
                     {
-                        platforms[i].transform.position += moveSpeed;
+                        platforms[i].transform.position += MoveSpeed;
                     }
                 }
                 yield return null;
             }
         }
 
-        public void OnPlayerJumped() {
-          
-
+        public void OnPlayerJumped()
+        {
+            //cycle the platform (bottom to top, like a modulus of sorts) 
+            amountSpawned++;
+            PlayerSubManager.instance.currentIndex--;
+            cyclePlat = platforms[0];
+            platforms.RemoveAt(0);
+            platforms.Insert(maxPlatformSpawnAmount - 1, cyclePlat);
+            cyclePlat.OnReposition(amountSpawned - 1);
         }
 
         //DEBUG COMMANDS
