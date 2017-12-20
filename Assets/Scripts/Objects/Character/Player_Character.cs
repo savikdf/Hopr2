@@ -100,7 +100,6 @@ public class Player_Character : MonoBehaviour
                     }
      
                     float perc = currentLerpTime / lerpTime;
-                    float perc2 = (perc * perc);//Mathf.Sin(perc * Mathf.PI * 0.5f);
                     perc = Mathf.Sin(perc * Mathf.PI * 0.5f);
 
                     yValue = Mathf.Lerp(transform.position.y, jumpPower, perc);
