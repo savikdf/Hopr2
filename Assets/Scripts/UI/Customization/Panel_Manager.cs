@@ -11,7 +11,7 @@ public class Panel_Manager : MonoBehaviour {
     public Color PanelShadowColor;
     public Color PanelOutlineColor;
     public Color textColor;
-    public bool showCorners;
+    public bool showOutline;
 
 
     GameObject panelBits;
@@ -61,7 +61,7 @@ public class Panel_Manager : MonoBehaviour {
 
         if (panelText != null) { panelText.GetComponent<Text>().text = text; panelText.GetComponent<Text>().color = textColor; }
 
-        if (panelOutline != null) panelOutline.gameObject.SetActive(showCorners);
+        if (panelOutline != null) panelOutline.gameObject.SetActive(showOutline);
         
 
 

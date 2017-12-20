@@ -7,6 +7,7 @@ using SubManager;
 public class CharacterManager : BaseSubManager
 {
     public Character[] characters;
+    public Object[] charactersObjectLoad;
 
     public static uint index = 0;
 
@@ -14,24 +15,49 @@ public class CharacterManager : BaseSubManager
 
     public override void InitializeSubManager()
     {
-        if(characters != null && characters.Length > 0)
+        
+    }
+
+    public void LoadCharacters()
+    {
+        charactersObjectLoad = Resources.LoadAll("Prefabs/Characters", typeof(GameObject));
+        characters = new Character[charactersObjectLoad.Length];
+
+        for (int i = 0; i < charactersObjectLoad.Length; i++)
         {
-            foreach (Character chars in characters)
+
+            characters[i] = new Character(charactersObjectLoad[i].name)
             {
-                if (chars.Effects.Count == 0)
+                Effects = new List<BaseEffect>
                 {
-                    chars.Effects.Add(new ScriptEffects.JumpEffect(2.0f));
-                    chars.Effects.Add(new ScriptEffects.ArmsMovment(2.0f));
-                    chars.Effects.Add(new ScriptEffects.FlipEffect(2.0f));
+                    new ScriptEffects.JumpEffect(2.0f),
+                    new ScriptEffects.ArmsMovment(2.0f),
+                    new ScriptEffects.FlipEffect(2.0f),
+                    new ParticleEffect(2.0f, ParticleEffects.ParticleEffectLoad.PuffLoad()),
+                    new TrailEffect(2.0f, TrailEffects.TrailEffectLoad.SmokeTrialLoad()),
+                },
 
-                    chars.Effects.Add(new ParticleEffect(2.0f, ParticleEffects.ParticleEffectLoad.PuffLoad()));
-                    chars.Effects.Add(new TrailEffect(2.0f, TrailEffects.TrailEffectLoad.SmokeTrialLoad()));
+                Model = new Model()
+                {
+                    //Will fix this ina bit, just getting systems rolling for now,
+                    //have to null check because some characters dont have arms and legs (goo)
+                    mainObject = charactersObjectLoad[i] as GameObject,
+                    Body = (charactersObjectLoad[i] as GameObject).transform.GetChild(0).gameObject,
+                    Larm = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(1).gameObject :
+                    new GameObject(),
+                    Lleg = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(2).gameObject :
+                    new GameObject(),
+                    Rarm = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(3).gameObject :
+                    new GameObject(),
+                    Rleg = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(4).gameObject :
+                    new GameObject()
+
                 }
+            };
 
-            }
+        }
 
-            ActiveCharacter = characters[index];
-        }        
+        ActiveCharacter = characters[index];
     }
 
     public Character GetCurrentActiveCharacter()
@@ -39,7 +65,7 @@ public class CharacterManager : BaseSubManager
         if(characters != null)
             return characters[0];
 
-        return new Character();
+        return new Character("No Chars");
     }
 
 
@@ -54,7 +80,7 @@ public class CharacterManager : BaseSubManager
     //use this to begin the setup of the game
     public override void OnGameLoad()
     {
-
+        LoadCharacters();
     }
 
     //runs on the game start event from the gamemanager

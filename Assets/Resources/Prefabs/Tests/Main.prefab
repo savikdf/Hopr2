@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1524115491946902}
+  m_IsPrefabParent: 1
+--- !u!1 &1524115491946902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4765710664668744}
+  - component: {fileID: 114041247022770020}
+  m_Layer: 0
+  m_Name: Main
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4765710664668744
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524115491946902}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.9733652, y: 11.99981, z: 1.9337521}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114041247022770020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1524115491946902}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 341cf3b1ac9c13a4ca2c69555dfd496a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisSubType: 0
+  characters:
+  - name: lithCronny
+    Model:
+      mainObject: {fileID: 1186416984034034, guid: 30186ef155ebdc142adb98262a81d00d,
+        type: 2}
+      Body: {fileID: 1214620432497242, guid: 30186ef155ebdc142adb98262a81d00d, type: 2}
+      Larm: {fileID: 1433680519330610, guid: 30186ef155ebdc142adb98262a81d00d, type: 2}
+      Rarm: {fileID: 1665482311996948, guid: 30186ef155ebdc142adb98262a81d00d, type: 2}
+      Lleg: {fileID: 1092950631617062, guid: 30186ef155ebdc142adb98262a81d00d, type: 2}
+      Rleg: {fileID: 1745294027725744, guid: 30186ef155ebdc142adb98262a81d00d, type: 2}
+    Effects: []
+    Disc: There Expendable
+  - name: Yux
+    Model:
+      mainObject: {fileID: 1922579225692982, guid: 1e5b2b28476022c4fb3abc282ffd87e8,
+        type: 2}
+      Body: {fileID: 1062646542001250, guid: 1e5b2b28476022c4fb3abc282ffd87e8, type: 2}
+      Larm: {fileID: 1649245917693222, guid: 1e5b2b28476022c4fb3abc282ffd87e8, type: 2}
+      Rarm: {fileID: 1447761657371102, guid: 1e5b2b28476022c4fb3abc282ffd87e8, type: 2}
+      Lleg: {fileID: 1173007686361984, guid: 1e5b2b28476022c4fb3abc282ffd87e8, type: 2}
+      Rleg: {fileID: 1605485436653146, guid: 1e5b2b28476022c4fb3abc282ffd87e8, type: 2}
+    Effects: []
+    Disc: One Mad Mother
+  - name: Ninja
+    Model:
+      mainObject: {fileID: 1048025203637694, guid: 8cffa65e668ec9243b9df109353a5c6e,
+        type: 2}
+      Body: {fileID: 1987955337152962, guid: 8cffa65e668ec9243b9df109353a5c6e, type: 2}
+      Larm: {fileID: 1260657319930022, guid: 8cffa65e668ec9243b9df109353a5c6e, type: 2}
+      Rarm: {fileID: 1120833251387032, guid: 8cffa65e668ec9243b9df109353a5c6e, type: 2}
+      Lleg: {fileID: 1435612492814766, guid: 8cffa65e668ec9243b9df109353a5c6e, type: 2}
+      Rleg: {fileID: 1874248907801258, guid: 8cffa65e668ec9243b9df109353a5c6e, type: 2}
+    Effects: []
+    Disc: Flippin Nuts

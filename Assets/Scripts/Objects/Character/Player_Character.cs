@@ -10,12 +10,12 @@ public class Player_Character : MonoBehaviour
     public GameObject playerModelObject;
     public Model playerModel;
 
-    public bool Animating;
-    public bool Moving;
-    public bool Grounded = true;
-    public bool Jumping = false;
-    public bool Landed = false;
-    public bool Falling = false;
+    private bool Animating;
+    private bool Moving;
+    private bool Grounded = true;
+    private bool Jumping = false;
+    private bool Landed = false;
+    private bool Falling = false;
 
     private ParticleSystem puff;
     private TrailRenderer trail;
@@ -46,209 +46,207 @@ public class Player_Character : MonoBehaviour
         player_Character = CharacterManager.ActiveCharacter;
 
         InitRender();
-    
 
-        player_Character.Effects[0].Set(this.transform);
-        player_Character.Effects[2].Set(this.transform);
+        //player_Character.Effects[0].Set(this.transform);
+        //player_Character.Effects[2].Set(this.transform);
 
-        InitEffects();
-    }
-	
+        //InitEffects();
+    }	
 
-    void InitEffects()
-    {
-
-        puff = Instantiate(player_Character.Effects[3].ps);
-        puff.transform.parent = this.transform;
-
-        trail = Instantiate(player_Character.Effects[4].tr);
-        trail.transform.parent = this.transform;
-        trail.enabled = false;
-    }
-
-    void LateUpdate()
-    {
-        Jump();
-        Gravity();
-    }
-
-    void Jump()
-    {
-        if (Jumping)
-        {
-            Grounded = false;
-            float yValue = 0;
-
-
-            float dist = Mathf.Abs(transform.position.y - jumpPower);
-
-            if (dist > 5.0f)
-            {
-                if (jumpPower > 0)
-                {
-
-                    if (jumpPower < 50)
-                        jumpPower = 50;
-
-                    puff.Emit((int)jumpPower);
-                    trail.enabled = true;
-                    currentLerpTime += Time.deltaTime;
-
-                    if (currentLerpTime > lerpTime)
-                    {
-                        currentLerpTime = lerpTime;
-                    }
-     
-                    float perc = currentLerpTime / lerpTime;
-                    perc = Mathf.Sin(perc * Mathf.PI * 0.5f);
-
-                    yValue = Mathf.Lerp(transform.position.y, jumpPower, perc);
-                    float yValueNormal = Utils.Norm(yValue, 0, jumpPower - 5.0f);
-                    player_Character.Effects[2].Play(yValueNormal, 1, TargetAngle, 0, 0);
-
-              
-                    
-                    transform.position =  new Vector3(transform.position.x, yValue, transform.position.z);
-                }
-
-
-            }
-            else
-            {
-                Jumping = false;
-            }
-
-
-        }
-
-        #region Effect
-
-            if (Jumping && !Grounded)
-            {
-                player_Character.Effects[1].Up(playerModel.Larm.transform, playerModel.Rarm.transform);
-            }
-            else if (Grounded)
-            {
-                player_Character.Effects[1].Reset(playerModel.Larm.transform, playerModel.Rarm.transform);
-                player_Character.Effects[2].Reset();
-                trail.enabled = false;
-            }
-    
-        #endregion
-    }
-
-    void Gravity()
-    {
-        if (transform.position.y > 0 && !Jumping)
-        {
-            fallVel += new Vector3(0, GRAVITY, 0) * Time.deltaTime * 1.2f;
-
-            transform.position += fallVel;
-            Grounded = false;
-            Falling = true;
-        }
-        else if (transform.position.y <= 0)
-        {
-            Falling = false;
-            Grounded = true;
-            fallVel = Vector3.zero;
-            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-        }
-
-
-        if (transform.position.y <= 0 && Falling)
-        {
-            Landed = true;
-        }
-    }
-
-    void JumpInputHandling()
-    {
-  
-        if (!Input.GetKey(KeyCode.Space))
-        {
-            player_Character.Effects[0].Rewind(Time.deltaTime, 124);
-            player_Character.Effects[2].Rewind(Time.deltaTime, 2);
-
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            Jumping = true;
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            jumpPower = 0;
-            currentLerpTime = 0;
-        }
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            jumpPower += Time.deltaTime * jumpPowerMultiplier;
-
-            player_Character.Effects[0].Play(Time.deltaTime, 2);
-        }
-    }
-
-    void MovmentInputHandling()
-    {
-        if (!Moving)
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                vector = transform.position + new Vector3(0, 0, 25);
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                vector = transform.position - new Vector3(0, 0, 25);
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                vector = transform.position + new Vector3(25, 0, 0);
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                vector = transform.position - new Vector3(25, 0, 0);
-
-            }
-        }
-    }
-
-	void Update ()
-    {
-
-        if (!Jumping && Grounded)
-        {
-            MovmentInputHandling();
-            JumpInputHandling();
-            LerpMove(vector, Time.deltaTime, 5);
-        }
-    }
-
-    void LerpMove(Vector3 newPos, float delta, float speed)
-    {
-        float dist = Vector3.Distance(newPos, transform.position);
-
-        if(dist > 0.4f)
-        {
-            Moving = true;
-            transform.position = Vector3.Lerp(transform.position, newPos, delta * speed);
-        }
-        else
-        {
-            Moving = false;
-            transform.position = newPos;
-        }
-
-    }
+   // void InitEffects()
+   // {
+   //
+   //     puff = Instantiate(player_Character.Effects[3].ps);
+   //     puff.transform.parent = this.transform;
+   //
+   //     trail = Instantiate(player_Character.Effects[4].tr);
+   //     trail.transform.parent = this.transform;
+   //     trail.enabled = false;
+   // }
+   //
+   // void LateUpdate()
+   // {
+   //     //Jump();
+   //     //Gravity();
+   // }
+   //
+   // void Jump()
+   // {
+   //     if (Jumping)
+   //     {
+   //         Grounded = false;
+   //         float yValue = 0;
+   //
+   //
+   //         float dist = Mathf.Abs(transform.position.y - jumpPower);
+   //
+   //         if (dist > 5.0f)
+   //         {
+   //             if (jumpPower > 0)
+   //             {
+   //
+   //                 if (jumpPower < 50)
+   //                     jumpPower = 50;
+   //
+   //                 puff.Emit((int)jumpPower);
+   //                 trail.enabled = true;
+   //                 currentLerpTime += Time.deltaTime;
+   //
+   //                 if (currentLerpTime > lerpTime)
+   //                 {
+   //                     currentLerpTime = lerpTime;
+   //                 }
+   //  
+   //                 float perc = currentLerpTime / lerpTime;
+   //                 perc = Mathf.Sin(perc * Mathf.PI * 0.5f);
+   //
+   //                 yValue = Mathf.Lerp(transform.position.y, jumpPower, perc);
+   //                 float yValueNormal = Utils.Norm(yValue, 0, jumpPower - 5.0f);
+   //                 //player_Character.Effects[2].Play(yValueNormal, 1, TargetAngle, 0, 0);
+   //
+   //           
+   //                 
+   //                 transform.position =  new Vector3(transform.position.x, yValue, transform.position.z);
+   //             }
+   //
+   //
+   //         }
+   //         else
+   //         {
+   //             Jumping = false;
+   //         }
+   //
+   //
+   //     }
+   //
+   //     #region Effect
+   //
+   //         if (Jumping && !Grounded)
+   //         {
+   //             player_Character.Effects[1].Up(playerModel.Larm.transform, playerModel.Rarm.transform);
+   //         }
+   //         else if (Grounded)
+   //         {
+   //             player_Character.Effects[1].Reset(playerModel.Larm.transform, playerModel.Rarm.transform);
+   //             //player_Character.Effects[2].Reset();
+   //             trail.enabled = false;
+   //         }
+   // 
+   //     #endregion
+   // }
+   //
+   // void Gravity()
+   // {
+   //     if (transform.position.y > 0 && !Jumping)
+   //     {
+   //         fallVel += new Vector3(0, GRAVITY, 0) * Time.deltaTime * 1.2f;
+   //
+   //         transform.position += fallVel;
+   //         Grounded = false;
+   //         Falling = true;
+   //     }
+   //     else if (transform.position.y <= 0)
+   //     {
+   //         Falling = false;
+   //         Grounded = true;
+   //         fallVel = Vector3.zero;
+   //         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+   //     }
+   //
+   //
+   //     if (transform.position.y <= 0 && Falling)
+   //     {
+   //         Landed = true;
+   //     }
+   // }
+   //
+   // void JumpInputHandling(KeyCode jumpKey)
+   // {
+   //
+   //     if (!Input.GetKey(jumpKey))
+   //     {
+   //         player_Character.Effects[0].Rewind(Time.deltaTime, 124);
+   //         player_Character.Effects[2].Rewind(Time.deltaTime, 2);
+   //
+   //     }
+   //
+   //     if (Input.GetKeyUp(jumpKey))
+   //     {
+   //         Jumping = true;
+   //
+   //     }
+   //
+   //     if (Input.GetKeyDown(jumpKey))
+   //     {
+   //         jumpPower = 0;
+   //         currentLerpTime = 0;
+   //     }
+   //
+   //     if (Input.GetKey(jumpKey))
+   //     {
+   //         jumpPower += Time.deltaTime * jumpPowerMultiplier;
+   //
+   //         player_Character.Effects[0].Play(Time.deltaTime, 2);
+   //     }
+   // }
+   //
+   // void MovmentInputHandling()
+   // {
+   //     if (!Moving)
+   //     {
+   //         if (Input.GetKeyDown(KeyCode.W))
+   //         {
+   //             vector = transform.position + new Vector3(0, 0, 25);
+   //
+   //         }
+   //
+   //         if (Input.GetKeyDown(KeyCode.S))
+   //         {
+   //             vector = transform.position - new Vector3(0, 0, 25);
+   //
+   //         }
+   //
+   //         if (Input.GetKeyDown(KeyCode.D))
+   //         {
+   //             vector = transform.position + new Vector3(25, 0, 0);
+   //
+   //         }
+   //
+   //         if (Input.GetKeyDown(KeyCode.A))
+   //         {
+   //             vector = transform.position - new Vector3(25, 0, 0);
+   //
+   //         }
+   //     }
+   // }
+   //
+	//void Update ()
+   // {
+   //
+   //     if (!Jumping && Grounded)
+   //     {
+   //         //MovmentInputHandling();
+   //         //JumpInputHandling(KeyCode.W);
+   //         //LerpMove(vector, Time.deltaTime, 5);
+   //     }
+   // }
+   //
+   // void LerpMove(Vector3 newPos, float delta, float speed)
+   // {
+   //     float dist = Vector3.Distance(newPos, transform.position);
+   //
+   //     if(dist > 0.4f)
+   //     {
+   //         Moving = true;
+   //         transform.position = Vector3.Lerp(transform.position, newPos, delta * speed);
+   //     }
+   //     else
+   //     {
+   //         Moving = false;
+   //         transform.position = newPos;
+   //     }
+   //
+   // }
 
     void InitRender()
     {
