@@ -287,7 +287,8 @@ public class GameManager : MonoBehaviour
         if (debugMode)
         {
             GUILayout.Label("DEBUG MODE", style);
-            GUILayout.Label("Invincibility_F2: " + PlayerSubManager.instance.isInvincible.ToString(), style);
+            if(PlayerSubManager.instance!=null)
+                GUILayout.Label("Invincibility_F2: " + PlayerSubManager.instance.isInvincible.ToString(), style);
         }
       
     }

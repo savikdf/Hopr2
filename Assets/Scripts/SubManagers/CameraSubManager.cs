@@ -13,7 +13,7 @@ namespace SubManager.CameraMan
         bool followPlayer = false;
         float damping = 0.9f;
         Camera mainCamera;
-        Vector3 offsetVec3;
+        public Vector3 offsetVec3;
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace SubManager.CameraMan
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Camera;
             mainCamera = GameObject.FindObjectOfType<Camera>();
-            offsetVec3 = new Vector3(0, 2.8f, -10f);
+            offsetVec3 = new Vector3(0, 0.5f, -10f);
         }
 
         public override void OnPostInit()

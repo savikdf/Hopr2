@@ -59,6 +59,41 @@ namespace SubManager.World.Platforms
 
         }
 
+        void EstablishType(WorldSubManager.PlatformTypes type)
+        {
+            switch (type)
+            {
+                case WorldSubManager.PlatformTypes.Normal:
+
+                    break;
+
+                case WorldSubManager.PlatformTypes.Blinker:
+
+                    break;
+                case WorldSubManager.PlatformTypes.Dud:
+
+                    break;
+                case WorldSubManager.PlatformTypes.Rich:
+
+                    break;
+                case WorldSubManager.PlatformTypes.Special:
+
+                    break;
+                case WorldSubManager.PlatformTypes.Tri:
+
+                    break;
+                case WorldSubManager.PlatformTypes.Warp:
+
+                    break;
+                default:
+                    EstablishType(WorldSubManager.PlatformTypes.Normal);
+                    break;
+
+            }
+
+        }
+
+
         public void OnReposition(int index)
         {
             platformIndex = index;  //TODO: make this worth something. doesn't do anything right now
