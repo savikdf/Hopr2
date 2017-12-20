@@ -14,9 +14,11 @@ public class Player_Character : MonoBehaviour
     public bool Moving;
     public bool Grounded = true;
     public bool Jumping = false;
+    public bool Landed = false;
+    public bool Falling = false;
 
-    public ParticleSystem puff;
-    public TrailRenderer trail;
+    private ParticleSystem puff;
+    private TrailRenderer trail;
 
     Vector3 vector;
     Vector3 fallVel;
@@ -26,9 +28,12 @@ public class Player_Character : MonoBehaviour
 
     float lerpTime = 4.0f;
 
-
     [Range(0, 55)]
     public float jumpPowerMultiplier;
+
+
+    [Range(0, 360)]
+    public float TargetAngle;
 
     void Awake()
     {
@@ -44,6 +49,7 @@ public class Player_Character : MonoBehaviour
     
 
         player_Character.Effects[0].Set(this.transform);
+        player_Character.Effects[2].Set(this.transform);
 
         InitEffects();
     }
@@ -52,11 +58,12 @@ public class Player_Character : MonoBehaviour
     void InitEffects()
     {
 
-        puff = Instantiate(player_Character.Effects[2].ps);
+        puff = Instantiate(player_Character.Effects[3].ps);
         puff.transform.parent = this.transform;
 
-        trail = Instantiate(player_Character.Effects[3].tr);
+        trail = Instantiate(player_Character.Effects[4].tr);
         trail.transform.parent = this.transform;
+        trail.enabled = false;
     }
 
     void LateUpdate()
@@ -80,9 +87,11 @@ public class Player_Character : MonoBehaviour
                 if (jumpPower > 0)
                 {
 
-                    if(jumpPower > 50)
-                    puff.Emit(400);
+                    if (jumpPower < 50)
+                        jumpPower = 50;
 
+                    puff.Emit((int)jumpPower);
+                    trail.enabled = true;
                     currentLerpTime += Time.deltaTime;
 
                     if (currentLerpTime > lerpTime)
@@ -91,9 +100,14 @@ public class Player_Character : MonoBehaviour
                     }
      
                     float perc = currentLerpTime / lerpTime;
+                    float perc2 = (perc * perc);//Mathf.Sin(perc * Mathf.PI * 0.5f);
                     perc = Mathf.Sin(perc * Mathf.PI * 0.5f);
 
                     yValue = Mathf.Lerp(transform.position.y, jumpPower, perc);
+                    float yValueNormal = Utils.Norm(yValue, 0, jumpPower - 5.0f);
+                    player_Character.Effects[2].Play(yValueNormal, 1, TargetAngle, 0, 0);
+
+              
                     
                     transform.position =  new Vector3(transform.position.x, yValue, transform.position.z);
                 }
@@ -117,8 +131,10 @@ public class Player_Character : MonoBehaviour
             else if (Grounded)
             {
                 player_Character.Effects[1].Reset(playerModel.Larm.transform, playerModel.Rarm.transform);
+                player_Character.Effects[2].Reset();
+                trail.enabled = false;
             }
-
+    
         #endregion
     }
 
@@ -130,28 +146,37 @@ public class Player_Character : MonoBehaviour
 
             transform.position += fallVel;
             Grounded = false;
+            Falling = true;
         }
         else if (transform.position.y <= 0)
         {
+            Falling = false;
             Grounded = true;
             fallVel = Vector3.zero;
+            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        }
+
+
+        if (transform.position.y <= 0 && Falling)
+        {
+            Landed = true;
         }
     }
 
-	void Update ()
+    void JumpInputHandling()
     {
-
-
+  
         if (!Input.GetKey(KeyCode.Space))
         {
             player_Character.Effects[0].Rewind(Time.deltaTime, 124);
+            player_Character.Effects[2].Rewind(Time.deltaTime, 2);
 
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             Jumping = true;
-         
+
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -160,42 +185,51 @@ public class Player_Character : MonoBehaviour
             currentLerpTime = 0;
         }
 
+        if (Input.GetKey(KeyCode.Space))
+        {
+            jumpPower += Time.deltaTime * jumpPowerMultiplier;
+
+            player_Character.Effects[0].Play(Time.deltaTime, 2);
+        }
+    }
+
+    void MovmentInputHandling()
+    {
+        if (!Moving)
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                vector = transform.position + new Vector3(0, 0, 25);
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                vector = transform.position - new Vector3(0, 0, 25);
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                vector = transform.position + new Vector3(25, 0, 0);
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                vector = transform.position - new Vector3(25, 0, 0);
+
+            }
+        }
+    }
+
+	void Update ()
+    {
+
         if (!Jumping && Grounded)
         {
-            if (Input.GetKey(KeyCode.Space))
-            {
-                jumpPower += Time.deltaTime * jumpPowerMultiplier;
-
-                player_Character.Effects[0].Play(Time.deltaTime, 2);
-            }
-
-            if (!Moving)
-            {
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    vector = transform.position + new Vector3(0, 0, 25);
-    
-                }
-
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    vector = transform.position - new Vector3(0, 0, 25);
-
-                }
-
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    vector = transform.position + new Vector3(25, 0, 0);
-          
-                }
-
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    vector = transform.position - new Vector3(25, 0, 0);
-
-                }
-            }
-
+            MovmentInputHandling();
+            JumpInputHandling();
             LerpMove(vector, Time.deltaTime, 5);
         }
     }

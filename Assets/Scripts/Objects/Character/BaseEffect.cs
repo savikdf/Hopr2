@@ -43,6 +43,11 @@ public class BaseEffect  {
 
     }
 
+    public virtual void Play(float delta, float speed, float X, float Y, float Z)
+    {
+
+    }
+
     public virtual void Stop()
     {
 
@@ -54,6 +59,11 @@ public class BaseEffect  {
     }
 
     public virtual void Up(Transform l, Transform r)
+    {
+
+    }
+
+    public virtual void Reset()
     {
 
     }

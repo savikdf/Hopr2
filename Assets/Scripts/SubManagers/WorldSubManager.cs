@@ -28,7 +28,13 @@ namespace SubManager.World
         bool isMoving;       //when is false, stops the move coroutine
         public enum PlatformTypes
         {
-            Normal
+            Normal,
+            Blinker,
+            Dud,
+            Special,
+            Tri,
+            Warp,
+            Rich
         }
         public List<Platform> platforms;
         Vector3 spawnVec3;

@@ -22,6 +22,7 @@ public class CharacterManager : BaseSubManager
                 {
                     chars.Effects.Add(new ScriptEffects.JumpEffect(2.0f));
                     chars.Effects.Add(new ScriptEffects.ArmsMovment(2.0f));
+                    chars.Effects.Add(new ScriptEffects.FlipEffect(2.0f));
 
                     chars.Effects.Add(new ParticleEffect(2.0f, ParticleEffects.ParticleEffectLoad.PuffLoad()));
                     chars.Effects.Add(new TrailEffect(2.0f, TrailEffects.TrailEffectLoad.SmokeTrialLoad()));

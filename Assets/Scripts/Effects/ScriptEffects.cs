@@ -9,6 +9,7 @@ namespace ScriptEffects {
     {
         float yValue;
         float storedY;
+        float min = 0.2f;
         float smallStopMargin = 0.01f;
         float bigStopMargin = 0.99f;
 
@@ -23,11 +24,11 @@ namespace ScriptEffects {
             {
                 if (yValue > smallStopMargin)
                 {
-                    yValue = Mathf.Lerp(t.localScale.y, 0, delta * speed);
+                    yValue = Mathf.Lerp(t.localScale.y, min, delta * speed);
                 }
                 else
                 {
-                    yValue = 0;
+                    yValue = min;
                 }
             }
             catch
@@ -74,7 +75,40 @@ namespace ScriptEffects {
 
     public class FlipEffect : ScriptEffect
     {
+        //float angle;
 
+        public FlipEffect(float _duration) : base(_duration)
+        {
+        }
+
+        public override void Play(float delta, float speed, float X, float Y, float Z)
+        {
+            try
+            {
+                t.rotation =  Quaternion.Euler((delta * speed) * X, ((delta * speed) * Y), (delta * speed) * Z);
+            }
+            catch
+            {
+                Debug.Log("No transform Assigned, Please Use FlipEffect.Set");
+            }
+
+            Debug.Log("Making an Effect from FlipEffect");
+            //t.rotation = rotation;
+        }
+
+
+
+        public override void Reset()
+        {
+
+            t.rotation = Quaternion.Euler(0, 0, 0);
+            //Debug.Log("Resting");
+        }
+
+        public override void Set(Transform _p)
+        {
+            base.t = _p;
+        }
     }
 
     public class ArmsMovment : ScriptEffect
