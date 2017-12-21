@@ -256,16 +256,27 @@ public class Player_Character : MonoBehaviour
         {
             player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
 
+
+            if (playerModelObject != null)
+                Destroy(playerModelObject);
+
+
+     
             playerModelObject = Instantiate(player_Character.Model.mainObject, this.transform.position, Quaternion.identity);
             playerModelObject.transform.parent = this.transform;
             playerModelObject.name = player_Character.name;
-                                                                 
+
             //Instantiate(player_Character.Model.Body, this.transform.position, Quaternion.identity);
-            playerModel.Body = playerModelObject.transform.GetChild(0).gameObject;
-            playerModel.Larm = playerModelObject.transform.GetChild(1).gameObject;
-            playerModel.Lleg = playerModelObject.transform.GetChild(2).gameObject;
-            playerModel.Rarm = playerModelObject.transform.GetChild(3).gameObject;
-            playerModel.Rleg = playerModelObject.transform.GetChild(4).gameObject;
+            playerModel.Body = ((playerModelObject).transform.childCount > 1) ? (playerModelObject).transform.GetChild(0).gameObject :
+                        new GameObject("Poo");
+            playerModel.Larm = ((playerModelObject).transform.childCount > 1) ? (playerModelObject).transform.GetChild(1).gameObject :
+                        new GameObject("Poo");
+            playerModel.Lleg = ((playerModelObject).transform.childCount > 1) ? (playerModelObject).transform.GetChild(2).gameObject :
+                        new GameObject("Poo");
+            playerModel.Rarm = ((playerModelObject).transform.childCount > 1) ? (playerModelObject).transform.GetChild(3).gameObject :
+                        new GameObject("Poo");
+            playerModel.Rleg = ((playerModelObject).transform.childCount > 1) ? (playerModelObject).transform.GetChild(4).gameObject :
+                        new GameObject("Poo");
 
         }
         catch (Exception ex)
