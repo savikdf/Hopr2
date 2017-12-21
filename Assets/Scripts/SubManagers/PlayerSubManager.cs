@@ -5,6 +5,7 @@ using SubManager;
 using SubManager.Spawn;
 using SubManager.World;
 using System;
+using SubManager.CharacterMan;
 
 namespace SubManager.Player
 {
@@ -19,7 +20,7 @@ namespace SubManager.Player
         //Data Vars
         public short playerSpawnIndex = 1;  //what platform they spawn on
         public int currentIndex;
-        public Vector3 offsetVec3 = new Vector3(0, 0.6f, 0);
+        public Vector3 offsetVec3 = new Vector3(0, 0, 0);
 
         //TODO: Real Player.
         private GameObject player_PH;

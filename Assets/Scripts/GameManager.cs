@@ -14,6 +14,7 @@ using SubManager.Spawn;
 using SubManager.World;
 using SubManager.Menu;
 using SubManager.Difficulty;
+using SubManager.CharacterMan;
 
 #endregion
 
@@ -276,7 +277,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 ClearAndReloadScene();
-            }
+            }  
         }
     }
 

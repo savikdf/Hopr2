@@ -118,27 +118,28 @@ namespace SubManager.Difficulty
             switch (dif)
             {
                 case PlatformDifficulties.Easy:
-                    return 1f;
-
-                case PlatformDifficulties.EasyMid:
                     return 1.2f;
 
-                case PlatformDifficulties.Mid:
+                case PlatformDifficulties.EasyMid:
                     return 1.4f;
 
-                case PlatformDifficulties.MidHard:
+                case PlatformDifficulties.Mid:
                     return 1.6f;
 
-                case PlatformDifficulties.Hard:
+                case PlatformDifficulties.MidHard:
                     return 1.8f;
 
-                case PlatformDifficulties.HardGod:
+                case PlatformDifficulties.Hard:
                     return 2f;
 
-                case PlatformDifficulties.God:
+                case PlatformDifficulties.HardGod:
                     return 2.2f;
+
+                case PlatformDifficulties.God:
+                    return 2.4f;
+
                 default:
-                    return 1f;
+                    return 1.2f;
             }
         }  
 

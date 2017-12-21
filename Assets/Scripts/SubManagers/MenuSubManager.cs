@@ -6,6 +6,7 @@ using SubManager;
 using System;
 using System.Linq;
 using SubManager.Player;
+using SubManager.CharacterMan;
 
 namespace SubManager.Menu
 {
@@ -50,7 +51,7 @@ namespace SubManager.Menu
             menus = new List<Canvas>();
             try
             {
-                menuHolder = Instantiate(Resources.Load("Prefabs/Menus") as GameObject, Vector3.zero, Quaternion.identity);
+                menuHolder = Instantiate(Resources.Load("Prefabs/UI/Menus") as GameObject, Vector3.zero, Quaternion.identity);
                 if (menuHolder)
                 {
                     //cycle through each type of menu
@@ -134,8 +135,17 @@ namespace SubManager.Menu
 
         public void OnButtonPress(string name)
         {
-            if(GameManager.instance.debugMode)
-                Debug.Log("Button pressed: " + name);
+            //if (GameManager.instance.debugMode)
+            //    Debug.Log("Button pressed: " + name);
+
+            //change character buttons will hit this
+            //Button_Character_Change_#. # will be the index that the character should update to
+            int charIndex = -1;
+            if (name.Contains("Character_Change_"))
+            {
+                charIndex = Int32.TryParse(name[name.Length - 1].ToString(), out charIndex) ? charIndex : -1;
+                name = "Button_Character_Change";
+            }
 
             switch (name)
             {
@@ -151,9 +161,18 @@ namespace SubManager.Menu
 
                 #region Character
 
-                case "Character_Back":
-                    SwitchMenu(MenuSubManager.MenuStates.Character);
+                case "Button_Character_Back":
+                    SwitchMenu(MenuSubManager.MenuStates.Main);
                     break;
+                case "Button_Character_Change":
+                    if (charIndex != -1 && CharacterManager.instance != null && Player_Character.instance != null)
+                    {
+                        //updates that character manager witht the new char index
+                        CharacterManager.instance.index = (uint)charIndex;
+                        Player_Character.instance.InitRender();
+                    }
+                    break;
+           
                 #endregion
 
                 #region Intra

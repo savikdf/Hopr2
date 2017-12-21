@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 224448102079716354}
   - component: {fileID: 114078036604580470}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -628,7 +628,7 @@ MonoBehaviour:
   PanelShadowColor: {r: 0.7794118, g: 0.7794118, b: 0.7794118, a: 1}
   PanelOutlineColor: {r: 0.3492647, g: 0.46729213, b: 0.6985294, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  showCorners: 1
+  showOutline: 0
 --- !u!114 &114137477465136030
 MonoBehaviour:
   m_ObjectHideFlags: 1

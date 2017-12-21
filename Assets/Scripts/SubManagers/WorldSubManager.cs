@@ -200,7 +200,7 @@ namespace SubManager.World
                     //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
                     for (int i = 0; i < platforms.Count; i++)
                     {
-                        if (platforms[i] != null)
+                        if (platforms[i] != null && i != PlayerSubManager.instance.currentIndex)
                         {
                             platforms[i].transform.Rotate(
                              new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
