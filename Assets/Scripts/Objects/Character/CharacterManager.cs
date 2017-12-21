@@ -48,15 +48,10 @@ namespace SubManager.CharacterMan
                         //have to null check because some characters dont have arms and legs (goo)
                         mainObject = charactersObjectLoad[i] as GameObject,
                         Body = (charactersObjectLoad[i] as GameObject).transform.GetChild(0).gameObject,
-                        Larm = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(1).gameObject :
-                        new GameObject(),
-                        Lleg = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(2).gameObject :
-                        new GameObject(),
-                        Rarm = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(3).gameObject :
-                        new GameObject(),
-                        Rleg = ((charactersObjectLoad[i] as GameObject).transform.childCount > 1) ? (charactersObjectLoad[i] as GameObject).transform.GetChild(4).gameObject :
-                        new GameObject()
-
+                        Larm =  (charactersObjectLoad[i] as GameObject).transform.GetChild(1).gameObject,
+                        Lleg =  (charactersObjectLoad[i] as GameObject).transform.GetChild(2).gameObject,
+                        Rarm = (charactersObjectLoad[i] as GameObject).transform.GetChild(3).gameObject,
+                        Rleg = (charactersObjectLoad[i] as GameObject).transform.GetChild(4).gameObject
                     }
                 };
 
