@@ -47,23 +47,27 @@ public class Player_Character : MonoBehaviour
     {
         InitRender();
 
-        //player_Character.Effects[0].Set(this.transform);
-        //player_Character.Effects[2].Set(this.transform);
+        player_Character.Effects[0].Set(this.transform);
+        player_Character.Effects[2].Set(this.transform);
 
-        //InitEffects();
+        InitEffects();
     }
+
+    void InitEffects()
+    {
+   
+        puff = Instantiate(player_Character.Effects[3].ps);
+        puff.transform.parent = this.transform;
+        puff.transform.localPosition = new Vector3(0, 0, 0);
+
+        trail = Instantiate(player_Character.Effects[4].tr);
+        trail.transform.parent = this.transform;
+        trail.transform.localPosition = new Vector3(0, 0, 0);
+        //trail.enabled = false;
+    }
+
     #region Shite
-    // void InitEffects()
-    // {
-    //
-    //     puff = Instantiate(player_Character.Effects[3].ps);
-    //     puff.transform.parent = this.transform;
-    //
-    //     trail = Instantiate(player_Character.Effects[4].tr);
-    //     trail.transform.parent = this.transform;
-    //     trail.enabled = false;
-    // }
-    //
+
     // void LateUpdate()
     // {
     //     //Jump();
@@ -220,17 +224,24 @@ public class Player_Character : MonoBehaviour
     //     }
     // }
     //
-    //void Update ()
-    // {
-    //
-    //     if (!Jumping && Grounded)
-    //     {
-    //         //MovmentInputHandling();
-    //         //JumpInputHandling(KeyCode.W);
-    //         //LerpMove(vector, Time.deltaTime, 5);
-    //     }
-    // }
-    //
+    void Update ()
+     {
+    
+         if (!Jumping && Grounded)
+         {
+            //MovmentInputHandling();
+            //JumpInputHandling(KeyCode.W);
+            //LerpMove(vector, Time.deltaTime, 5);
+            JumpAnimation();
+         }
+     }
+    
+    void JumpAnimation()
+    {
+        if(Input.GetKeyUp(KeyCode.W))
+        puff.Emit(50);
+    }
+
     // void LerpMove(Vector3 newPos, float delta, float speed)
     // {
     //     float dist = Vector3.Distance(newPos, transform.position);

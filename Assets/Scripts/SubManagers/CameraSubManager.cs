@@ -22,7 +22,7 @@ namespace SubManager.CameraMan
         {
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Camera;
-            mainCamera = GameObject.FindObjectOfType<Camera>();
+            mainCamera = Camera.main;//GameObject.FindObjectOfType<Camera>();
             offsetVec3 = new Vector3(0, 0.5f, -10f);
         }
 
