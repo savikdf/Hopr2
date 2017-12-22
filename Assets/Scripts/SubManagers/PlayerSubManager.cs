@@ -11,6 +11,21 @@ namespace SubManager.Player
 {
     public class PlayerSubManager : BaseSubManager
     {
+
+        //Physics Vars
+        public float GRAVITY = -9.8f;
+
+        //Character Model Rendering
+
+        public Character player_Character;
+        [HideInInspector]
+        public GameObject playerModelObject;
+        public Model playerModel;
+
+        //Effects 
+        private ParticleSystem puff;
+        private TrailRenderer trail;
+
         #region Variables
         public static PlayerSubManager instance;
         bool isPlayerAlive = true;
@@ -18,15 +33,16 @@ namespace SubManager.Player
         public bool isInvincible = false;
 
         //Data Vars
-        public short playerSpawnIndex = 1;  //what platform they spawn on
+        public short playerSpawnIndex = 1; 
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0, 0);
 
         //TODO: Real Player.
-        private GameObject player_PH;
-        public GameObject Player_PH
+        private GameObject player_Object;
+
+        public GameObject Player_Object
         {
-            get { return player_PH; }
+            get { return player_Object; }
             set { Debug.Log("Cannot Set the Player Object This Way."); }
         }
         //----------------------------
@@ -34,9 +50,6 @@ namespace SubManager.Player
         #endregion
 
         #region Properties
-
-
-
         #endregion
 
         #region Overrides
@@ -48,9 +61,9 @@ namespace SubManager.Player
 
             //PLACEHOLDER:
 
-            player_PH = (player_PH == null) ?
-                GameObject.Find("Player_PH") : player_PH;
-            if (player_PH == null)
+            player_Object = (player_Object == null) ?
+                GameObject.Find("Player_Object") : player_Object;
+            if (player_Object == null)
             {
                 Debug.Log("NO PLAYER!");
             }
@@ -60,12 +73,13 @@ namespace SubManager.Player
 
         public override void OnPostInit()
         {
-
+            InitRender();
         }
 
         //spawn the player on the platforms
         public override void OnGameLoad()
         {
+         
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
@@ -86,6 +100,37 @@ namespace SubManager.Player
         #endregion
 
         #region Specific Methods 
+
+        public void InitRender()
+        {
+            try
+            {
+                player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
+
+
+                if (playerModelObject != null)
+                {
+                    Destroy(playerModelObject);
+                }
+
+                playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
+                playerModelObject.transform.parent = player_Object.transform;
+
+                playerModelObject.name = player_Character.name;
+
+                playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
+                playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
+                playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
+                playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
+                playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
+
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Player_Character.InitRender(): " + ex.Message);
+            }
+
+        }
 
         void OnPlayerJump(bool isUp)
         {
@@ -144,12 +189,12 @@ namespace SubManager.Player
         public void SetPlayerOnPlatform(int platIndex)
         {
             //sets the parent of the player to platform
-            PlayerSubManager.instance.Player_PH.transform.SetParent(
+            PlayerSubManager.instance.player_Object.transform.SetParent(
                          WorldSubManager.instance.platforms[platIndex].transform
                      );
 
             //puts them in the middle of the platform they spawn on
-            PlayerSubManager.instance.Player_PH.transform.localPosition = Vector3.zero + offsetVec3;
+            PlayerSubManager.instance.player_Object.transform.localPosition = Vector3.zero + offsetVec3;
 
         }
 

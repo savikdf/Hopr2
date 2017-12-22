@@ -195,9 +195,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 26049610}
-  - component: {fileID: 26049611}
   m_Layer: 0
-  m_Name: Player_PH
+  m_Name: Player_Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,40 +215,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &26049611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 26049609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22d4b1e2acf19894293da07d1532cbf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GRAVITY: -9.8
-  player_Character:
-    name: 
-    Model:
-      mainObject: {fileID: 0}
-      Body: {fileID: 0}
-      Larm: {fileID: 0}
-      Rarm: {fileID: 0}
-      Lleg: {fileID: 0}
-      Rleg: {fileID: 0}
-    Effects: []
-    Disc: 
-  playerModelObject: {fileID: 0}
-  playerModel:
-    mainObject: {fileID: 0}
-    Body: {fileID: 0}
-    Larm: {fileID: 0}
-    Rarm: {fileID: 0}
-    Lleg: {fileID: 0}
-    Rleg: {fileID: 0}
-  jumpPower: 0
-  jumpPowerMultiplier: 55
-  TargetAngle: 360
 --- !u!1001 &78324102
 Prefab:
   m_ObjectHideFlags: 0
@@ -683,8 +648,6 @@ GameObject:
   m_Component:
   - component: {fileID: 387201587}
   - component: {fileID: 387201586}
-  - component: {fileID: 387201585}
-  - component: {fileID: 387201584}
   m_Layer: 0
   m_Name: Action_Cam
   m_TagString: Untagged
@@ -692,20 +655,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &387201584
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 387201583}
-  m_Enabled: 1
---- !u!124 &387201585
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 387201583}
-  m_Enabled: 1
 --- !u!20 &387201586
 Camera:
   m_ObjectHideFlags: 0
@@ -1777,6 +1726,10 @@ Prefab:
     - target: {fileID: 4845189428786016, guid: de3f8ca88f4e2c449a71fb58b965727a, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386797248980044, guid: de3f8ca88f4e2c449a71fb58b965727a, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de3f8ca88f4e2c449a71fb58b965727a, type: 2}

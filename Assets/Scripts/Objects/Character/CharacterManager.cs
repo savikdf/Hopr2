@@ -68,7 +68,6 @@ namespace SubManager.CharacterMan
             return new Character("No Chars");
         }
 
-
         //runs on the post init event from the gamemanager
         //use this to start communicating with other subManagers
         public override void OnPostInit()

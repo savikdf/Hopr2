@@ -34,7 +34,7 @@ namespace SubManager.CameraMan
         public override void OnGameLoad()
         {
             //start the camera looking at the right place
-            mainCamera.transform.position = PlayerSubManager.instance.Player_PH.transform.position + offsetVec3;
+            mainCamera.transform.position = PlayerSubManager.instance.Player_Object.transform.position + offsetVec3;
 
         }
 
@@ -58,7 +58,7 @@ namespace SubManager.CameraMan
             while (followPlayer)
             {
                 mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position,
-                    PlayerSubManager.instance.Player_PH.transform.position + offsetVec3, Time.deltaTime * damping);
+                    PlayerSubManager.instance.Player_Object.transform.position + offsetVec3, Time.deltaTime * damping);
 
                 yield return null;
             }
