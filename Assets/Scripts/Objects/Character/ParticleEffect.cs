@@ -16,11 +16,6 @@ public class ParticleEffect : BaseEffect
        ps = _ps;
     }
 
-    public override bool Play()
-    {
-        ps.Play();
-        return true;
-    }
 
     public void SetParticleSystem(ParticleSystem _ps)
     {

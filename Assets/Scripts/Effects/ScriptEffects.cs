@@ -13,41 +13,40 @@ namespace ScriptEffects {
         float smallStopMargin = 0.01f;
         float bigStopMargin = 0.99f;
 
+
         public JumpEffect(float _duration) : base(_duration)
         {
         }
 
-        public override bool Play(float delta, float speed)
+        public override void Play(float delta, float speed, bool trigger)
         {
             storedY = t.localScale.y;
+
             try
             {
                 if (yValue > smallStopMargin)
                 {
                     yValue = Mathf.Lerp(t.localScale.y, min, delta * speed);
+          
+                    t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
                 }
                 else
                 {
+                    trigger = true;
                     yValue = min;
-
-                    t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
-
-                    return true;
+                    Debug.Log("WHAT THE FUCK");
+                    return;
                 }
             }
             catch
             {
                 Debug.Log("No transform Assigned, Please Use JumpAffect.Sett");
             }
-
-            Debug.Log("Making an Effect from JumpEffect");
-
-            return false;
         }
 
 
 
-        public override bool Rewind(float delta, float speed)
+        public override void Rewind(float delta, float speed)
         {
             storedY = t.localScale.y;
             try
@@ -60,7 +59,6 @@ namespace ScriptEffects {
                 {
                     yValue = 1.0f;
                     t.localScale = new Vector3((1.0f - Mathf.Sqrt(yValue)) + 1, yValue, (1.0f - Mathf.Sqrt(yValue)) + 1);
-                    return true;
                 }
             }
             catch
@@ -69,7 +67,6 @@ namespace ScriptEffects {
             }
 
             //Debug.Log("Rewinding an Effect from JumpEffect");
-            return false;
         }
 
         public override void Set(Transform _p)
@@ -86,7 +83,7 @@ namespace ScriptEffects {
         {
         }
 
-        public override bool Play(float delta, float speed, float X, float Y, float Z)
+        public override void Play(float delta, float speed, float X, float Y, float Z)
         {
             try
             {
@@ -99,7 +96,6 @@ namespace ScriptEffects {
             }
 
             Debug.Log("Making an Effect from FlipEffect");
-            return true;
         }
 
 

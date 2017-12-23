@@ -32,10 +32,15 @@ namespace SubManager.Player
         [HideInInspector]
         public bool isInvincible = false;
 
+        public bool JumpAnimationTriggered = false;
+        public bool JumpAnimationEnded = false;
+
+        bool status = false;
         //Data Vars
         public short playerSpawnIndex = 1; 
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0, 0);
+        float time = 0;
 
         //TODO: Real Player.
         private GameObject player_Object;
@@ -90,10 +95,10 @@ namespace SubManager.Player
         public override void OnGameStart()
         {
 
-            //player_Character.Effects[0].Set(Player_Object.transform);
+            if(Player_Object != null) player_Character.Effects[0].Set(Player_Object.transform);
             //player_Character.Effects[2].Set(player_Object.transform);
             //
-           // InitEffects();
+            InitEffects();
         }
 
         //player dies, this runs after
@@ -150,9 +155,12 @@ namespace SubManager.Player
             //trail.enabled = false;
         }
 
-        public bool JumpEffects()
+        public bool JumpEffectsReset()
         {
-            return player_Character.Effects[0].Play(Time.deltaTime, 2);
+            //float time = 0;
+            //time = Time.deltaTime;
+            //return player_Character.Effects[0].Rewind(time, 0.002f);
+            return true;
         }
 
         void OnPlayerJump(bool isUp)
@@ -167,9 +175,11 @@ namespace SubManager.Player
                     {
                         //moves player index up
                         SetPlayerOnPlatform(currentIndex + 1);
+                        JumpEffectsReset();
                         currentIndex++;
                         //tell the world manager that the player has jumped
                         WorldSubManager.instance.OnPlayerJumped();
+             
                     }
                     else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)
                     {
@@ -230,9 +240,16 @@ namespace SubManager.Player
         {
             if (GameManager.instance.debugMode)
             {
+
+                time += Time.deltaTime;
+
                 if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
                 {
-                    OnPlayerJump(true);
+                    JumpAnimationTriggered = true;
+                    JumpAnimationEnded = false;
+                    time = 0;
+
+
                 }
                 if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
                 {
@@ -243,6 +260,16 @@ namespace SubManager.Player
                     isInvincible = !isInvincible;
                 }
             }
+
+
+            if(JumpAnimationTriggered)
+            {    
+                player_Character.Effects[0].Play(time, 2f, JumpAnimationEnded);          
+            }
+            Debug.Log(JumpAnimationEnded);
+
+            if (JumpAnimationTriggered && JumpAnimationEnded)
+                OnPlayerJump(true);
         }
 
         #endregion

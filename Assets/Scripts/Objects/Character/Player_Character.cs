@@ -185,7 +185,7 @@ public class Player_Character : MonoBehaviour
     void JumpAnimation()
     {
         if(Input.GetKeyUp(KeyCode.W))
-        puff.Emit(50);
+        puff.Emit(350);
     }
 
     // void LerpMove(Vector3 newPos, float delta, float speed)
