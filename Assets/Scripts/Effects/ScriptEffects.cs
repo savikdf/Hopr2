@@ -17,7 +17,7 @@ namespace ScriptEffects {
         {
         }
 
-        public override void Play(float delta, float speed)
+        public override bool Play(float delta, float speed)
         {
             storedY = t.localScale.y;
             try
@@ -29,6 +29,10 @@ namespace ScriptEffects {
                 else
                 {
                     yValue = min;
+
+                    t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
+
+                    return true;
                 }
             }
             catch
@@ -38,12 +42,12 @@ namespace ScriptEffects {
 
             Debug.Log("Making an Effect from JumpEffect");
 
-            t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
+            return false;
         }
 
 
 
-        public override void Rewind(float delta, float speed)
+        public override bool Rewind(float delta, float speed)
         {
             storedY = t.localScale.y;
             try
@@ -55,6 +59,8 @@ namespace ScriptEffects {
                 else
                 {
                     yValue = 1.0f;
+                    t.localScale = new Vector3((1.0f - Mathf.Sqrt(yValue)) + 1, yValue, (1.0f - Mathf.Sqrt(yValue)) + 1);
+                    return true;
                 }
             }
             catch
@@ -63,8 +69,7 @@ namespace ScriptEffects {
             }
 
             //Debug.Log("Rewinding an Effect from JumpEffect");
-
-            t.localScale = new Vector3((1.0f - Mathf.Sqrt(yValue)) + 1, yValue, (1.0f - Mathf.Sqrt(yValue)) + 1);
+            return false;
         }
 
         public override void Set(Transform _p)
@@ -81,11 +86,12 @@ namespace ScriptEffects {
         {
         }
 
-        public override void Play(float delta, float speed, float X, float Y, float Z)
+        public override bool Play(float delta, float speed, float X, float Y, float Z)
         {
             try
             {
                 t.rotation =  Quaternion.Euler((delta * speed) * X, ((delta * speed) * Y), (delta * speed) * Z);
+                
             }
             catch
             {
@@ -93,7 +99,7 @@ namespace ScriptEffects {
             }
 
             Debug.Log("Making an Effect from FlipEffect");
-            //t.rotation = rotation;
+            return true;
         }
 
 

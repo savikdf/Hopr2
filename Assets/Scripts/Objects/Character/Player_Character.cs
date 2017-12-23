@@ -43,28 +43,28 @@ public class Player_Character : MonoBehaviour
         instance = (instance == null) ? this : instance;
     }
 
-    void Start()
-    {
-        InitRender();
-
-        player_Character.Effects[0].Set(this.transform);
-        player_Character.Effects[2].Set(this.transform);
-
-        InitEffects();
-    }
-
-    void InitEffects()
-    {
-   
-        puff = Instantiate(player_Character.Effects[3].ps);
-        puff.transform.parent = this.transform;
-        puff.transform.localPosition = new Vector3(0, 0, 0);
-
-        trail = Instantiate(player_Character.Effects[4].tr);
-        trail.transform.parent = this.transform;
-        trail.transform.localPosition = new Vector3(0, 0, 0);
-        //trail.enabled = false;
-    }
+    //void Start()
+    //{
+    //    InitRender();
+    //
+    //    player_Character.Effects[0].Set(this.transform);
+    //    player_Character.Effects[2].Set(this.transform);
+    //
+    //    InitEffects();
+    //}
+    //
+    //void InitEffects()
+   // {
+   //
+   //     puff = Instantiate(player_Character.Effects[3].ps);
+   //     puff.transform.parent = this.transform;
+   //     puff.transform.localPosition = new Vector3(0, 0, 0);
+   //
+   //     trail = Instantiate(player_Character.Effects[4].tr);
+   //     trail.transform.parent = this.transform;
+   //     trail.transform.localPosition = new Vector3(0, 0, 0);
+   //     //trail.enabled = false;
+   // }
 
     #region Shite
 
@@ -73,7 +73,7 @@ public class Player_Character : MonoBehaviour
     //     //Jump();
     //     //Gravity();
     // }
-    //
+  
     // void Jump()
     // {
     //     if (Jumping)
@@ -139,31 +139,7 @@ public class Player_Character : MonoBehaviour
     //     #endregion
     // }
     //
-    // void Gravity()
-    // {
-    //     if (transform.position.y > 0 && !Jumping)
-    //     {
-    //         fallVel += new Vector3(0, GRAVITY, 0) * Time.deltaTime * 1.2f;
-    //
-    //         transform.position += fallVel;
-    //         Grounded = false;
-    //         Falling = true;
-    //     }
-    //     else if (transform.position.y <= 0)
-    //     {
-    //         Falling = false;
-    //         Grounded = true;
-    //         fallVel = Vector3.zero;
-    //         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-    //     }
-    //
-    //
-    //     if (transform.position.y <= 0 && Falling)
-    //     {
-    //         Landed = true;
-    //     }
-    // }
-    //
+
     // void JumpInputHandling(KeyCode jumpKey)
     // {
     //
@@ -191,36 +167,6 @@ public class Player_Character : MonoBehaviour
     //         jumpPower += Time.deltaTime * jumpPowerMultiplier;
     //
     //         player_Character.Effects[0].Play(Time.deltaTime, 2);
-    //     }
-    // }
-    //
-    // void MovmentInputHandling()
-    // {
-    //     if (!Moving)
-    //     {
-    //         if (Input.GetKeyDown(KeyCode.W))
-    //         {
-    //             vector = transform.position + new Vector3(0, 0, 25);
-    //
-    //         }
-    //
-    //         if (Input.GetKeyDown(KeyCode.S))
-    //         {
-    //             vector = transform.position - new Vector3(0, 0, 25);
-    //
-    //         }
-    //
-    //         if (Input.GetKeyDown(KeyCode.D))
-    //         {
-    //             vector = transform.position + new Vector3(25, 0, 0);
-    //
-    //         }
-    //
-    //         if (Input.GetKeyDown(KeyCode.A))
-    //         {
-    //             vector = transform.position - new Vector3(25, 0, 0);
-    //
-    //         }
     //     }
     // }
     //

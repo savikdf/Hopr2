@@ -55,7 +55,7 @@ namespace SubManager.Player
         #region Overrides
         public override void InitializeSubManager()
         {
-            instance = (instance == null) ? this : instance;
+            instance = instance ?? (this);
             thisSubType = GameManager.GameSubManagerTypes.Player;
 
 
@@ -83,12 +83,17 @@ namespace SubManager.Player
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
+
         }
 
         //begin input detection
         public override void OnGameStart()
         {
 
+            //player_Character.Effects[0].Set(Player_Object.transform);
+            //player_Character.Effects[2].Set(player_Object.transform);
+            //
+           // InitEffects();
         }
 
         //player dies, this runs after
@@ -132,14 +137,30 @@ namespace SubManager.Player
 
         }
 
+        void InitEffects()
+        {
+
+            puff = Instantiate(player_Character.Effects[3].ps);
+            puff.transform.parent = this.transform;
+            puff.transform.localPosition = new Vector3(0, 0, 0);
+
+            trail = Instantiate(player_Character.Effects[4].tr);
+            trail.transform.parent = this.transform;
+            trail.transform.localPosition = new Vector3(0, 0, 0);
+            //trail.enabled = false;
+        }
+
+        public bool JumpEffects()
+        {
+            return player_Character.Effects[0].Play(Time.deltaTime, 2);
+        }
+
         void OnPlayerJump(bool isUp)
         {
             //determine if they player CAN jump, if yes, go for it
             //if NO, the death sequence will need to be run
             try
             {
-
-
                 if (isPlayerAlive && GameManager.instance.currentGameState == GameManager.GameStates.Intra)
                 {
                     if (isUp && WorldSubManager.instance.IsPlatformAboveJumpable)
@@ -163,6 +184,7 @@ namespace SubManager.Player
                         OnPlayerDeath();
                     }
                 }
+
                 //if they jump when its the main screen it will start the game, but not jump them? yah. yah that sounds good.
                 else if (GameManager.instance.currentGameState == GameManager.GameStates.Pre)
                 {

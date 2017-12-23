@@ -23,34 +23,34 @@ public class BaseEffect  {
     }
 
 
-    public virtual void Play()
+    public virtual bool Play()
     {
-
+        return false;
     }
 
-    public virtual void Rewind()
+    public virtual bool Rewind()
     {
-
+        return false;
     }
 
-    public virtual void Rewind(float delta, float speed)
+    public virtual bool Rewind(float delta, float speed)
     {
-
+        return false;
     }
 
-    public virtual void Play(float delta, float speed)
+    public virtual bool Play(float delta, float speed)
     {
-
+        return false;
     }
 
-    public virtual void Play(float delta, float speed, float X, float Y, float Z)
+    public virtual bool Play(float delta, float speed, float X, float Y, float Z)
     {
-
+        return false;
     }
 
-    public virtual void Stop()
+    public virtual bool Stop()
     {
-
+        return false;
     }
 
     public virtual void Set(Transform _t)
