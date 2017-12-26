@@ -185,7 +185,7 @@ public class Player_Character : MonoBehaviour
     void JumpAnimation()
     {
         if(Input.GetKeyUp(KeyCode.W))
-        puff.Emit(350);
+        if(puff != null) puff.Emit(350);
     }
 
     // void LerpMove(Vector3 newPos, float delta, float speed)
@@ -224,8 +224,6 @@ public class Player_Character : MonoBehaviour
             playerModelObject.name = player_Character.name;
 
             //Instantiate(player_Character.Model.Body, this.transform.position, Quaternion.identity);
-
-
 
             playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
             playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;

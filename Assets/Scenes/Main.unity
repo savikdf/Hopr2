@@ -3571,7 +3571,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1144984109}
   - component: {fileID: 1144984108}
-  - component: {fileID: 1144984110}
   m_Layer: 0
   m_Name: Player_Object
   m_TagString: Untagged
@@ -3636,40 +3635,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1144984110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1144984107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22d4b1e2acf19894293da07d1532cbf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GRAVITY: -9.8
-  player_Character:
-    name: 
-    Model:
-      mainObject: {fileID: 0}
-      Body: {fileID: 0}
-      Larm: {fileID: 0}
-      Rarm: {fileID: 0}
-      Lleg: {fileID: 0}
-      Rleg: {fileID: 0}
-    Effects: []
-    Disc: 
-  playerModelObject: {fileID: 0}
-  playerModel:
-    mainObject: {fileID: 0}
-    Body: {fileID: 0}
-    Larm: {fileID: 0}
-    Rarm: {fileID: 0}
-    Lleg: {fileID: 0}
-    Rleg: {fileID: 0}
-  jumpPower: 0
-  jumpPowerMultiplier: 0
-  TargetAngle: 0
 --- !u!1 &1175624567
 GameObject:
   m_ObjectHideFlags: 0
@@ -4042,6 +4007,10 @@ Prefab:
         type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1933358170866260, guid: 2658bd96d5b3ab3469dc1870e9e5af10, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2658bd96d5b3ab3469dc1870e9e5af10, type: 2}

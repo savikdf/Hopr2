@@ -122,24 +122,20 @@ namespace SubManager.Player
             {
                 Destroy(playerModelObject);
             }
-            else
-            {
-                if (player_Object != null)
-                {
-                    playerModelObject = new GameObject();
 
-                    playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
-                    playerModelObject.transform.parent = player_Object.transform;
+                //playerModelObject = new GameObject();
 
-                    playerModelObject.name = player_Character.name;
+                playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
+                playerModelObject.transform.parent = player_Object.transform;
 
-                    playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
-                    playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
-                    playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
-                    playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
-                    playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
-                }
-            }
+                playerModelObject.name = player_Character.name;
+
+                playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
+                playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
+                playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
+                playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
+                playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
+            
 
 
         }
@@ -214,12 +210,12 @@ namespace SubManager.Player
         public void SetPlayerOnPlatform(int platIndex)
         {
             //sets the parent of the player to platform
-            PlayerSubManager.instance.player_Object.transform.SetParent(
+            PlayerSubManager.instance.Player_Object.transform.SetParent(
                          WorldSubManager.instance.platforms[platIndex].transform
                      );
 
             //puts them in the middle of the platform they spawn on
-            PlayerSubManager.instance.player_Object.transform.localPosition = Vector3.zero + offsetVec3;
+            PlayerSubManager.instance.Player_Object.transform.localPosition = Vector3.zero + offsetVec3;
 
         }
 
