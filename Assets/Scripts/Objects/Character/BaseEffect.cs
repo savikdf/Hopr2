@@ -44,7 +44,7 @@ public class BaseEffect  {
     }
 
 
-    public virtual void Play(float delta, float speed, bool status)
+    public virtual void Play(float delta, float speed, ref bool status)
     {
 
     }

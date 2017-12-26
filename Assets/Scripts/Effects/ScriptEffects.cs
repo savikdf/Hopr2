@@ -10,6 +10,7 @@ namespace ScriptEffects {
         float yValue;
         float storedY;
         float min = 0.2f;
+        float max = 1.0f;
         float smallStopMargin = 0.01f;
         float bigStopMargin = 0.99f;
 
@@ -18,55 +19,35 @@ namespace ScriptEffects {
         {
         }
 
-        public override void Play(float delta, float speed, bool trigger)
+        public override void Play(float delta, float speed, ref bool trigger)
         {
             storedY = t.localScale.y;
 
-            try
-            {
-                if (yValue > smallStopMargin)
-                {
-                    yValue = Mathf.Lerp(t.localScale.y, min, delta * speed);
-          
-                    t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
-                }
-                else
-                {
-                    trigger = true;
-                    yValue = min;
-                    Debug.Log("WHAT THE FUCK");
-                    return;
-                }
+            yValue = Mathf.Lerp(t.localScale.y, min, delta * speed);
+
+            if (yValue <= min)
+            {       
+                trigger = true;
+                return;
             }
-            catch
-            {
-                Debug.Log("No transform Assigned, Please Use JumpAffect.Sett");
-            }
+
+            t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
         }
 
 
 
         public override void Rewind(float delta, float speed)
         {
-            storedY = t.localScale.y;
-            try
+            yValue = Mathf.Lerp(storedY, max, delta * speed);
+            Debug.Log("Rewind");
+
+            if (yValue > max)
             {
-                if (yValue < bigStopMargin)
-                {
-                    yValue = Mathf.Lerp(storedY, 1.0f, delta * speed);
-                }
-                else
-                {
-                    yValue = 1.0f;
-                    t.localScale = new Vector3((1.0f - Mathf.Sqrt(yValue)) + 1, yValue, (1.0f - Mathf.Sqrt(yValue)) + 1);
-                }
-            }
-            catch
-            {
-                Debug.Log("No transform Assigned, Please Use JumpAffect.Sett");
+               // trigger = true;
+                return;
             }
 
-            //Debug.Log("Rewinding an Effect from JumpEffect");
+            t.localScale = new Vector3(((1.0f - Mathf.Sqrt(yValue)) + 1), yValue, ((1.0f - Mathf.Sqrt(yValue)) + 1));
         }
 
         public override void Set(Transform _p)

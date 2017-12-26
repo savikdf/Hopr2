@@ -18,6 +18,7 @@ namespace SubManager.Player
         //Character Model Rendering
 
         public Character player_Character;
+
         [HideInInspector]
         public GameObject playerModelObject;
         public Model playerModel;
@@ -113,32 +114,33 @@ namespace SubManager.Player
 
         public void InitRender()
         {
-            try
-            {
+
                 player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
 
 
-                if (playerModelObject != null)
-                {
-                    Destroy(playerModelObject);
-                }
-
-                playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
-                playerModelObject.transform.parent = player_Object.transform;
-
-                playerModelObject.name = player_Character.name;
-
-                playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
-                playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
-                playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
-                playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
-                playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
-
-            }
-            catch (Exception ex)
+            if (playerModelObject != null)
             {
-                Debug.LogError("Player_Character.InitRender(): " + ex.Message);
+                Destroy(playerModelObject);
             }
+            else
+            {
+                if (player_Object != null)
+                {
+                    playerModelObject = new GameObject();
+
+                    playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
+                    playerModelObject.transform.parent = player_Object.transform;
+
+                    playerModelObject.name = player_Character.name;
+
+                    playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
+                    playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
+                    playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
+                    playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
+                    playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
+                }
+            }
+
 
         }
 
@@ -155,14 +157,6 @@ namespace SubManager.Player
             //trail.enabled = false;
         }
 
-        public bool JumpEffectsReset()
-        {
-            //float time = 0;
-            //time = Time.deltaTime;
-            //return player_Character.Effects[0].Rewind(time, 0.002f);
-            return true;
-        }
-
         void OnPlayerJump(bool isUp)
         {
             //determine if they player CAN jump, if yes, go for it
@@ -175,7 +169,6 @@ namespace SubManager.Player
                     {
                         //moves player index up
                         SetPlayerOnPlatform(currentIndex + 1);
-                        JumpEffectsReset();
                         currentIndex++;
                         //tell the world manager that the player has jumped
                         WorldSubManager.instance.OnPlayerJumped();
@@ -238,17 +231,15 @@ namespace SubManager.Player
         //Press Down to move the player down   
         private void Update()
         {
+            time += Time.deltaTime;
+
             if (GameManager.instance.debugMode)
             {
-
-                time += Time.deltaTime;
-
                 if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
                 {
+                    time = 0;        
                     JumpAnimationTriggered = true;
                     JumpAnimationEnded = false;
-                    time = 0;
-
 
                 }
                 if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
@@ -259,17 +250,28 @@ namespace SubManager.Player
                 {
                     isInvincible = !isInvincible;
                 }
+
+                if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
+                {
+              
+
+                }
             }
 
 
-            if(JumpAnimationTriggered)
-            {    
-                player_Character.Effects[0].Play(time, 2f, JumpAnimationEnded);          
-            }
-            Debug.Log(JumpAnimationEnded);
+            if (JumpAnimationTriggered)
+            {
+                player_Character.Effects[0].Play(time, 5f, ref JumpAnimationEnded);
 
-            if (JumpAnimationTriggered && JumpAnimationEnded)
-                OnPlayerJump(true);
+                if (JumpAnimationEnded)
+                {
+                    OnPlayerJump(true);
+                    player_Character.Effects[0].Rewind(time, 5f);
+                    JumpAnimationEnded = false;
+                    JumpAnimationTriggered = false;
+
+                }
+            }
         }
 
         #endregion
