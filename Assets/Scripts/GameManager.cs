@@ -78,6 +78,10 @@ public class GameManager : MonoBehaviour
     public delegate void GameEndAction();
     public static event GameEndAction OnGameEnd;
 
+    //OnGameReset event
+    public delegate void GameResetAction();
+    public static event GameResetAction OnGameReset;
+
     #endregion
 
     #region Methods

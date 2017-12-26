@@ -108,6 +108,12 @@ namespace SubManager.Player
             isPlayerAlive = false;
         }
 
+        //starting positions everyone!
+        public override void OnGameReset()
+        {
+            
+        }
+
         #endregion
 
         #region Specific Methods 

@@ -46,6 +46,11 @@ namespace SubManager.Spawn
 
         }
 
+
+        public override void OnGameReset()
+        {
+
+        }
         #endregion
 
         #region Methods

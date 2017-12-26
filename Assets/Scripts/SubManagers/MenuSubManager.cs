@@ -109,6 +109,11 @@ namespace SubManager.Menu
             SwitchMenu(MenuStates.Death);
         }
 
+        public override void OnGameReset()
+        {
+
+        }
+
         #endregion
 
         #region Specific Methods

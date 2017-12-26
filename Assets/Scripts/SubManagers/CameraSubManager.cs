@@ -17,7 +17,7 @@ namespace SubManager.CameraMan
 
         #endregion
 
-
+        #region Overrides
         public override void InitializeSubManager()
         {
             instance = (instance == null) ? this : instance;
@@ -51,6 +51,13 @@ namespace SubManager.CameraMan
         {
             followPlayer = false;
         }
+
+        public override void OnGameReset()
+        {
+
+        }
+
+        #endregion
 
         #region Specific Methods
         IEnumerator FollowPlayer()

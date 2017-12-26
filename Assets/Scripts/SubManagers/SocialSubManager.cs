@@ -32,6 +32,11 @@ namespace SubManager.Social
         {
 
         }
+
+        public override void OnGameReset()
+        {
+
+        }
     }
 }
 

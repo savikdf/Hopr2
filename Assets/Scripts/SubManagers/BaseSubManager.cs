@@ -22,7 +22,8 @@ namespace SubManager
             GameManager.OnInitComplete += OnPostInit;
             GameManager.OnGameLoad += OnGameLoad;
             GameManager.OnGameStart += OnGameStart;
-            GameManager.OnGameEnd += OnGameEnd; 
+            GameManager.OnGameEnd += OnGameEnd;
+            GameManager.OnGameReset += OnGameReset;
                                                       
             //init
             InitializeSubManager();             
@@ -62,14 +63,19 @@ namespace SubManager
             Debug.Log("Some SubManager is running a default event (OnGameStart()), needs to override!");
         }
 
-        //runs on the game start event from the gamemanager
-        //use this to begin the process of the game
+        //runs on the game end event from the gamemanager
+        //use this to end the process of the game
         public virtual void OnGameEnd()
         {
             Debug.Log("Some SubManager is running a default event (OnGameEnd()), needs to override!");
         }
 
-
+        //runs on the game reset event from the gamemanager
+        //use this to reset the process of the game
+        public virtual void OnGameReset()
+        {
+            Debug.Log("Some SubManager is running a default event (OnGameReset()), needs to override!");
+        }
 
 
         #endregion  

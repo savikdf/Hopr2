@@ -64,6 +64,11 @@ namespace SubManager.Difficulty
 
         }
 
+        public override void OnGameReset()
+        {
+
+        }
+
         #endregion
 
         #region Specific Methods

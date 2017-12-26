@@ -7,10 +7,12 @@ namespace SubManager.Ad
 {
     public class AdSubManager : BaseSubManager
     {
+        public static AdSubManager instance;
+
         public override void InitializeSubManager()
         {
-            thisSubType = GameManager.GameSubManagerTypes.Ad;
-           
+            instance = (instance == null) ? this : instance;
+            thisSubType = GameManager.GameSubManagerTypes.Ad;              
         }
 
 
@@ -30,6 +32,11 @@ namespace SubManager.Ad
         }
 
         public override void OnGameEnd()
+        {
+
+        }
+
+        public override void OnGameReset()
         {
 
         }

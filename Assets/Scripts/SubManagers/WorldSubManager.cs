@@ -145,6 +145,11 @@ namespace SubManager.World
             isMoving = false;
         }
 
+        public override void OnGameReset()
+        {
+
+        }
+
         #endregion
 
         #region Specific Methods  
