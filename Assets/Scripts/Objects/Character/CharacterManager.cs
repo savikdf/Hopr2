@@ -95,6 +95,11 @@ namespace SubManager.CharacterMan
         {
 
         }
+
+        public override void OnGameReset()
+        {
+
+        }
     }
 
 }

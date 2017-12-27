@@ -38,7 +38,7 @@ namespace SubManager.Player
 
         bool status = false;
         //Data Vars
-        public short playerSpawnIndex = 1; 
+        public short playerSpawnIndex = 1;
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0, 0);
         float time = 0;
@@ -85,7 +85,7 @@ namespace SubManager.Player
         //spawn the player on the platforms
         public override void OnGameLoad()
         {
-         
+
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
@@ -96,7 +96,7 @@ namespace SubManager.Player
         public override void OnGameStart()
         {
 
-            if(Player_Object != null) player_Character.Effects[0].Set(Player_Object.transform);
+            if (Player_Object != null) player_Character.Effects[0].Set(Player_Object.transform);
             //player_Character.Effects[2].Set(player_Object.transform);
             //
             InitEffects();
@@ -111,7 +111,11 @@ namespace SubManager.Player
         //starting positions everyone!
         public override void OnGameReset()
         {
-            
+            //reseting eveything
+            currentIndex = playerSpawnIndex;
+            SetPlayerOnPlatform(playerSpawnIndex);
+            isPlayerAlive = true;
+
         }
 
         #endregion
@@ -121,7 +125,7 @@ namespace SubManager.Player
         public void InitRender()
         {
 
-                player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
+            player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
 
 
             if (playerModelObject != null)
@@ -129,19 +133,19 @@ namespace SubManager.Player
                 Destroy(playerModelObject);
             }
 
-                //playerModelObject = new GameObject();
+            //playerModelObject = new GameObject();
 
-                playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
-                playerModelObject.transform.parent = player_Object.transform;
+            playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
+            playerModelObject.transform.parent = player_Object.transform;
 
-                playerModelObject.name = player_Character.name;
+            playerModelObject.name = player_Character.name;
 
-                playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
-                playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
-                playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
-                playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
-                playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
-            
+            playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
+            playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
+            playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
+            playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
+            playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
+
 
 
         }
@@ -174,7 +178,7 @@ namespace SubManager.Player
                         currentIndex++;
                         //tell the world manager that the player has jumped
                         WorldSubManager.instance.OnPlayerJumped();
-             
+
                     }
                     else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)
                     {
@@ -202,27 +206,35 @@ namespace SubManager.Player
                 //kill them. They can reach this if you jump off the last platform (aka break things)
                 OnPlayerDeath();
                 Debug.Log("OnPlayerJump(): " + ex.Message);
-            } 
+            }
         }
 
         //this is called when the the player SHOULD die, maybe they have an ex macina moment that saves them? hmm...
         void OnPlayerDeath()
         {
-            if(!isInvincible || !GameManager.instance.debugMode)   
+            if (!isInvincible || !GameManager.instance.debugMode)
                 GameManager.instance.StartEvent("OnGameEnd");
         }
 
         //TEMP, not linked with animation yet TODO: link
         public void SetPlayerOnPlatform(int platIndex)
         {
-            //sets the parent of the player to platform
-            PlayerSubManager.instance.Player_Object.transform.SetParent(
-                         WorldSubManager.instance.platforms[platIndex].transform
-                     );
+            try
+            {
+                //sets the parent of the player to platform
+                PlayerSubManager.instance.Player_Object.transform.SetParent(
+                             WorldSubManager.instance.platforms[platIndex].transform
+                         );
 
-            //puts them in the middle of the platform they spawn on
-            PlayerSubManager.instance.Player_Object.transform.localPosition = Vector3.zero + offsetVec3;
+                //puts them in the middle of the platform they spawn on
+                PlayerSubManager.instance.Player_Object.transform.localPosition = Vector3.zero + offsetVec3;
 
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("SetPlayerOnPlatform(): " + ex.Message);
+            }
+          
         }
 
         #endregion
@@ -233,47 +245,47 @@ namespace SubManager.Player
         //Press Down to move the player down   
         private void Update()
         {
-            time += Time.deltaTime;
-
-            if (GameManager.instance.debugMode)
+            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
             {
-                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+                time += Time.deltaTime;
+
+                if (GameManager.instance.debugMode)
                 {
-                    time = 0;        
-                    JumpAnimationTriggered = true;
-                    JumpAnimationEnded = false;
+                    if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+                    {
+                        time = 0;
+                        JumpAnimationTriggered = true;
+                        JumpAnimationEnded = false;
+
+                    }
+                    if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+                    {
+                        OnPlayerJump(false);
+                    }
+                    if (Input.GetKeyDown(KeyCode.F2))
+                    {
+                        isInvincible = !isInvincible;
+                    }
 
                 }
-                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+
+
+                if (JumpAnimationTriggered)
                 {
-                    OnPlayerJump(false);
-                }
-                if (Input.GetKeyDown(KeyCode.F2))
-                {
-                    isInvincible = !isInvincible;
+                    player_Character.Effects[0].Play(time, 5f, ref JumpAnimationEnded);
+
+                    if (JumpAnimationEnded)
+                    {
+                        OnPlayerJump(true);
+                        player_Character.Effects[0].Rewind(time, 5f);
+                        JumpAnimationEnded = false;
+                        JumpAnimationTriggered = false;
+
+                    }
                 }
 
-                if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
-                {
-              
-
-                }
             }
 
-
-            if (JumpAnimationTriggered)
-            {
-                player_Character.Effects[0].Play(time, 5f, ref JumpAnimationEnded);
-
-                if (JumpAnimationEnded)
-                {
-                    OnPlayerJump(true);
-                    player_Character.Effects[0].Rewind(time, 5f);
-                    JumpAnimationEnded = false;
-                    JumpAnimationTriggered = false;
-
-                }
-            }
         }
 
         #endregion

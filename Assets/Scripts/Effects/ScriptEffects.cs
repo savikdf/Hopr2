@@ -39,7 +39,7 @@ namespace ScriptEffects {
         public override void Rewind(float delta, float speed)
         {
             yValue = Mathf.Lerp(storedY, max, delta * speed);
-            Debug.Log("Rewind");
+            //Debug.Log("Rewind");
 
             if (yValue > max)
             {

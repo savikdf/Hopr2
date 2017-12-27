@@ -23,7 +23,7 @@ namespace SubManager.CameraMan
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Camera;
             mainCamera = Camera.main;//GameObject.FindObjectOfType<Camera>();
-            offsetVec3 = new Vector3(0, 0.5f, -10f);
+            offsetVec3 = new Vector3(0, 0.5f, 10f);
         }
 
         public override void OnPostInit()
@@ -34,8 +34,7 @@ namespace SubManager.CameraMan
         public override void OnGameLoad()
         {
             //start the camera looking at the right place
-            mainCamera.transform.position = PlayerSubManager.instance.Player_Object.transform.position + offsetVec3;
-
+            SetCameraOnPlayer();
         }
 
         public override void OnGameStart()
@@ -54,12 +53,20 @@ namespace SubManager.CameraMan
 
         public override void OnGameReset()
         {
-
+            
         }
 
         #endregion
 
         #region Specific Methods
+        public void SetCameraOnPlayer()
+        {
+            //Debug.Log(PlayerSubManager.instance.Player_Object.transform.position.ToString());
+            mainCamera.transform.position = PlayerSubManager.instance.Player_Object.transform.position + offsetVec3;
+            //Debug.Log(mainCamera.transform.position.ToString());
+
+        }
+
         IEnumerator FollowPlayer()
         {
             while (followPlayer)
@@ -69,8 +76,7 @@ namespace SubManager.CameraMan
 
                 yield return null;
             }
-            if (GameManager.instance.debugMode)
-                Debug.Log("Camera.FollowPlayer() has ended.");
+
         }
 
         #endregion

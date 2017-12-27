@@ -147,7 +147,9 @@ namespace SubManager.World
 
         public override void OnGameReset()
         {
-
+            ResetPlatforms();
+            isSpinning = true;
+            isMoving = false;
         }
 
         #endregion
@@ -249,15 +251,22 @@ namespace SubManager.World
             cyclePlat.OnReposition(amountSpawned - 1);
         }
 
-        //DEBUG COMMANDS
-        private void Update()
+        private void ResetPlatforms()
         {
-            if (GameManager.instance.debugMode)
+            amountSpawned = 0;
+            spawnVec3 = Vector3.zero;
+
+            for(int i = 0; i < platforms.Count; i++)
             {
+                platforms[i].OnIndexSet(i);
+                platforms[i].transform.position = spawnVec3;
 
-
-            }
+                amountSpawned++;
+                spawnVec3.y = amountSpawned * distanceAppart;
+            } 
+            
         }
+
 
         #endregion 
     }

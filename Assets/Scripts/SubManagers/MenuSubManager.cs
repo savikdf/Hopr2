@@ -111,7 +111,7 @@ namespace SubManager.Menu
 
         public override void OnGameReset()
         {
-
+            SwitchMenu(MenuStates.Main);
         }
 
         #endregion
@@ -133,7 +133,7 @@ namespace SubManager.Menu
             }
             catch (Exception ex)
             {
-                Debug.LogError("SetBUttonEvents(): " + ex.Message);
+                Debug.LogError("SetButtonEvents(): " + ex.Message);
             }
 
         }
@@ -187,7 +187,7 @@ namespace SubManager.Menu
 
                 #region Death
                 case "Button_Death_Retry":
-                    GameManager.instance.ClearAndReloadScene();
+                    GameManager.instance.StartEvent("OnGameReset");
 
                     break;
 

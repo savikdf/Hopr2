@@ -21,7 +21,7 @@ namespace SubManager.World.Platforms
         private void Awake()
         {
             sides = new List<Side>();
-            thisPlatformType = WorldSubManager.PlatformTypes.Normal;    //TODO, fix this when more types exist
+            thisPlatformType = WorldSubManager.PlatformTypes.Normal;    
             thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
             thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
             try
@@ -89,19 +89,27 @@ namespace SubManager.World.Platforms
                     EstablishType(WorldSubManager.PlatformTypes.Normal);
                     break;
 
-            }
+            }         
+        }  
 
-        }
-
-
-        public void OnReposition(int index)
+        public void OnIndexSet(int index)
         {
-            platformIndex = index;  //TODO: make this worth something. doesn't do anything right now
+            platformIndex = index; 
             gameObject.name = string.Format("Platform#{0}", platformIndex.ToString());
-            gameObject.transform.position = WorldSubManager.instance.platforms[WorldSubManager.instance.platforms.Count - 2].transform.position + new Vector3(0, WorldSubManager.instance.distanceAppart, 0);
             //update the difficulty settings of the platform
             thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
             thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
+        }
+
+        public void OnReposition(int index)
+        {
+            platformIndex = index;
+            gameObject.name = string.Format("Platform#{0}", platformIndex.ToString());
+            //update the difficulty settings of the platform
+            thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
+            thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
+            gameObject.transform.position = WorldSubManager.instance.platforms[WorldSubManager.instance.platforms.Count - 2].transform.position + new Vector3(0, WorldSubManager.instance.distanceAppart, 0);
+            
 
         }
 

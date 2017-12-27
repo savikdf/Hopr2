@@ -173,18 +173,18 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameSubManagerTypes.Character:
                     this.gameObject.AddComponent<CharacterManager>();
-                  
+
                     break;
                 case GameSubManagerTypes.Difficulty:
                     this.gameObject.AddComponent<DifficultySubManager>();
-                    
+
                     break;
                 case GameSubManagerTypes.None:
                     //nothing needs to happen hear. this is used for catching errors in the
                     //sub manager init proccess
                     break;
 
-                
+
                 default:
                     Debug.Log("GameManager hit a default for " + subtype.ToString());
                     break;
@@ -196,21 +196,22 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-        return true;                                                  
+        return true;
     }
 
-   public void StartEvent(string eventName)
+    public void StartEvent(string eventName)
     {
+        //Debug.Log(eventName + " is about to kick off");
         switch (eventName)
         {
             case "OnInitComplete":
                 //this is just for the submanagers to finalize things  
-                OnInitComplete();        
+                OnInitComplete();
                 break;
 
             case "OnGameLoad":
                 currentGameState = GameStates.Pre;
-                OnGameLoad(); 
+                OnGameLoad();
                 break;
 
             case "OnGameStart":
@@ -222,9 +223,17 @@ public class GameManager : MonoBehaviour
                 currentGameState = GameStates.Post;
                 OnGameEnd();
                 break;
+
+            case "OnGameReset":
+                isLoading = true;
+                currentGameState = GameStates.Pre;
+                OnGameReset();
+                CameraSubManager.instance.SetCameraOnPlayer();
+                isLoading = false;
+                break;
         }
     }
-    
+
 
     public void ClearAndReloadScene()
     {
@@ -281,7 +290,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 ClearAndReloadScene();
-            }  
+            }
         }
     }
 
@@ -292,10 +301,10 @@ public class GameManager : MonoBehaviour
         if (debugMode)
         {
             GUILayout.Label("DEBUG MODE", style);
-            if(PlayerSubManager.instance!=null)
+            if (PlayerSubManager.instance != null)
                 GUILayout.Label("Invincibility_F2: " + PlayerSubManager.instance.isInvincible.ToString(), style);
         }
-      
+
     }
 
     #endregion
