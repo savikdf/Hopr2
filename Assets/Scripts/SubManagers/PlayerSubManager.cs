@@ -154,6 +154,10 @@ namespace SubManager.Player
                     {
                         //moves player index up
                         SetPlayerOnPlatform(currentIndex + 1);
+
+                        //Call clear on effects here if needed
+                        playerEffectsManager.ResetEffects();
+
                         currentIndex++;
                         //tell the world manager that the player has jumped
                         WorldSubManager.instance.OnPlayerJumped();
@@ -248,6 +252,7 @@ namespace SubManager.Player
                             OnPlayerJump(true);
                             playerEffectsManager.JumpAnimationEnded = false;
                             playerEffectsManager.JumpAnimationTriggered = false;
+
                         }
                     }
 
