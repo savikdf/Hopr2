@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
 
                     break;
                 case GameSubManagerTypes.Character:
-                    this.gameObject.AddComponent<CharacterManager>();
+                    this.gameObject.AddComponent<CharacterSubManager>();
 
                     break;
                 case GameSubManagerTypes.Difficulty:

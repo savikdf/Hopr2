@@ -6,43 +6,43 @@ using System;
 
 public class Player_Character : MonoBehaviour
 {
-    public static Player_Character instance;
-    public float GRAVITY = -9.8f;
-
-    public Character player_Character;
-    public GameObject playerModelObject;
-    public Model playerModel;
-
-    private bool Animating;
-    private bool Moving;
-    private bool Grounded = true;
-    private bool Jumping = false;
-    private bool Landed = false;
-    private bool Falling = false;
-
-    private ParticleSystem puff;
-    private TrailRenderer trail;
-
-    Vector3 vector;
-    Vector3 fallVel;
-
-    public float jumpPower;
-    float currentLerpTime;
-
-    float lerpTime = 4.0f;
-
-    [Range(0, 55)]
-    public float jumpPowerMultiplier;
-
-
-    [Range(0, 360)]
-    public float TargetAngle;
-
-    void Awake()
-    {
-        instance = (instance == null) ? this : instance;
-    }
-
+    //public static Player_Character instance;
+    //public float GRAVITY = -9.8f;
+    //
+    //public Character player_Character;
+    //public GameObject playerModelObject;
+    //public Model playerModel;
+    //
+    //private bool Animating;
+    //private bool Moving;
+    //private bool Grounded = true;
+    //private bool Jumping = false;
+    //private bool Landed = false;
+    //private bool Falling = false;
+    //
+    //private ParticleSystem puff;
+    //private TrailRenderer trail;
+    //
+    //Vector3 vector;
+    //Vector3 fallVel;
+    //
+    //public float jumpPower;
+    //float currentLerpTime;
+    //
+    //float lerpTime = 4.0f;
+    //
+    //[Range(0, 55)]
+    //public float jumpPowerMultiplier;
+    //
+    //
+    //[Range(0, 360)]
+    //public float TargetAngle;
+    //
+    //void Awake()
+    //{
+    //    instance = (instance == null) ? this : instance;
+    //}
+    //
     //void Start()
     //{
     //    InitRender();
@@ -53,18 +53,7 @@ public class Player_Character : MonoBehaviour
     //    InitEffects();
     //}
     //
-    //void InitEffects()
-   // {
-   //
-   //     puff = Instantiate(player_Character.Effects[3].ps);
-   //     puff.transform.parent = this.transform;
-   //     puff.transform.localPosition = new Vector3(0, 0, 0);
-   //
-   //     trail = Instantiate(player_Character.Effects[4].tr);
-   //     trail.transform.parent = this.transform;
-   //     trail.transform.localPosition = new Vector3(0, 0, 0);
-   //     //trail.enabled = false;
-   // }
+
 
     #region Shite
 
@@ -170,24 +159,24 @@ public class Player_Character : MonoBehaviour
     //     }
     // }
     //
-    void Update ()
-     {
-    
-         if (!Jumping && Grounded)
-         {
-            //MovmentInputHandling();
-            //JumpInputHandling(KeyCode.W);
-            //LerpMove(vector, Time.deltaTime, 5);
-            JumpAnimation();
-         }
-     }
-    
-    void JumpAnimation()
-    {
-        if(Input.GetKeyUp(KeyCode.W))
-        if(puff != null) puff.Emit(350);
-    }
-
+    //void Update ()
+    // {
+    //
+    //     if (!Jumping && Grounded)
+    //     {
+    //        //MovmentInputHandling();
+    //        //JumpInputHandling(KeyCode.W);
+    //        //LerpMove(vector, Time.deltaTime, 5);
+    //        JumpAnimation();
+    //     }
+    // }
+    //
+    //void JumpAnimation()
+    //{
+    //    if(Input.GetKeyUp(KeyCode.W))
+    //    if(puff != null) puff.Emit(350);
+    //}
+    //
     // void LerpMove(Vector3 newPos, float delta, float speed)
     // {
     //     float dist = Vector3.Distance(newPos, transform.position);
@@ -206,36 +195,36 @@ public class Player_Character : MonoBehaviour
     // }
 
     #endregion
-
-    public void InitRender()
-    {
-        try
-        {
-            player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
-
-
-            if (playerModelObject != null)
-            {
-                Destroy(playerModelObject);
-            }
-
-            playerModelObject = Instantiate(player_Character.Model.mainObject, this.transform.position, Quaternion.identity);
-            playerModelObject.transform.parent = this.transform;
-            playerModelObject.name = player_Character.name;
-
-            //Instantiate(player_Character.Model.Body, this.transform.position, Quaternion.identity);
-
-            playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
-            playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
-            playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
-            playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
-            playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
-
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Player_Character.InitRender(): " + ex.Message);
-        }
-
-    }
+   //
+   // public void InitRender()
+   // {
+   //     try
+   //     {
+   //         player_Character = CharacterSubManager.instance.GetCurrentActiveCharacter();
+   //
+   //
+   //         if (playerModelObject != null)
+   //         {
+   //             Destroy(playerModelObject);
+   //         }
+   //
+   //         playerModelObject = Instantiate(player_Character.Model.mainObject, this.transform.position, Quaternion.identity);
+   //         playerModelObject.transform.parent = this.transform;
+   //         playerModelObject.name = player_Character.name;
+   //
+   //         //Instantiate(player_Character.Model.Body, this.transform.position, Quaternion.identity);
+   //
+   //         playerModel.Body = (playerModelObject).transform.GetChild(0).gameObject;
+   //         playerModel.Larm = (playerModelObject).transform.GetChild(1).gameObject;
+   //         playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
+   //         playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
+   //         playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
+   //
+   //     }
+   //     catch (Exception ex)
+   //     {
+   //         Debug.LogError("Player_Character.InitRender(): " + ex.Message);
+   //     }
+   //
+   // }
 }

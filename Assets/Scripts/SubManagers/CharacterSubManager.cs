@@ -7,14 +7,13 @@ namespace SubManager.CharacterMan
 {
 
     [System.Serializable]
-    public class CharacterManager : BaseSubManager
+    public class CharacterSubManager : BaseSubManager
     {
-        public static CharacterManager instance;
+        public static CharacterSubManager instance;
         public Character[] characters;
         public Object[] charactersObjectLoad;
 
         public uint index = 0;
-
         public static Character ActiveCharacter;
 
         public override void InitializeSubManager()

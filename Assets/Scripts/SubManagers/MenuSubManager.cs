@@ -170,10 +170,10 @@ namespace SubManager.Menu
                     SwitchMenu(MenuSubManager.MenuStates.Main);
                     break;
                 case "Button_Character_Change":
-                    if (charIndex != -1 && CharacterManager.instance != null && PlayerSubManager.instance != null)
+                    if (charIndex != -1 && CharacterSubManager.instance != null && PlayerSubManager.instance != null)
                     {
                         //updates that character manager witht the new char index
-                        CharacterManager.instance.index = (uint)charIndex;
+                        CharacterSubManager.instance.index = (uint)charIndex;
                         PlayerSubManager.instance.InitRender();
                     }
                     break;

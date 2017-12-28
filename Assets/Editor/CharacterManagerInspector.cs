@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using SubManager.CharacterMan;
 
-[CustomEditor(typeof(CharacterManager))]
+[CustomEditor(typeof(CharacterSubManager))]
 public class CharacterManagerInspector : Editor {
 
     public override void OnInspectorGUI()

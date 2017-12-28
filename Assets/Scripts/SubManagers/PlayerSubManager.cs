@@ -17,15 +17,13 @@ namespace SubManager.Player
 
         //Character Model Rendering
 
-        public Character player_Character;
+        public static Character player_Character;
 
         [HideInInspector]
-        public GameObject playerModelObject;
-        public Model playerModel;
+        public static GameObject playerModelObject;
+        public static Model playerModel;
 
-        //Effects 
-        private ParticleSystem puff;
-        private TrailRenderer trail;
+        public EffectsPackadgeManager playerEffectsManager;
 
         #region Variables
         public static PlayerSubManager instance;
@@ -33,15 +31,12 @@ namespace SubManager.Player
         [HideInInspector]
         public bool isInvincible = false;
 
-        public bool JumpAnimationTriggered = false;
-        public bool JumpAnimationEnded = false;
 
-        bool status = false;
         //Data Vars
         public short playerSpawnIndex = 1;
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0, 0);
-        float time = 0;
+
 
         //TODO: Real Player.
         private GameObject player_Object;
@@ -80,6 +75,7 @@ namespace SubManager.Player
         public override void OnPostInit()
         {
             InitRender();
+
         }
 
         //spawn the player on the platforms
@@ -89,6 +85,7 @@ namespace SubManager.Player
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
+            playerEffectsManager = Player_Object.GetComponent<EffectsPackadgeManager>();
 
         }
 
@@ -98,8 +95,6 @@ namespace SubManager.Player
 
             if (Player_Object != null) player_Character.Effects[0].Set(Player_Object.transform);
             //player_Character.Effects[2].Set(player_Object.transform);
-            //
-            InitEffects();
         }
 
         //player dies, this runs after
@@ -125,7 +120,7 @@ namespace SubManager.Player
         public void InitRender()
         {
 
-            player_Character = CharacterManager.instance.GetCurrentActiveCharacter();
+            player_Character = CharacterSubManager.instance.GetCurrentActiveCharacter();
 
 
             if (playerModelObject != null)
@@ -145,22 +140,6 @@ namespace SubManager.Player
             playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
             playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
             playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
-
-
-
-        }
-
-        void InitEffects()
-        {
-
-            puff = Instantiate(player_Character.Effects[3].ps);
-            puff.transform.parent = this.transform;
-            puff.transform.localPosition = new Vector3(0, 0, 0);
-
-            trail = Instantiate(player_Character.Effects[4].tr);
-            trail.transform.parent = this.transform;
-            trail.transform.localPosition = new Vector3(0, 0, 0);
-            //trail.enabled = false;
         }
 
         void OnPlayerJump(bool isUp)
@@ -247,15 +226,10 @@ namespace SubManager.Player
         {
             if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
             {
-                time += Time.deltaTime;
-
                 if (GameManager.instance.debugMode)
                 {
                     if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
                     {
-                        time = 0;
-                        JumpAnimationTriggered = true;
-                        JumpAnimationEnded = false;
 
                     }
                     if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
@@ -267,25 +241,18 @@ namespace SubManager.Player
                         isInvincible = !isInvincible;
                     }
 
-                }
-
-
-                if (JumpAnimationTriggered)
-                {
-                    player_Character.Effects[0].Play(time, 5f, ref JumpAnimationEnded);
-
-                    if (JumpAnimationEnded)
+                    if (playerEffectsManager.JumpAnimationTriggered)
                     {
-                        OnPlayerJump(true);
-                        player_Character.Effects[0].Rewind(time, 5f);
-                        JumpAnimationEnded = false;
-                        JumpAnimationTriggered = false;
-
+                        if (playerEffectsManager.JumpAnimationEnded)
+                        {
+                            OnPlayerJump(true);
+                            playerEffectsManager.JumpAnimationEnded = false;
+                            playerEffectsManager.JumpAnimationTriggered = false;
+                        }
                     }
+
                 }
-
             }
-
         }
 
         #endregion
