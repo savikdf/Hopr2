@@ -23,7 +23,7 @@ namespace SubManager.Player
         public static GameObject playerModelObject;
         public static Model playerModel;
 
-        public EffectsPackadgeManager playerEffectsManager;
+        public EffectsPackageManager playerEffectsManager;
 
         #region Variables
         public static PlayerSubManager instance;
@@ -85,7 +85,7 @@ namespace SubManager.Player
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
-            playerEffectsManager = Player_Object.GetComponent<EffectsPackadgeManager>();
+            playerEffectsManager = Player_Object.GetComponent<EffectsPackageManager>();
 
         }
 

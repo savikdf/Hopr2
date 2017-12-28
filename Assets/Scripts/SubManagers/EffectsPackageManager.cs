@@ -7,7 +7,7 @@ using SubManager.World;
 using System;
 using SubManager.CharacterMan;
 
-public class EffectsPackadgeManager : BaseSubManager
+public class EffectsPackageManager : BaseSubManager
 {
     //Effects 
     private ParticleSystem puff;
