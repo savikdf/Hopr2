@@ -23,7 +23,7 @@ namespace SubManager.Player
         public static GameObject playerModelObject;
         public static Model playerModel;
 
-        public EffectsPackageManager playerEffectsManager;
+        public EffectsPackageController playerEffectsManager;
 
         #region Variables
         public static PlayerSubManager instance;
@@ -81,11 +81,11 @@ namespace SubManager.Player
         //spawn the player on the platforms
         public override void OnGameLoad()
         {
-
+            playerEffectsManager = Player_Object.GetComponent<EffectsPackageController>();
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
-            playerEffectsManager = Player_Object.GetComponent<EffectsPackageManager>();
+
 
         }
 

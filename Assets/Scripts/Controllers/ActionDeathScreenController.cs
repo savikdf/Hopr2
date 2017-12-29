@@ -27,8 +27,7 @@ namespace SubManager.CameraMan
 
         public override void OnGameStart()
         {
-            int i = isGrayed ? 1 : 0;
-            MainImageMaterial.SetInt("_IsBnW", 1);
+            MainImageMaterial.SetInt("_IsBnW", isGrayed ? 1 : 0);
         }
 
         public override void OnGameEnd()
