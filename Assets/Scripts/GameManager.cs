@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public bool debugMode = false;
     bool setupErroredOut;
     public bool isLoading; //menu submanager tracks this for its loading UI    
+    public float globaltimer;
 
     //states of the game
     public enum GameStates
@@ -217,6 +218,7 @@ public class GameManager : MonoBehaviour
             case "OnGameStart":
                 currentGameState = GameStates.Intra;
                 OnGameStart();
+                StartCoroutine(TrackTime());
                 break;
 
             case "OnGameEnd":
@@ -229,6 +231,7 @@ public class GameManager : MonoBehaviour
                 currentGameState = GameStates.Pre;
                 OnGameReset();
                 CameraSubManager.instance.SetCameraOnPlayer();
+                globaltimer = 0;
                 isLoading = false;
                 break;
         }
@@ -271,6 +274,16 @@ public class GameManager : MonoBehaviour
         }
 
         SceneManager.LoadScene(0);
+
+    }
+
+    IEnumerator TrackTime()
+    {
+        while(currentGameState == GameStates.Intra)
+        {
+            globaltimer += Time.deltaTime;
+            yield return null;
+        }
     }
 
     #endregion

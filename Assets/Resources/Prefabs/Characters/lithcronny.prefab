@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4120355397168580}
   - component: {fileID: 33552650886049624}
   - component: {fileID: 23796110934786488}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LithCronny_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4026812624711090}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithcronny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4593481299598804}
   - component: {fileID: 33462474180851184}
   - component: {fileID: 23066689216195814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LithCronny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4726294602375554}
   - component: {fileID: 33941307243449640}
   - component: {fileID: 23494493342248966}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LithCronny_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4337106038385284}
   - component: {fileID: 33395108892966824}
   - component: {fileID: 23078191552743642}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LithCronny_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4479697211732318}
   - component: {fileID: 33059677295500582}
   - component: {fileID: 23791595227124318}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LithCronny_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}

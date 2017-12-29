@@ -14,7 +14,6 @@ namespace SubManager.CameraMan
         float damping = 0.9f;
         Camera mainCamera;
         public Vector3 offsetVec3;
-
         #endregion
 
         #region Overrides

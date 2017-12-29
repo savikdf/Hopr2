@@ -35,7 +35,7 @@ namespace SubManager.Player
         //Data Vars
         public short playerSpawnIndex = 1;
         public int currentIndex;
-        public Vector3 offsetVec3 = new Vector3(0, 0, 0);
+        public Vector3 offsetVec3 = new Vector3(0, 0.08f, 0);
 
 
         //TODO: Real Player.

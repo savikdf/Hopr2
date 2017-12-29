@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4063070216335188}
   - component: {fileID: 33509385316135704}
   - component: {fileID: 23276777398354430}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yux
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4537014273091396}
   - component: {fileID: 33188020274625226}
   - component: {fileID: 23747934624317832}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yux_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4143089994420590}
   - component: {fileID: 33195921747816616}
   - component: {fileID: 23941418198728758}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yux_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4287357796718074}
   - component: {fileID: 33780036208735442}
   - component: {fileID: 23398270181571322}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yux_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4146674384350126}
   - component: {fileID: 33036043440140942}
   - component: {fileID: 23099295731374172}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yux_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4227221266763290}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yux
   m_TagString: Untagged
   m_Icon: {fileID: 0}

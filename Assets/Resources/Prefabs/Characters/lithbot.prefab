@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4770044251859840}
   - component: {fileID: 33873363158606118}
   - component: {fileID: 23329208763545522}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithbot_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4189764373823356}
   - component: {fileID: 33188534672942562}
   - component: {fileID: 23950108769540452}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithbot_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4941865703945244}
   - component: {fileID: 33327561854058386}
   - component: {fileID: 23339313479638482}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithbot_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4788073835516858}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithbot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4607371422761132}
   - component: {fileID: 33463961441519806}
   - component: {fileID: 23673774166002262}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithbot_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4006730859153530}
   - component: {fileID: 33948505419147206}
   - component: {fileID: 23168965645304984}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lithbot_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}

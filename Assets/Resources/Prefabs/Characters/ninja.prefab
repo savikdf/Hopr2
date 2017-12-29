@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4348807629330200}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ninja
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4107399654605042}
   - component: {fileID: 33728412492932140}
   - component: {fileID: 23512609946131412}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ninja_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4519973237387264}
   - component: {fileID: 33376742079491642}
   - component: {fileID: 23019571853590948}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ninja_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4524024704598030}
   - component: {fileID: 33438199455833614}
   - component: {fileID: 23129320047732006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ninja_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4132188691813892}
   - component: {fileID: 33971203138555620}
   - component: {fileID: 23229388074303900}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ninja_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4711605939344922}
   - component: {fileID: 33903692854177370}
   - component: {fileID: 23777191241604720}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ninja
   m_TagString: Untagged
   m_Icon: {fileID: 0}

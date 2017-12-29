@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4137757563329184}
   - component: {fileID: 33775424787153874}
   - component: {fileID: 23693108649257972}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forestWalker_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4413734013088610}
   - component: {fileID: 33993029579656944}
   - component: {fileID: 23119461231283778}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forestWalker_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4021697313942510}
   - component: {fileID: 33102456364177080}
   - component: {fileID: 23982967306387034}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forestWalker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4109569704901624}
   - component: {fileID: 33627016600853018}
   - component: {fileID: 23490537837471754}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forestWalker_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4534115618096240}
   - component: {fileID: 33628818947933062}
   - component: {fileID: 23200543512828768}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forestWalker_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4862191415561220}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: forestWalker
   m_TagString: Untagged
   m_Icon: {fileID: 0}

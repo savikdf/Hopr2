@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4510647758259754}
   - component: {fileID: 33845437086217354}
   - component: {fileID: 23499729965304738}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: globeStrider_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4017124666044796}
   - component: {fileID: 33270021766379164}
   - component: {fileID: 23484414112037706}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: globeStrider_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4063038467716360}
   - component: {fileID: 33547377615343352}
   - component: {fileID: 23188982258522660}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: globeStrider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4311464440916772}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: globeStrider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4211942837684718}
   - component: {fileID: 33269330920904358}
   - component: {fileID: 23495459813540284}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: globeStrider_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4706086799239500}
   - component: {fileID: 33639133009801170}
   - component: {fileID: 23900936866454476}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: globeStrider_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}

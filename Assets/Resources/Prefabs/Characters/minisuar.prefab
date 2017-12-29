@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4982298233199014}
   - component: {fileID: 33945202225186588}
   - component: {fileID: 23837675994476466}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Minisuar_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4319656359460826}
   - component: {fileID: 33694864515682402}
   - component: {fileID: 23451987464085174}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Minisuar_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4343957293136798}
   - component: {fileID: 33802169590325428}
   - component: {fileID: 23314509108310226}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Minisuar_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4720449053989402}
   - component: {fileID: 33045981645715952}
   - component: {fileID: 23998644108982472}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Minisuar_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4805438826090024}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: minisuar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4378530235020056}
   - component: {fileID: 33964584181780224}
   - component: {fileID: 23102133062523910}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Minisuar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

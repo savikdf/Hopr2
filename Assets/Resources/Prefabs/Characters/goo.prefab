@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4506232459990366}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goo_r_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34,7 +34,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4226878817214282}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goo_r_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 4402176702359578}
   - component: {fileID: 33382947314682350}
   - component: {fileID: 23656825790122338}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4042947413015816}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goo_l_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4296137103349882}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: goo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4659763596900700}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goo_l_leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
