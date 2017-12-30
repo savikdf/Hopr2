@@ -25,7 +25,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1131783863151456
 GameObject:
   m_ObjectHideFlags: 1
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 222945252142082370}
   - component: {fileID: 114732289861315012}
   m_Layer: 5
-  m_Name: C_TL_0
+  m_Name: C_TR_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 222104890120528238}
   - component: {fileID: 114771709725582894}
   m_Layer: 5
-  m_Name: C_TL_I
+  m_Name: C_TR_I
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

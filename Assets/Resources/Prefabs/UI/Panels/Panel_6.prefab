@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 222330583337780740}
   - component: {fileID: 114409439826716708}
   m_Layer: 5
-  m_Name: C_TL_0
+  m_Name: C_TR_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 222265213647634358}
   - component: {fileID: 114140905866275654}
   m_Layer: 5
-  m_Name: C_TL_I
+  m_Name: C_TR_I
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
