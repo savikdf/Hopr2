@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 [ExecuteInEditMode]
 public class ButtonController : BaseSubManager, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
+    public bool DebugLogs;
 
     public Button button;
     Color ButtonBaseColor { get; set; }
@@ -21,8 +22,8 @@ public class ButtonController : BaseSubManager, IPointerEnterHandler, IPointerEx
     List<Image> Outlines = new List<Image>();
     List<Image> InnerLines = new List<Image>();
     List<Image> Body = new List<Image>();
-    float time;
-    bool HandleMouse, HandleClick;
+    float time, innerTime, exitTime;
+    bool HandleMouse, HandleClick, Exit, Click, HandleInnerClick, EndInnerClick;
 
     public override void InitializeSubManager()
     {
@@ -52,76 +53,136 @@ public class ButtonController : BaseSubManager, IPointerEnterHandler, IPointerEx
     {
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        //time = 0;
-        //HandleClick = true;
-        //Debug.Log("In Button");
-        //StartCoroutine(Snoop());
-        Debug.Log("Just Clicking");
-
-        if(HandleMouse)
-        {
-            Debug.Log("Just Clicking");
-        }
+        innerTime = 0;
+        HandleInnerClick = true;
+        EndInnerClick = false;
+        StartCoroutine(SnoopClick());
     }
-
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        innerTime = 0;
+        EndInnerClick = true;
+        Debug.Log("Button Up");
+
         time = 0;
-        HandleClick = true;
-        Debug.Log("In Button");
+        HandleMouse = true;
         StartCoroutine(Snoop());
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+
+    public void OnPointerClick(PointerEventData eventData)
     {
-        time = 0;
         HandleClick = true;
-        Debug.Log("In Button");
-        StartCoroutine(Snoop());
     }
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!HandleClick)
-        {
-            time = 0;
-            HandleMouse = true;
-            Debug.Log("In Button");
-            StartCoroutine(Snoop());
-        }
+        time = 0;
+        Exit = false;
+        HandleMouse = true;
+        //Debug.Log("In Button");
+        StartCoroutine(Snoop());
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-            time = 0;
-            Debug.Log("Out Button");
-            HandleMouse = true;
-            StartCoroutine(Snoop());
+        exitTime = 0;
+        Exit = true;
+        StartCoroutine(SnoopExit());
     }
 
+    IEnumerator SnoopExit()
+    {
+        while (Exit)
+        {
+            exitTime += Time.deltaTime;
+            Log("Snoop Exit is Active");
+            ImageColorManage();
+            //if We Click Again Outside of the Button
+            if (Input.GetMouseButton(0))
+            {
+                time = 0;
+                Click = true;
+                StartCoroutine(SnoopExitClick());
+            }
+            
 
-   IEnumerator Snoop()
-   {
+            yield return null;
+        }
+    }
 
-        while (HandleMouse || HandleClick)
+    IEnumerator SnoopExitClick()
+    {
+        while (Click)
         {
             time += Time.deltaTime;
-            Debug.Log("I Shouldnt be Spamming");
+            Log("Snoop Exit Click is Active");
+
+            ImageColorManage();
+
+           if (time > 0.2f)
+           {
+               Exit = false;
+               Click = false;
+           }
+              
+            yield return null;
+        }
+    }
+
+    IEnumerator SnoopClick()
+    {
+        while (HandleInnerClick)
+        {
+            innerTime += Time.deltaTime;
+
+            Log("Snoop Click is Active");
+
+
+
+            ImageColorManage();
+
+            if (EndInnerClick)
+            {
+                if (innerTime > 0.1f)
+                {
+                    EndInnerClick = false;
+                    HandleInnerClick = false;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator Snoop()
+    {
+
+        while (HandleMouse)
+        {
+            time += Time.deltaTime;
+            Log("Snoopin");
             ImageColorManage();
 
             if (time > 0.1f)
             {
                 if(HandleMouse) HandleMouse = false;
-                if(HandleClick) HandleClick = false;
             }
             
 
             yield return null;
         }
    }
+
+
+    public void Log(string log)
+    {
+        if (DebugLogs) Debug.Log(log);
+    }
 
     public void ParseNames()
     {
@@ -153,19 +214,17 @@ public class ButtonController : BaseSubManager, IPointerEnterHandler, IPointerEx
 
     void ImageColorManage()
     {
-            foreach(Image img in Outlines)
+        foreach(Image img in Outlines)
 
-                img.color = button.targetGraphic.canvasRenderer.GetColor() * buttonouterColor;
+            img.color = button.targetGraphic.canvasRenderer.GetColor() * buttonouterColor;
 
-            foreach (Image img in InnerLines)
-                img.color = button.targetGraphic.canvasRenderer.GetColor() * buttoninnerColor;
+        foreach (Image img in InnerLines)
+            img.color = button.targetGraphic.canvasRenderer.GetColor() * buttoninnerColor;
 
-            foreach (Image img in Body)
-                img.color = button.targetGraphic.canvasRenderer.GetColor() * buttonbaseColor;
-            
+        foreach (Image img in Body)
+            img.color = button.targetGraphic.canvasRenderer.GetColor() * buttonbaseColor;
     }
 
-   // public
 
     void OnValidate()
     {

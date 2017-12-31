@@ -346,69 +346,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 4715288952078290, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 4053638332490918, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4053638332490918, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0.00000031292436
-      objectReference: {fileID: 0}
-    - target: {fileID: 4053638332490918, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4053638332490918, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4053638332490918, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4053638332490918, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 8.855
-      objectReference: {fileID: 0}
-    - target: {fileID: 20434135983692562, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_CullingMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
-    - target: {fileID: 20434135983692562, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_BackGroundColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20434135983692562, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_BackGroundColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20434135983692562, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_BackGroundColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20692908468919298, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_BackGroundColor.r
-      value: 0.875
-      objectReference: {fileID: 0}
-    - target: {fileID: 20692908468919298, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_BackGroundColor.g
-      value: 0.96499044
-      objectReference: {fileID: 0}
-    - target: {fileID: 20692908468919298, guid: 24fe9c2cc953b6e44add4ca11fa3898c,
-        type: 2}
-      propertyPath: m_BackGroundColor.b
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 24fe9c2cc953b6e44add4ca11fa3898c, type: 2}
   m_IsPrefabParent: 0

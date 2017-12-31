@@ -9,36 +9,36 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1552052663662764}
+  m_RootGameObject: {fileID: 1316147804046212}
   m_IsPrefabParent: 1
---- !u!1 &1552052663662764
+--- !u!1 &1316147804046212
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224888590658655930}
-  - component: {fileID: 222007195136461048}
-  - component: {fileID: 114551459000735376}
-  - component: {fileID: 95379133020591532}
+  - component: {fileID: 224070375763610746}
+  - component: {fileID: 222456502904061372}
+  - component: {fileID: 114261915267271986}
+  - component: {fileID: 95858415634235048}
   m_Layer: 5
-  m_Name: Tapper
+  m_Name: Swiper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &95379133020591532
+--- !u!95 &95858415634235048
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1552052663662764}
+  m_GameObject: {fileID: 1316147804046212}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ddc08dd67f30c5341a765f198cf0190f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 47fc11df9238cd645aa69a66b0b59511, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -46,12 +46,12 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114551459000735376
+--- !u!114 &114261915267271986
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1552052663662764}
+  m_GameObject: {fileID: 1316147804046212}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -73,19 +73,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!222 &222007195136461048
+--- !u!222 &222456502904061372
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1552052663662764}
---- !u!224 &224888590658655930
+  m_GameObject: {fileID: 1316147804046212}
+--- !u!224 &224070375763610746
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1552052663662764}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1316147804046212}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
