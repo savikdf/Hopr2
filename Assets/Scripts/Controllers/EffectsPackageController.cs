@@ -81,53 +81,56 @@ public class EffectsPackageController : BaseSubManager
     }
     private void Update()
     {
-        if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
-        {
-            time += Time.deltaTime;
-
-            if (GameManager.instance.debugMode)
+        if (GameManager.instance != null)
             {
-                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+                if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
                 {
-                    time = 0;
-                    JumpAnimationTriggered = true;
-                    JumpAnimationEnded = false;
-                    puff.Clear();
-                    if (trail != null) trail.enabled = true;
+                    time += Time.deltaTime;
+
+                    if (GameManager.instance.debugMode)
+                    {
+                        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+                        {
+                            time = 0;
+                            JumpAnimationTriggered = true;
+                            JumpAnimationEnded = false;
+                            puff.Clear();
+                            if (trail != null) trail.enabled = true;
 
 
-                }
-                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-                {
-             
-                }
-                if (Input.GetKeyDown(KeyCode.F2))
-                {
-                }
-                if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
-                {
-                    puff.Emit(100);
+                        }
+                        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+                        {
+
+                        }
+                        if (Input.GetKeyDown(KeyCode.F2))
+                        {
+                        }
+                        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
+                        {
+                            puff.Emit(100);
+                        }
+                    }
+
+
+                    //  player_Character.Effects[1].Reset(playerModel.Larm.transform, playerModel.Rarm.transform);
+                    if (JumpAnimationTriggered)
+                    {
+                        SubManager.Player.PlayerSubManager.player_Character.Effects[0].Play(time, 5f, ref JumpAnimationEnded);
+
+                        if (JumpAnimationEnded)
+                        {
+                            SubManager.Player.PlayerSubManager.player_Character.Effects[0].Rewind(time, 5f);
+
+                            SubManager.Player.PlayerSubManager.player_Character.Effects[1].Up(
+                            SubManager.Player.PlayerSubManager.playerModel.Larm.transform,
+                            SubManager.Player.PlayerSubManager.playerModel.Rarm.transform);
+
+                        }
+                    }
+
                 }
             }
-
-
-            //  player_Character.Effects[1].Reset(playerModel.Larm.transform, playerModel.Rarm.transform);
-            if (JumpAnimationTriggered)
-            {
-                SubManager.Player.PlayerSubManager.player_Character.Effects[0].Play(time, 5f, ref JumpAnimationEnded);
-
-                if (JumpAnimationEnded)
-                {    
-                    SubManager.Player.PlayerSubManager.player_Character.Effects[0].Rewind(time, 5f);
-
-                    SubManager.Player.PlayerSubManager.player_Character.Effects[1].Up(
-                    SubManager.Player.PlayerSubManager.playerModel.Larm.transform,
-                    SubManager.Player.PlayerSubManager.playerModel.Rarm.transform);
-
-                }
-            }
-
-        }
 
     }
 }
