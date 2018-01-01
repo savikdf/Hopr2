@@ -23,20 +23,22 @@ public class EffectsPackageController : BaseSubManager
         if (puff != null)
             Destroy(puff.gameObject);
 
-
-        puff = Instantiate(CharacterSubManager.ActiveCharacter.Effects[3].ps);
-        puff.transform.parent = SubManager.Player.PlayerSubManager.instance.Player_Object.transform;
-        puff.transform.localPosition = new Vector3(0, 0, 0);
-
-
-        if (trail != null)
-            Destroy(trail);
+        if (SubManager.Player.PlayerSubManager.instance.Player_Object.transform != null)
+        {
+            puff = Instantiate(CharacterSubManager.ActiveCharacter.Effects[3].ps);
+            puff.transform.parent = SubManager.Player.PlayerSubManager.instance.Player_Object.transform;
+            puff.transform.localPosition = new Vector3(0, 0, 0);
 
 
-        trail = Instantiate(CharacterSubManager.ActiveCharacter.Effects[4].tr);
-        trail.transform.parent = SubManager.Player.PlayerSubManager.instance.Player_Object.transform;
-        trail.transform.localPosition = new Vector3(0, 0, 0);
-        trail.enabled = false;
+            if (trail != null)
+                Destroy(trail);
+
+
+            trail = Instantiate(CharacterSubManager.ActiveCharacter.Effects[4].tr);
+            trail.transform.parent = SubManager.Player.PlayerSubManager.instance.Player_Object.transform;
+            trail.transform.localPosition = new Vector3(0, 0, 0);
+            trail.enabled = false;
+        }
         
     }
 
