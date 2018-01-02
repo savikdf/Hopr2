@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public static class Utils
 {
     public static float Norm(float value, float min, float max)
@@ -206,5 +207,68 @@ public static class Utils
         return new Color(Utils.randomRange(0f, 1f), Utils.randomRange(0, 1f), Utils.randomRange(0, 1f), 1f);
     }
 
-    
+    public static Vector3 SegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        //A1 is the change in Y
+        //B1 is the change in X
+
+        float A1 = p1.y - p0.y;
+        float B1 = p0.x - p1.x;
+        float C1 = A1 * p0.x + B1 * p0.y;
+
+        float A2 = p3.y - p2.y;
+        float B2 = p2.x - p3.x;
+        float C2 = A2 * p2.x + B2 * p2.y;
+
+        float denominator = A1 * B2 - A2 * B1;
+
+        float sectX = (B2 * C1 - B1 * C2) / denominator;
+        float sectY = (A1 * C2 - A2 * C1) / denominator;
+
+        float rx0 = (sectX - p0.x) / (p1.x - p0.x),
+              ry0 = (sectY - p0.y) / (p1.y - p0.y);
+        float rx1 = (sectX - p2.x) / (p3.x - p2.x),
+              ry1 = (sectY - p2.y) / (p3.y - p2.y);
+
+        if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) && ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
+        {
+            return new Vector3(sectX, sectY, p0.z);
+        }
+        else
+            return new Vector3();
+       
+    }
+
+    public static bool IsSegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        //A1 is the change in Y
+        //B1 is the change in X
+
+        float A1 = p1.y - p0.y;
+        float B1 = p0.x - p1.x;
+        float C1 = A1 * p0.x + B1 * p0.y;
+
+        float A2 = p3.y - p2.y;
+        float B2 = p2.x - p3.x;
+        float C2 = A2 * p2.x + B2 * p2.y;
+
+        float denominator = A1 * B2 - A2 * B1;
+
+        float sectX = (B2 * C1 - B1 * C2) / denominator;
+        float sectY = (A1 * C2 - A2 * C1) / denominator;
+
+        float rx0 = (sectX - p0.x) / (p1.x - p0.x),
+              ry0 = (sectY - p0.y) / (p1.y - p0.y);
+        float rx1 = (sectX - p2.x) / (p3.x - p2.x),
+              ry1 = (sectY - p2.y) / (p3.y - p2.y);
+
+        if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) && ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
+        {
+            return true;
+        }
+        else
+            return false;
+
+    }
+
 }
