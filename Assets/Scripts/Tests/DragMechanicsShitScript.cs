@@ -107,7 +107,7 @@ public class DragMechanicsShitScript : MonoBehaviour
     public bool isGettingReady, isGrounded, isApplyingGravity; 
     public float buildup, cap, angle;
     public Vector2 Velocity;
-
+    public bool isColliding;
 
     [Range(0, 10)]
     public float TapRange;
@@ -125,6 +125,8 @@ public class DragMechanicsShitScript : MonoBehaviour
     [Range(0, 1)]
     public float CheckMultiplier;
     public Vector3 intersectionPoint;
+
+    public Vector3 rayCheckOffset;
 
     Ray CollisionRay;
 
@@ -149,7 +151,7 @@ public class DragMechanicsShitScript : MonoBehaviour
 
 	void Update ()
     {
-        GroundCheck();
+       
 
         if (Velocity.magnitude < 0.1f)
             //isGrounded = true;
@@ -167,8 +169,7 @@ public class DragMechanicsShitScript : MonoBehaviour
             getAngle();
             Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), -1.0f));
 
-
-            if(buildup < TapRange)
+            if (buildup < TapRange)
             {
                 buildup = TapRange;
             }
@@ -177,6 +178,7 @@ public class DragMechanicsShitScript : MonoBehaviour
             Velocity += new Vector2(direction.x, direction.y) * buildup;
 
             buildup = 0;
+            isGrounded = false;
         }
 
         if(isGettingReady)
@@ -188,6 +190,7 @@ public class DragMechanicsShitScript : MonoBehaviour
         Gravity();
    
         ArrowRotate();
+
         for(int i = 0; i < faces.Count; i++)
             faces[i].Update();
     }   
@@ -195,14 +198,14 @@ public class DragMechanicsShitScript : MonoBehaviour
     void LateUpdate()
     {
         CollisionRay = new Ray(transform.position, Velocity.normalized);
+        GroundCheck();
 
         for (int i = 0; i < iterations; i++)
         {
             CollisionDetection();
-
-
-            ApplyForce();
         }
+
+        ApplyForce();
 
         time += Time.deltaTime;
 
@@ -221,16 +224,22 @@ public class DragMechanicsShitScript : MonoBehaviour
 
 
         intersectionPoint = Utils.SegmentIntersection(face.p0, face.p1,
-        transform.position + CollisionRay.direction * CheckMultiplier, transform.position);
+        (transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier, transform.position);
 
         if (Utils.IsSegmentIntersection(face.p0, face.p1,
-           transform.position + CollisionRay.direction * CheckMultiplier, transform.position))
+           (transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier, transform.position))
         {
+
+     
             //transform.position = new Vector3(toWorld(ToView(transform.position)).x + .1f, toWorld(ToView(transform.position)).y, transform.position.z);
             //Velocity.x += -Velocity.x * 0.27f;
-            Velocity = Vector2.Reflect(Velocity, (Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal) * BOUNCEDECAY;
-        }
+            //Velocity = Vector2.Reflect(Velocity, (Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal) * BOUNCEDECAY;
+            Velocity = ReflectionTest(Velocity, (Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal, intersectionPoint) * BOUNCEDECAY;
 
+
+        }
+        //if (Mathf.Abs(Velocity.magnitude) < 0.3f && Mathf.Abs(dotAngle) == 1)
+        //    isGrounded = true;
 
         //One Way Interesection
         //Reverse the order and sign and BAM two way baby
@@ -244,7 +253,28 @@ public class DragMechanicsShitScript : MonoBehaviour
     }
 
 
-    
+    Vector2 ReflectionTest(Vector2 Velocity, Vector3 direction, Vector3 intersectionPoint)
+    {
+
+        Vector2 Result = Vector2.Reflect(Velocity, direction);
+        Debug.Log(Result.magnitude);
+
+        if (Result.magnitude < 0.12f)
+        {
+            isGrounded = true;
+            Result = Vector2.zero;
+            isApplyingGravity = false;
+            transform.position = intersectionPoint;
+            Debug.Log("stuck");
+        }
+        else if (Result.magnitude > 0.15f)
+        {          
+            isGrounded = false;
+        }
+
+        return Result;
+
+    }
 
     bool LineIntresection()
     {
@@ -253,9 +283,6 @@ public class DragMechanicsShitScript : MonoBehaviour
 
     void CollisionDetection()
     {
-
-        if (!isGrounded)
-        {
             for (int j = 0; j < faces.Count; j++)
             {
                 NearestPlatform(faces[j]);
@@ -265,15 +292,16 @@ public class DragMechanicsShitScript : MonoBehaviour
             {
                 transform.position = new Vector3(toWorld(ToView(transform.position)).x - .1f, toWorld(ToView(transform.position)).y, transform.position.z);
                 //Velocity.x += -Velocity.x * 0.27f;
-                Velocity = Vector2.Reflect(Velocity, Vector2.right);
+                Velocity = Vector2.Reflect(Velocity, Vector2.right) * BOUNCEDECAY;
             }
             if (ToView(transform.position).x > 1.0f)
             {
                 transform.position = new Vector3(toWorld(ToView(transform.position)).x + .1f, toWorld(ToView(transform.position)).y, transform.position.z);
                 //Velocity.x += -Velocity.x * 0.27f;
-                Velocity = Vector2.Reflect(Velocity, Vector2.left);
+                Velocity = Vector2.Reflect(Velocity, Vector2.left) * BOUNCEDECAY;
             }
-        }
+
+            GroundCheck();
     }
 
     void BuilUp()
@@ -317,17 +345,28 @@ public class DragMechanicsShitScript : MonoBehaviour
 
     void GroundCheck()
     {
-        if (transform.position.y < 0.1f)
+
+        if (ToView(transform.position).y < 0.0f)
         {
-            isGrounded = true;
-            Velocity = Vector2.zero;
-            isApplyingGravity = false;
-            transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            //isGrounded = true;
+            //Velocity = Vector2.zero;
+            //isApplyingGravity = false;
+            //transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+            //Debug.Log("What the Duck");
+            Velocity = ReflectionTest(Velocity, Vector3.up, intersectionPoint) * BOUNCEDECAY;
         }
-        else
-        {
-            isGrounded = false;
-        }
+
+        //if (transform.position.y < 0.1f)
+        //{
+        //    isGrounded = true;
+        //    Velocity = Vector2.zero;
+        //    isApplyingGravity = false;
+        //    transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
+        //}
+        //else
+        //{
+        //    //isGrounded = false;
+        //}
     }
 
 
@@ -375,7 +414,7 @@ public class DragMechanicsShitScript : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawRay(CollisionRay);
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(transform.position + CollisionRay.direction * CheckMultiplier, 0.06f);
+            Gizmos.DrawSphere((transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier, 0.06f);
 
             for (int j = 0; j < faces.Count; j++)
             {

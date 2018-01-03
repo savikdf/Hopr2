@@ -333,13 +333,15 @@ MonoBehaviour:
   cap: 20
   angle: 0
   Velocity: {x: 0, y: 0}
-  TapRange: 5.2
+  isColliding: 0
+  TapRange: 10
   Arrow: {fileID: 888797578}
   m_ScreenMosPos: {x: 0, y: 0, z: 0}
   iterations: 1
   dotAngle: 0
   CheckMultiplier: 0.4
   intersectionPoint: {x: 0, y: 0, z: 0}
+  rayCheckOffset: {x: 0, y: 0.5, z: 0}
 --- !u!224 &304737569 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224888590658655930, guid: a4fa993997c8890479cee79fbd83708c,
