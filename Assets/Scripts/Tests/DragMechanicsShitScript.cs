@@ -119,18 +119,25 @@ public class DragMechanicsShitScript : MonoBehaviour
     
     [Range(0, 10)]
     public int iterations;
-    public float dotAngle;
 
 
-    [Range(0, 1)]
+    [Range(0, 10)]
     public float CheckMultiplier;
-    public Vector3 intersectionPoint;
 
     public Vector3 rayCheckOffset;
 
     Ray CollisionRay;
+    Vector3 CollisionRayVector;
+
+    Vector3 FuturePosition, PastPosition;
 
     List<Face> faces = new List<Face>();
+
+    [Range(0, 5)]
+    public float RestTime;
+
+    [Range(0, 1)]
+    public float CollisionDistance;
 
     void Start ()
     {
@@ -195,9 +202,12 @@ public class DragMechanicsShitScript : MonoBehaviour
             faces[i].Update();
     }   
 
-    void LateUpdate()
+    void FixedUpdate()
     {
+        
         CollisionRay = new Ray(transform.position, Velocity.normalized);
+        CollisionRayVector = (transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier;
+
         GroundCheck();
 
         for (int i = 0; i < iterations; i++)
@@ -207,7 +217,7 @@ public class DragMechanicsShitScript : MonoBehaviour
 
         ApplyForce();
 
-        time += Time.deltaTime;
+        time += Time.fixedDeltaTime;
 
         faces[1].Object.transform.Rotate(new Vector3(0, Mathf.Sin(time % 180), 0));
         faces[2].Object.transform.Rotate(new Vector3(0, Mathf.Cos(time % 180), 0));
@@ -216,58 +226,91 @@ public class DragMechanicsShitScript : MonoBehaviour
 
     void NearestPlatform(Face face)
     {
-        Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), -1.0f));
 
+        float dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
 
-        dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
+        Vector3 intersectionPoint = Utils.SegmentIntersection(face.p0, face.p1, CollisionRayVector, transform.position, false);
 
-
-
-        intersectionPoint = Utils.SegmentIntersection(face.p0, face.p1,
-        (transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier, transform.position);
-
-        if (Utils.IsSegmentIntersection(face.p0, face.p1,
-           (transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier, transform.position))
+        if ((Mathf.Sign(dotAngle) == -1))
         {
+            if (Utils.IsSegmentIntersection(face.p0, face.p1, CollisionRayVector, transform.position))
+            {
 
-     
-            //transform.position = new Vector3(toWorld(ToView(transform.position)).x + .1f, toWorld(ToView(transform.position)).y, transform.position.z);
-            //Velocity.x += -Velocity.x * 0.27f;
-            //Velocity = Vector2.Reflect(Velocity, (Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal) * BOUNCEDECAY;
-            Velocity = ReflectionTest(Velocity, (Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal, intersectionPoint) * BOUNCEDECAY;
-
-
-        }
-        //if (Mathf.Abs(Velocity.magnitude) < 0.3f && Mathf.Abs(dotAngle) == 1)
-        //    isGrounded = true;
-
-        //One Way Interesection
-        //Reverse the order and sign and BAM two way baby
-        if (Mathf.Sign(dotAngle) == -1)
-        {
-            //Debug.Log("Negetive");                    
-            //Means the Faces are in Oppsite Directions   
+                //One Way Interesection
+                //Reverse the order and sign and BAM two way baby
+                //(Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal, intersectionPoint
+                Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle) * BOUNCEDECAY;
+            }
         }
 
-       
+        PastandFutureCheck(face.p0, face.p1);
     }
 
 
-    Vector2 ReflectionTest(Vector2 Velocity, Vector3 direction, Vector3 intersectionPoint)
+    void GroundCheck()
     {
 
-        Vector2 Result = Vector2.Reflect(Velocity, direction);
-        Debug.Log(Result.magnitude);
+        float dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
 
-        if (Result.magnitude < 0.12f)
+
+        Vector3 leftSide = new Vector3(-3.0f, 0, 0);
+        Vector3 rightSide = new Vector3(3.0f, 0, 0);
+
+        Vector3 intersectionPoint = Utils.SegmentIntersection(leftSide, rightSide,
+            CollisionRayVector, transform.position, false);
+
+
+        if ((Mathf.Sign(dotAngle) == -1))
         {
-            isGrounded = true;
-            Result = Vector2.zero;
-            isApplyingGravity = false;
-            transform.position = intersectionPoint;
-            Debug.Log("stuck");
+
+            if (Utils.IsSegmentIntersection(leftSide, rightSide,
+            CollisionRayVector, transform.position))
+            {
+
+                //float distanceCheck = Vector3.Distance(transform.position, intersectionPoint);
+                //
+                //if (Vector3.Distance(transform.position, intersectionPoint) < CollisionDistance)
+                //{
+                //
+                //}
+                Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle) * BOUNCEDECAY;
+            }
         }
-        else if (Result.magnitude > 0.15f)
+
+        PastandFutureCheck(leftSide, rightSide);
+    }
+
+    void PastandFutureCheck(Vector3 p0, Vector3 p1)
+    {
+        float dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
+
+        Vector3 intersectionPoint = Utils.SegmentIntersection(p0, p1,
+            PastPosition, FuturePosition, false);
+
+        if ((Mathf.Sign(dotAngle) == -1))
+        {
+            if (Utils.IsSegmentIntersection(p0, p1, PastPosition, FuturePosition))
+            {
+                Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle) * BOUNCEDECAY;
+            }
+        }
+    }
+
+    Vector2 ReflectionTest(Vector2 Velocity, Vector3 direction, Vector3 intersectionPoint, float angle)
+    {
+        Vector2 Result = Vector2.Reflect(Velocity, direction);
+        //
+        angle = Mathf.Abs(angle);
+
+        if (Result.magnitude < RestTime)
+        {
+                isGrounded = true;
+                Result = Vector2.zero;
+                isApplyingGravity = false;
+                transform.position = intersectionPoint;
+                Debug.Log("stuck");
+        }
+        else if (Result.magnitude > RestTime)
         {          
             isGrounded = false;
         }
@@ -283,25 +326,25 @@ public class DragMechanicsShitScript : MonoBehaviour
 
     void CollisionDetection()
     {
-            for (int j = 0; j < faces.Count; j++)
-            {
-                NearestPlatform(faces[j]);
-            }
+        for (int j = 0; j < faces.Count; j++)
+        {
+            NearestPlatform(faces[j]);
+        }
 
-            if (ToView(transform.position).x < 0.0f)
-            {
-                transform.position = new Vector3(toWorld(ToView(transform.position)).x - .1f, toWorld(ToView(transform.position)).y, transform.position.z);
-                //Velocity.x += -Velocity.x * 0.27f;
-                Velocity = Vector2.Reflect(Velocity, Vector2.right) * BOUNCEDECAY;
-            }
-            if (ToView(transform.position).x > 1.0f)
-            {
-                transform.position = new Vector3(toWorld(ToView(transform.position)).x + .1f, toWorld(ToView(transform.position)).y, transform.position.z);
-                //Velocity.x += -Velocity.x * 0.27f;
-                Velocity = Vector2.Reflect(Velocity, Vector2.left) * BOUNCEDECAY;
-            }
+        if (ToView(transform.position).x < 0.0f)
+        {
+            transform.position = new Vector3(toWorld(ToView(transform.position)).x - .1f, toWorld(ToView(transform.position)).y, transform.position.z);
+            //Velocity.x += -Velocity.x * 0.27f;
+            Velocity = Vector2.Reflect(Velocity, Vector2.right) * BOUNCEDECAY;
+        }
+        if (ToView(transform.position).x > 1.0f)
+        {
+            transform.position = new Vector3(toWorld(ToView(transform.position)).x + .1f, toWorld(ToView(transform.position)).y, transform.position.z);
+            //Velocity.x += -Velocity.x * 0.27f;
+            Velocity = Vector2.Reflect(Velocity, Vector2.left) * BOUNCEDECAY;
+        }
 
-            GroundCheck();
+        GroundCheck();
     }
 
     void BuilUp()
@@ -331,45 +374,19 @@ public class DragMechanicsShitScript : MonoBehaviour
 
     void ApplyForce()
     {
-        transform.position += (new Vector3(Velocity.x, Velocity.y, 0.0f) * Time.deltaTime) * 3.0f;
+        PastPosition = transform.position;
+        transform.position += (new Vector3(Velocity.x, Velocity.y, 0.0f) * Time.fixedDeltaTime) * 3.0f;
+        FuturePosition = transform.position;
     }
 
     void Gravity()
     {
         if(!isGrounded)
         {
-            Velocity += new Vector2(0, GRAVITY * Time.deltaTime) * SCALEFACTOR;
+            Velocity += new Vector2(0, GRAVITY * Time.fixedDeltaTime) * SCALEFACTOR;
             isApplyingGravity = true;
         }
     }
-
-    void GroundCheck()
-    {
-
-        if (ToView(transform.position).y < 0.0f)
-        {
-            //isGrounded = true;
-            //Velocity = Vector2.zero;
-            //isApplyingGravity = false;
-            //transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
-            //Debug.Log("What the Duck");
-            Velocity = ReflectionTest(Velocity, Vector3.up, intersectionPoint) * BOUNCEDECAY;
-        }
-
-        //if (transform.position.y < 0.1f)
-        //{
-        //    isGrounded = true;
-        //    Velocity = Vector2.zero;
-        //    isApplyingGravity = false;
-        //    transform.position = new Vector3(transform.position.x, 0.0f, transform.position.z);
-        //}
-        //else
-        //{
-        //    //isGrounded = false;
-        //}
-    }
-
-
 
     void getAngle()
     {
@@ -406,15 +423,16 @@ public class DragMechanicsShitScript : MonoBehaviour
             Ray debugRay = new Ray(transform.position, direction);
             Gizmos.DrawRay(debugRay);
 
+            Gizmos.DrawSphere(new Vector3(-3.0f, 0, 0), 0.05f);
+            Gizmos.DrawSphere(new Vector3(3.0f, 0, 0), 0.05f);
 
-
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(intersectionPoint, .06f);
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(CollisionRay);
+            Gizmos.DrawRay(transform.position, CollisionRay.direction * CheckMultiplier);
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere((transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier, 0.06f);
+            Gizmos.DrawSphere(CollisionRayVector, 0.06f);
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(transform.position, 0.07f);
 
             for (int j = 0; j < faces.Count; j++)
             {

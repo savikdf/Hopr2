@@ -252,7 +252,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 195084360}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.169, z: 0}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children:
   - {fileID: 2013076262}
@@ -330,18 +330,19 @@ MonoBehaviour:
   isGrounded: 0
   isApplyingGravity: 0
   buildup: 0
-  cap: 20
+  cap: 50
   angle: 0
   Velocity: {x: 0, y: 0}
   isColliding: 0
   TapRange: 10
   Arrow: {fileID: 888797578}
   m_ScreenMosPos: {x: 0, y: 0, z: 0}
-  iterations: 1
+  iterations: 3
   dotAngle: 0
-  CheckMultiplier: 0.4
-  intersectionPoint: {x: 0, y: 0, z: 0}
-  rayCheckOffset: {x: 0, y: 0.5, z: 0}
+  CheckMultiplier: 0.15
+  rayCheckOffset: {x: 0, y: 0, z: 0}
+  RestTime: 3.5
+  CollisionDistance: 0.215
 --- !u!224 &304737569 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224888590658655930, guid: a4fa993997c8890479cee79fbd83708c,

@@ -207,7 +207,7 @@ public static class Utils
         return new Color(Utils.randomRange(0f, 1f), Utils.randomRange(0, 1f), Utils.randomRange(0, 1f), 1f);
     }
 
-    public static Vector3 SegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+    public static Vector3 SegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, bool usePos)
     {
         //A1 is the change in Y
         //B1 is the change in X
@@ -235,7 +235,7 @@ public static class Utils
             return new Vector3(sectX, sectY, p0.z);
         }
         else
-            return new Vector3();
+            return (usePos) ? p3 : new Vector3();
        
     }
 
