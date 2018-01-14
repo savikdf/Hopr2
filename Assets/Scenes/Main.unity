@@ -88,6 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -151,66 +152,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224811716297749548, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 224811716297749548, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 960
-      objectReference: {fileID: 0}
-    - target: {fileID: 224550796853998048, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 224550796853998048, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 960
-      objectReference: {fileID: 0}
-    - target: {fileID: 224412363028653432, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 224412363028653432, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 960
-      objectReference: {fileID: 0}
-    - target: {fileID: 224264122345737438, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 224264122345737438, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 960
-      objectReference: {fileID: 0}
-    - target: {fileID: 224760880437374596, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 224760880437374596, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 960
-      objectReference: {fileID: 0}
-    - target: {fileID: 224089358381626930, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 224089358381626930, guid: 2658bd96d5b3ab3469dc1870e9e5af10,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 960
-      objectReference: {fileID: 0}
     - target: {fileID: 1933358170866260, guid: 2658bd96d5b3ab3469dc1870e9e5af10, type: 2}
       propertyPath: m_IsActive
       value: 0
@@ -242,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1144984107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03e929da7477b1b4e9506aa0ff797c62, type: 3}
+  m_Script: {fileID: 11500000, guid: b556d141232174f41862ec0eae79aacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   thisSubType: 0
