@@ -13,14 +13,16 @@ public class Face
     //Probs better to just store the transform itself *shrugs*
     public Vector3 storedRefrenceRotation, storedRefrencePosition;
 
-    public Face(Vector3 _p0, Vector3 _p1, Vector3 pos, string name)
+    public bool isDynamic;
+
+    public Face(Vector3 _p0, Vector3 _p1, Vector3 pos, string name, bool _isDynamic)
     {
         Object = new GameObject(name);
         Object.transform.position = pos;
         Object.transform.rotation = new Quaternion() { eulerAngles = new Vector3(90, 0, 0) };
         storedRefrenceRotation = Object.transform.rotation.eulerAngles;
         storedRefrencePosition = Object.transform.position;
-
+        isDynamic = _isDynamic;
         p0pos = _p0;
         p1pos = _p1;
 
@@ -141,17 +143,17 @@ public class DragMechanicsShitScript : MonoBehaviour
 
     void Start ()
     {
-        testFace = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 3.5f, -1), "TestFace");
+        testFace = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 3.5f, -1), "TestFace", false);
         faces.Add(testFace);
-        testFace2 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(1.5f, 5.5f, -1), "TestFace2");
+        testFace2 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(1.5f, 5.5f, -1), "TestFace2", false);
         faces.Add(testFace2);
 
-        testFace5 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1.5f, 5.5f, -1), "TestFace5");
+        testFace5 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1.5f, 5.5f, -1), "TestFace5", false);
         faces.Add(testFace5);
 
-        testFace3 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 8.5f, -1), "TestFace3");
+        testFace3 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 8.5f, -1), "TestFace3", false);
         faces.Add(testFace3);
-        testFace4 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 2.5f, -1), "TestFace4");
+        testFace4 = new Face(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 2.5f, -1), "TestFace4", false);
         testFace4.Object.transform.Rotate(new Vector3(0, 90, 0));
         faces.Add(testFace4);
     }
@@ -159,7 +161,6 @@ public class DragMechanicsShitScript : MonoBehaviour
 	void Update ()
     {
        
-
         if (Velocity.magnitude < 0.1f)
             //isGrounded = true;
 
@@ -203,8 +204,7 @@ public class DragMechanicsShitScript : MonoBehaviour
     }   
 
     void FixedUpdate()
-    {
-        
+    {      
         CollisionRay = new Ray(transform.position, Velocity.normalized);
         CollisionRayVector = (transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier;
 
@@ -214,19 +214,17 @@ public class DragMechanicsShitScript : MonoBehaviour
         {
             CollisionDetection();
         }
-
         ApplyForce();
 
         time += Time.fixedDeltaTime;
 
-        faces[1].Object.transform.Rotate(new Vector3(0, Mathf.Sin(time % 180), 0));
-        faces[2].Object.transform.Rotate(new Vector3(0, Mathf.Cos(time % 180), 0));
+        //faces[1].Object.transform.Rotate(new Vector3(0, Mathf.Sin(time % 180), 0));
+        //faces[2].Object.transform.Rotate(new Vector3(0, Mathf.Cos(time % 180), 0));
 
     }
 
     void NearestPlatform(Face face)
     {
-
         float dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
 
         Vector3 intersectionPoint = Utils.SegmentIntersection(face.p0, face.p1, CollisionRayVector, transform.position, false);
@@ -235,80 +233,65 @@ public class DragMechanicsShitScript : MonoBehaviour
         {
             if (Utils.IsSegmentIntersection(face.p0, face.p1, CollisionRayVector, transform.position))
             {
-
-                //One Way Interesection
-                //Reverse the order and sign and BAM two way baby
-                //(Mathf.Sign(dotAngle) == -1) ? face.normal : -face.normal, intersectionPoint
-                Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle) * BOUNCEDECAY;
+                Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle, face.isDynamic) * BOUNCEDECAY;
             }
         }
-
-        PastandFutureCheck(face.p0, face.p1);
+        
+        PastandFutureCheck(face.p0, face.p1, face.isDynamic, face.normal);
     }
-
 
     void GroundCheck()
     {
 
         float dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
 
-
         Vector3 leftSide = new Vector3(-3.0f, 0, 0);
         Vector3 rightSide = new Vector3(3.0f, 0, 0);
 
-        Vector3 intersectionPoint = Utils.SegmentIntersection(leftSide, rightSide,
-            CollisionRayVector, transform.position, false);
+        Vector3 intersectionPoint = Utils.SegmentIntersection(leftSide, rightSide, CollisionRayVector, transform.position, false);
 
 
         if ((Mathf.Sign(dotAngle) == -1))
         {
 
-            if (Utils.IsSegmentIntersection(leftSide, rightSide,
-            CollisionRayVector, transform.position))
+            if (Utils.IsSegmentIntersection(leftSide, rightSide, CollisionRayVector, transform.position))
             {
+                Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle, false) * BOUNCEDECAY;
 
-                //float distanceCheck = Vector3.Distance(transform.position, intersectionPoint);
-                //
-                //if (Vector3.Distance(transform.position, intersectionPoint) < CollisionDistance)
-                //{
-                //
-                //}
-                Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle) * BOUNCEDECAY;
             }
         }
 
-        PastandFutureCheck(leftSide, rightSide);
+        PastandFutureCheck(leftSide, rightSide, false, Vector2.up);
     }
 
-    void PastandFutureCheck(Vector3 p0, Vector3 p1)
+    void PastandFutureCheck(Vector3 p0, Vector3 p1, bool isDynamic, Vector3 n)
     {
         float dotAngle = Vector2.Dot(Velocity.normalized, testFace.normal);
 
-        Vector3 intersectionPoint = Utils.SegmentIntersection(p0, p1,
-            PastPosition, FuturePosition, false);
+        Vector3 intersectionPoint = Utils.SegmentIntersection(p0, p1, PastPosition, FuturePosition, false);
 
         if ((Mathf.Sign(dotAngle) == -1))
         {
             if (Utils.IsSegmentIntersection(p0, p1, PastPosition, FuturePosition))
             {
-                Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle) * BOUNCEDECAY;
+                Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle, isDynamic) * BOUNCEDECAY;
             }
         }
     }
 
-    Vector2 ReflectionTest(Vector2 Velocity, Vector3 direction, Vector3 intersectionPoint, float angle)
+    Vector2 ReflectionTest(Vector2 Velocity, Vector3 direction, Vector3 intersectionPoint, float angle, bool isDynamic)
     {
         Vector2 Result = Vector2.Reflect(Velocity, direction);
         //
         angle = Mathf.Abs(angle);
 
-        if (Result.magnitude < RestTime)
+        if (Result.magnitude < RestTime && !isDynamic)
         {
-                isGrounded = true;
-                Result = Vector2.zero;
-                isApplyingGravity = false;
-                transform.position = intersectionPoint;
-                Debug.Log("stuck");
+            isGrounded = true;
+            Result = Vector2.zero;
+            isApplyingGravity = false;
+            transform.position = intersectionPoint;
+            //Debug.Log("stuck");
         }
         else if (Result.magnitude > RestTime)
         {          
@@ -316,7 +299,6 @@ public class DragMechanicsShitScript : MonoBehaviour
         }
 
         return Result;
-
     }
 
     bool LineIntresection()
