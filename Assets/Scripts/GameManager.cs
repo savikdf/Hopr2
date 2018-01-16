@@ -15,7 +15,7 @@ using SubManager.World;
 using SubManager.Menu;
 using SubManager.Difficulty;
 using SubManager.CharacterMan;
-
+using SubManager.Physics;
 #endregion
 
 public class GameManager : MonoBehaviour
@@ -50,7 +50,8 @@ public class GameManager : MonoBehaviour
         Social,
         Menu,
         Character,
-        Difficulty
+        Difficulty,
+        Physics
     }
 
     #endregion
@@ -178,7 +179,9 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameSubManagerTypes.Difficulty:
                     this.gameObject.AddComponent<DifficultySubManager>();
-
+                    break;
+                case GameSubManagerTypes.Physics:
+                    this.gameObject.AddComponent<PhysicsSubManager>();
                     break;
                 case GameSubManagerTypes.None:
                     //nothing needs to happen hear. this is used for catching errors in the

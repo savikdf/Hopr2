@@ -91,6 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4579682933467930}
   - component: {fileID: 114266684698141418}
+  - component: {fileID: 114756558890475662}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -468,3 +469,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPassable: 1
+--- !u!114 &114756558890475662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1603543098803340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbcdcd9ba7c8aa04d9b68e5af9d3a919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numSides: 4
+  CollisionFaces: []

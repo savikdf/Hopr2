@@ -39,7 +39,7 @@ namespace SubManager.World
         public List<Platform> platforms;
         Vector3 spawnVec3;
         GameObject trashObject;
-        GameObject platHolder;
+        public GameObject platHolder;
         Platform cyclePlat;
 
         #endregion
@@ -209,9 +209,9 @@ namespace SubManager.World
                     {
                         if (platforms[i] != null && i != PlayerSubManager.instance.currentIndex)
                         {
-                            platforms[i].transform.Rotate(
-                             new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
-                             );
+                         //   platforms[i].transform.Rotate(
+                         //    new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
+                         //    );
                         }
                     }
                 }
@@ -266,7 +266,7 @@ namespace SubManager.World
             } 
             
         }
-
+        
 
         #endregion 
     }

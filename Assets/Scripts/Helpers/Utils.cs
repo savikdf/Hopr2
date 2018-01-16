@@ -271,4 +271,15 @@ public static class Utils
 
     }
 
+
+    public static Vector3 toWorld(Vector3 vector)
+    {
+        return Camera.main.ViewportToWorldPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
+    }
+
+   public static Vector3 ToView(Vector3 vector)
+    {
+        return Camera.main.WorldToViewportPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
+    }
+
 }
