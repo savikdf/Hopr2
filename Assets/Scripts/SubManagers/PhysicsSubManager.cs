@@ -5,49 +5,25 @@ using SubManager.World;
 
 namespace SubManager.Physics
 {
-
     public class PhysicsSubManager : BaseSubManager
     {
-        public static float GRAVITY = -9.8f;
-        public static float SCALEFACTOR = 0.95f;
-        public static float BOUNCEDECAY = 0.55f;
+        public VariableManager physicsOptions;
         public Platform_Collider[] colliderFaces;
         public GameObject player;
         //each sub manager will need to override these:
         Vector2 mousePos;
-
-        [Range(0, 100)]
-        public float force = 0.2f;
         public bool isGettingReady, isGrounded, isApplyingGravity, Impulse;
         public float buildup;
-        public float cap = 25;
         public float angle;
         public float time;
         public Vector2 Velocity;
         public bool isColliding;
-
-        [Range(0, 10)]
-        public float TapRange = 5f;
         public GameObject Arrow;
         public Vector3 m_ScreenMosPos;
-
         [Range(0, 10)]
         public int iterations = 2;
-
-
-        [Range(0, 10)]
-        public float CheckMultiplier = 0.15f;
-
-        public Vector3 rayCheckOffset = new Vector3(0, 0.2f, 0);
-
         Ray CollisionRay;
         Vector3 CollisionRayVector, FuturePosition, PastPosition;
-
-        [Range(0, 5)]
-        public float RestTime = 1.4f;
-
-        [Range(0, 1)]
-        public float CollisionDistance = .25f;
 
         //use this to set local data
         public override void InitializeSubManager()
@@ -65,6 +41,7 @@ namespace SubManager.Physics
         //use this to begin the setup of the game
         public override void OnGameLoad()
         {
+            physicsOptions = GameObject.Find("Main").GetComponent<VariableManager>();
             player = GameObject.Find("Player_Object");
             Arrow = GameObject.Find("Arrow");
             colliderFaces = WorldSubManager.instance.platHolder.GetComponentsInChildren<Platform_Collider>();//player.transform.Find("Platform_Holder").gameObject;
@@ -99,7 +76,7 @@ namespace SubManager.Physics
         void CollisionCheck()
         {
             CollisionRay = new Ray(player.transform.position, Velocity.normalized);
-            CollisionRayVector = (player.transform.position + rayCheckOffset) + CollisionRay.direction * CheckMultiplier;
+            CollisionRayVector = (player.transform.position + physicsOptions.physicsOptions.rayCheckOffset) + CollisionRay.direction * physicsOptions.physicsOptions.CheckMultiplier;
             //GroundCheck();
             for (int i = 0; i < iterations; i++)
             {
@@ -126,9 +103,9 @@ namespace SubManager.Physics
                 getAngle();
                 Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), -1.0f));
 
-                if (buildup < TapRange)
+                if (buildup < physicsOptions.physicsOptions.TapRange)
                 {
-                    buildup = TapRange;
+                    buildup = physicsOptions.physicsOptions.TapRange;
                 }
 
                 if (isGrounded)
@@ -163,7 +140,7 @@ namespace SubManager.Physics
             {
                 if (Utils.IsSegmentIntersection(face.p0, face.p1, CollisionRayVector, player.transform.position))
                 {
-                    Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle, face.isDynamic) * BOUNCEDECAY;
+                    Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle, face.isDynamic) * physicsOptions.physicsOptions.BOUNCEDECAY;
                 }
             }
 
@@ -185,7 +162,7 @@ namespace SubManager.Physics
 
                 if (Utils.IsSegmentIntersection(leftSide, rightSide, CollisionRayVector, player.transform.position))
                 {
-                    Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle, false) * BOUNCEDECAY;
+                    Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle, false) * physicsOptions.physicsOptions.BOUNCEDECAY;
 
                 }
             }
@@ -203,7 +180,7 @@ namespace SubManager.Physics
             {
                 if (Utils.IsSegmentIntersection(p0, p1, PastPosition, FuturePosition))
                 {
-                    Velocity = ReflectionTest(Velocity, n, intersectionPoint, dotAngle, isDynamic) * BOUNCEDECAY;
+                    Velocity = ReflectionTest(Velocity, n, intersectionPoint, dotAngle, isDynamic) * physicsOptions.physicsOptions.BOUNCEDECAY;
                 }
             }
         }
@@ -214,15 +191,14 @@ namespace SubManager.Physics
             //
             angle = Mathf.Abs(angle);
 
-            if (Result.magnitude < RestTime && !isDynamic)
+            if (Result.magnitude < physicsOptions.physicsOptions.RestTime && !isDynamic)
             {
                 isGrounded = true;
                 Result = Vector2.zero;
                 isApplyingGravity = false;
                 player.transform.position = intersectionPoint;
-                //Debug.Log("stuck");
             }
-            else if (Result.magnitude > RestTime)
+            else if (Result.magnitude > physicsOptions.physicsOptions.RestTime)
             {
                 isGrounded = false;
             }
@@ -260,10 +236,10 @@ namespace SubManager.Physics
 
         void BuilUp()
         {
-            if (buildup < cap)
-                buildup += force;
+            if (buildup < physicsOptions.physicsOptions.cap)
+                buildup += physicsOptions.physicsOptions.force;
             else
-                buildup = cap;
+                buildup = physicsOptions.physicsOptions.cap;
         }
 
 
@@ -271,7 +247,7 @@ namespace SubManager.Physics
         {
             Vector3 MousePos = Input.mousePosition;
             MousePos.z = 3913;
-            m_ScreenMosPos = Camera.main.ScreenToWorldPoint(new Vector3(MousePos.x, MousePos.y, Camera.main.farClipPlane));
+            m_ScreenMosPos = (new Vector3(MousePos.x, MousePos.y, Camera.main.farClipPlane));
         }
 
         void ApplyForce()
@@ -285,7 +261,7 @@ namespace SubManager.Physics
         {
             if (!isGrounded)
             {
-                Velocity += new Vector2(0, GRAVITY * Time.fixedDeltaTime) * SCALEFACTOR;
+                Velocity += new Vector2(0, physicsOptions.physicsOptions.GRAVITY * Time.fixedDeltaTime) * physicsOptions.physicsOptions.SCALEFACTOR;
                 isApplyingGravity = true;
             }
         }
@@ -296,11 +272,13 @@ namespace SubManager.Physics
             //Hyp Coords
 
             Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(player.transform.position.x, player.transform.position.y, Camera.main.farClipPlane));
+            Vector3 MousePos = Input.mousePosition;
+            Vector3  m_ScreenMosPos = Camera.main.ScreenToViewportPoint(new Vector3(MousePos.x, MousePos.y, Camera.main.farClipPlane));
 
-            float dx = m_ScreenMosPos.x + screenPos.x;
-            float dy = m_ScreenMosPos.y + screenPos.x;
+            float dx = m_ScreenMosPos.x - screenPos.x;
+            float dy = m_ScreenMosPos.y - screenPos.y;
 
-            angle = Mathf.Atan2(dy, dx) * Mathf.Rad2Deg;
+            angle = Mathf.Atan2(-dy, dx) * Mathf.Rad2Deg;
         }
 
         void ArrowRotate()
@@ -330,7 +308,7 @@ namespace SubManager.Physics
                 Gizmos.DrawSphere(new Vector3(3.0f, 0, 0), 0.05f);
 
                 Gizmos.color = Color.green;
-                Gizmos.DrawRay(player.transform.position, CollisionRay.direction * CheckMultiplier);
+                Gizmos.DrawRay(player.transform.position, CollisionRay.direction * physicsOptions.physicsOptions.CheckMultiplier);
                 Gizmos.color = Color.red;
                 Gizmos.DrawSphere(CollisionRayVector, 0.06f);
 
