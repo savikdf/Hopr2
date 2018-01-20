@@ -12,13 +12,17 @@ public class Platform_Collider : MonoBehaviour
     public Face[] CollisionFaces;
     public Side_Collider[] sideColliders;
     public VariableManager physicsOptions;
-    Platform platform;
-    public List<Vector3> vertices;
-
     // Use this for initialization
+
     void Start()
     {
         physicsOptions = GameObject.Find("GameManager").GetComponent<VariableManager>();
+        SetUpCollider();
+    }
+
+    
+    void SetUpCollider()
+    {
 
         if(sideColliders.Length <= 0)
         {
@@ -35,6 +39,14 @@ public class Platform_Collider : MonoBehaviour
             CollisionFaces[i] = sideColliders[i].face;
     }
 
+    public void SwitchOff()
+    {
+         for(int i = 0; i < sideColliders.Length; i++)
+         {
+            CollisionFaces[i].normal = Vector3.up;
+            sideColliders[i].GetComponent<MeshRenderer>().material.color = Color.gray;
+         }
+    }
 
     // Update is called once per frame
     void Update()

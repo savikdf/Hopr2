@@ -19,10 +19,6 @@ public class PhysicsOptions
 		[Range(0, 5)]
         public float RestTime = 1.4f;
         public bool showDebugs;
-
-        public Vector3 resetPoint;
-
-        public Vector3 resetPosition;
 }
 
 public class VariableManager : MonoBehaviour 

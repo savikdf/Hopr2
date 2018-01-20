@@ -206,7 +206,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 26049609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 888797579}
@@ -454,5 +454,3 @@ MonoBehaviour:
     rayCheckOffset: {x: 0, y: 0.5, z: 0}
     RestTime: 1.45
     showDebugs: 0
-    resetPoint: {x: 0, y: -5, z: 0}
-    resetPosition: {x: -2, y: 5, z: 0}

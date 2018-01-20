@@ -54,9 +54,7 @@ namespace SubManager.Player
             instance = instance ?? (this);
             thisSubType = GameManager.GameSubManagerTypes.Player;
 
-
             //PLACEHOLDER:
-
             player_Object = (player_Object == null) ?
                 GameObject.Find("Player_Object") : player_Object;
             if (player_Object == null)
@@ -80,8 +78,6 @@ namespace SubManager.Player
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
-
-
         }
 
         //begin input detection
