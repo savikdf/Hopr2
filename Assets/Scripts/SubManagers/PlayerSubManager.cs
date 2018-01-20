@@ -204,13 +204,13 @@ namespace SubManager.Player
         {
             try
             {
-                //sets the parent of the player to platform
-                PlayerSubManager.instance.Player_Object.transform.SetParent(
-                             WorldSubManager.instance.platforms[platIndex].transform
-                         );
-
-                //puts them in the middle of the platform they spawn on
-                PlayerSubManager.instance.Player_Object.transform.localPosition = Vector3.zero + offsetVec3;
+                ////sets the parent of the player to platform
+                //PlayerSubManager.instance.Player_Object.transform.SetParent(
+                //             WorldSubManager.instance.platforms[platIndex].transform
+                //         );
+//
+                ////puts them in the middle of the platform they spawn on
+                //PlayerSubManager.instance.Player_Object.transform.localPosition = Vector3.zero + offsetVec3;
 
             }
             catch (Exception ex)

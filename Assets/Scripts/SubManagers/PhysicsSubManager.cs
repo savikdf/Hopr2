@@ -9,22 +9,19 @@ namespace SubManager.Physics
     {
         public VariableManager physicsOptions;
         public Platform_Collider[] colliderFaces;
-        public GameObject player;
+        public GameObject player, Arrow;
         //each sub manager will need to override these:
         Vector2 mousePos;
-        public bool isGettingReady, isGrounded, isApplyingGravity, Impulse;
+        bool isGettingReady, isGrounded, isApplyingGravity, isColliding;
         public float buildup;
-        public float angle;
-        public float time;
+        float angle, time;
         public Vector2 Velocity;
-        public bool isColliding;
-        public GameObject Arrow;
-        public Vector3 m_ScreenMosPos;
         [Range(0, 10)]
-        public int iterations = 2;
+        public int iterations = 1;
         Ray CollisionRay;
-        Vector3 CollisionRayVector, FuturePosition, PastPosition;
+        Vector3 CollisionRayVector, FuturePosition, PastPosition, m_ScreenMosPos;
 
+        public List<Vector3> intersections = new List<Vector3>();
         //use this to set local data
         public override void InitializeSubManager()
         {
@@ -41,7 +38,7 @@ namespace SubManager.Physics
         //use this to begin the setup of the game
         public override void OnGameLoad()
         {
-            physicsOptions = GameObject.Find("Main").GetComponent<VariableManager>();
+            physicsOptions = GameObject.Find("GameManager").GetComponent<VariableManager>();
             player = GameObject.Find("Player_Object");
             Arrow = GameObject.Find("Arrow");
             colliderFaces = WorldSubManager.instance.platHolder.GetComponentsInChildren<Platform_Collider>();//player.transform.Find("Platform_Holder").gameObject;
@@ -69,39 +66,42 @@ namespace SubManager.Physics
         {
             time += Time.fixedDeltaTime;
 
-            if(GameManager.instance.currentGameState == GameManager.GameStates.Intra)
-            CollisionCheck();
+            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
+            {
+                CollisionCheck();
+                Gravity();
+                ApplyForce();
+            }
         }
 
         void CollisionCheck()
         {
             CollisionRay = new Ray(player.transform.position, Velocity.normalized);
-            CollisionRayVector = (player.transform.position + physicsOptions.physicsOptions.rayCheckOffset) + CollisionRay.direction * physicsOptions.physicsOptions.CheckMultiplier;
+            CollisionRayVector = (player.transform.position + physicsOptions.physicsOptions.rayCheckOffset) 
+            + CollisionRay.direction * physicsOptions.physicsOptions.CheckMultiplier;
+
             //GroundCheck();
             for (int i = 0; i < iterations; i++)
             {
                 CollisionDetection();
             }
-            ApplyForce();
         }
 
         void PhysicsUpdate()
         {
-            if (Velocity.magnitude < 0.1f)
-                //isGrounded = true;
 
-                if (Input.GetMouseButtonDown(0))
-                {
-                    //buildup = 0;
+            if (Input.GetMouseButtonDown(0))
+            {
+                //buildup = 0;
 
-                    isGettingReady = true;
-                }
+                isGettingReady = true;
+            }
 
             if (Input.GetMouseButtonUp(0))
             {
                 isGettingReady = false;
-                getAngle();
-                Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), -1.0f));
+
+                Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(getAngle() * Mathf.Deg2Rad), Mathf.Sin(getAngle() * Mathf.Deg2Rad), -1.0f));
 
                 if (buildup < physicsOptions.physicsOptions.TapRange)
                 {
@@ -121,66 +121,54 @@ namespace SubManager.Physics
                     BuilUp();
             }
 
-            Gravity();
+            if (player.transform.position.y < -5)
+            {
+                player.transform.position = new Vector3(0, 5, 0);
+                Velocity = Vector3.zero;
+            }
             ArrowRotate();
         }
+
         void Update()
         {
-            if(GameManager.instance.currentGameState == GameManager.GameStates.Intra)
-            PhysicsUpdate();
+            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
+                PhysicsUpdate();
         }
 
         void NearestPlatform(Face face)
         {
-            float dotAngle = Vector2.Dot(Velocity.normalized, Vector3.up);
 
-            Vector3 intersectionPoint = Utils.SegmentIntersection(face.p0, face.p1, CollisionRayVector, player.transform.position, false);
+           float dotAngle = Vector2.Dot(Velocity.normalized, face.normal);
 
-            if ((Mathf.Sign(dotAngle) == -1))
-            {
-                if (Utils.IsSegmentIntersection(face.p0, face.p1, CollisionRayVector, player.transform.position))
-                {
-                    Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle, face.isDynamic) * physicsOptions.physicsOptions.BOUNCEDECAY;
-                }
-            }
+           Vector3 intersectionPoint = Utils.SegmentIntersection(face.p0, face.p1, CollisionRayVector, player.transform.position, false);
 
-            PastandFutureCheck(face.p0, face.p1, face.isDynamic, Vector3.up);
+           if ((Mathf.Sign(dotAngle) == -1) && intersectionPoint.z > 0)
+           {
+               if (Utils.IsSegmentIntersection(face.p0, face.p1, CollisionRayVector, player.transform.position))
+               {
+                   intersections.Add(new Vector3(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z));
+                   Velocity = ReflectionTest(Velocity, face.normal, intersectionPoint, dotAngle, face.isDynamic) * physicsOptions.physicsOptions.BOUNCEDECAY;
+                   Debug.Log(face.Object.transform.parent.name);
+               }
+           }
+
+            PastandFutureCheck(face.p0, face.p1, face.isDynamic, Vector3.up, face.Object.transform.parent.name);
         }
 
-        void GroundCheck()
+
+        void PastandFutureCheck(Vector3 p0, Vector3 p1, bool isDynamic, Vector3 n, string name)
         {
-
-            float dotAngle = Vector2.Dot(Velocity.normalized, Vector3.up);
-
-            Vector3 leftSide = new Vector3(-3.0f, 0, 0);
-            Vector3 rightSide = new Vector3(3.0f, 0, 0);
-
-            Vector3 intersectionPoint = Utils.SegmentIntersection(leftSide, rightSide, CollisionRayVector, player.transform.position, false);
-
-            if ((Mathf.Sign(dotAngle) == -1))
-            {
-
-                if (Utils.IsSegmentIntersection(leftSide, rightSide, CollisionRayVector, player.transform.position))
-                {
-                    Velocity = ReflectionTest(Velocity, Vector2.up, intersectionPoint, dotAngle, false) * physicsOptions.physicsOptions.BOUNCEDECAY;
-
-                }
-            }
-
-            PastandFutureCheck(leftSide, rightSide, false, Vector3.up);
-        }
-
-        void PastandFutureCheck(Vector3 p0, Vector3 p1, bool isDynamic, Vector3 n)
-        {
-            float dotAngle = Vector2.Dot(Velocity.normalized, n);
+            float dotAngle = Vector2.Dot(Velocity.normalized, n.normalized);
 
             Vector3 intersectionPoint = Utils.SegmentIntersection(p0, p1, PastPosition, FuturePosition, false);
 
-            if ((Mathf.Sign(dotAngle) == -1))
+            if ((Mathf.Sign(dotAngle) == -1) && intersectionPoint.z > 0)
             {
                 if (Utils.IsSegmentIntersection(p0, p1, PastPosition, FuturePosition))
                 {
-                    Velocity = ReflectionTest(Velocity, n, intersectionPoint, dotAngle, isDynamic) * physicsOptions.physicsOptions.BOUNCEDECAY;
+                    intersections.Add(new Vector3(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z));
+                    Velocity = ReflectionTest(Velocity, n.normalized, intersectionPoint, dotAngle, isDynamic) * physicsOptions.physicsOptions.BOUNCEDECAY;
+                    Debug.Log(name);
                 }
             }
         }
@@ -188,15 +176,15 @@ namespace SubManager.Physics
         Vector2 ReflectionTest(Vector2 Velocity, Vector3 direction, Vector3 intersectionPoint, float angle, bool isDynamic)
         {
             Vector2 Result = Vector2.Reflect(Velocity, direction);
-            //
-            angle = Mathf.Abs(angle);
 
-            if (Result.magnitude < physicsOptions.physicsOptions.RestTime && !isDynamic)
+            angle = Mathf.Abs(getAngle());
+
+            if (Result.magnitude < physicsOptions.physicsOptions.RestTime)
             {
                 isGrounded = true;
                 Result = Vector2.zero;
                 isApplyingGravity = false;
-                player.transform.position = intersectionPoint;
+                player.transform.position = intersectionPoint + new Vector3(0, 0, 0);
             }
             else if (Result.magnitude > physicsOptions.physicsOptions.RestTime)
             {
@@ -204,11 +192,6 @@ namespace SubManager.Physics
             }
 
             return Result;
-        }
-
-        bool LineIntresection()
-        {
-            return true;
         }
 
         void CollisionDetection()
@@ -219,19 +202,20 @@ namespace SubManager.Physics
                     NearestPlatform(colliderFaces[j].CollisionFaces[k]);
             }
 
-          //  if (ToView(player.transform.position).x < 0.0f)
-          //  {
-          //      player.transform.position = new Vector3(toWorld(ToView(player.transform.position)).x - .1f, toWorld(ToView(player.transform.position)).y, player.transform.position.z);
-          //      //Velocity.x += -Velocity.x * 0.27f;
-          //      Velocity = Vector2.Reflect(Velocity, Vector2.right) * BOUNCEDECAY;
-          //  }
-          //  if (ToView(player.transform.position).x > 1.0f)
-          //  {
-          //      player.transform.position = new Vector3(toWorld(ToView(player.transform.position)).x + .1f, toWorld(ToView(player.transform.position)).y, player.transform.position.z);
-          //      //Velocity.x += -Velocity.x * 0.27f;
-          //      Velocity = Vector2.Reflect(Velocity, Vector2.left) * BOUNCEDECAY;
-          //  }
-        //GroundCheck();
+            //  if (ToView(player.transform.position).x < 0.0f)
+            //  {
+            //      player.transform.position = new Vector3(toWorld(ToView(player.transform.position)).x - .1f, toWorld(ToView(player.transform.position)).y, player.transform.position.z);
+            //      //Velocity.x += -Velocity.x * 0.27f;
+            //      Velocity = Vector2.Reflect(Velocity, Vector2.right) * BOUNCEDECAY;
+            //  }
+            //  if (ToView(player.transform.position).x > 1.0f)
+            //  {
+            //      player.transform.position = new Vector3(toWorld(ToView(player.transform.position)).x + .1f, toWorld(ToView(player.transform.position)).y, player.transform.position.z);
+            //      //Velocity.x += -Velocity.x * 0.27f;
+            //      Velocity = Vector2.Reflect(Velocity, Vector2.left) * BOUNCEDECAY;
+            //  }
+
+            //GroundCheck();
         }
 
         void BuilUp()
@@ -241,7 +225,6 @@ namespace SubManager.Physics
             else
                 buildup = physicsOptions.physicsOptions.cap;
         }
-
 
         void GetMousePos()
         {
@@ -266,39 +249,37 @@ namespace SubManager.Physics
             }
         }
 
-        void getAngle()
+        float getAngle()
         {
             GetMousePos();
             //Hyp Coords
 
             Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(player.transform.position.x, player.transform.position.y, Camera.main.farClipPlane));
             Vector3 MousePos = Input.mousePosition;
-            Vector3  m_ScreenMosPos = Camera.main.ScreenToViewportPoint(new Vector3(MousePos.x, MousePos.y, Camera.main.farClipPlane));
+            Vector3 m_ScreenMosPos = Camera.main.ScreenToViewportPoint(new Vector3(MousePos.x, MousePos.y, Camera.main.farClipPlane));
 
             float dx = m_ScreenMosPos.x - screenPos.x;
             float dy = m_ScreenMosPos.y - screenPos.y;
 
-            angle = Mathf.Atan2(-dy, dx) * Mathf.Rad2Deg;
+            return Mathf.Atan2(dy, -dx) * Mathf.Rad2Deg;
         }
 
         void ArrowRotate()
         {
-            getAngle();
 
             Quaternion rotation = new Quaternion
             {
-                eulerAngles = new Vector3(0, 0, angle)
+                eulerAngles = new Vector3(0, 0, getAngle())
             };
             Arrow.transform.rotation = rotation;
         }
-
 
         void OnDrawGizmos()
         {
             if (Application.isPlaying)
             {
 
-                Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), -1.0f));
+                Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(getAngle() * Mathf.Deg2Rad), Mathf.Sin(getAngle() * Mathf.Deg2Rad), -1.0f));
                 Gizmos.DrawSphere(direction + player.transform.position, .05f);
 
                 Ray debugRay = new Ray(player.transform.position, direction);
@@ -314,6 +295,9 @@ namespace SubManager.Physics
 
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawSphere(player.transform.position, 0.07f);
+
+                for(int i = 0; i < intersections.Count; i++)
+                Gizmos.DrawCube(intersections[i], new Vector3(0.1f, 0.1f, 0.1f));
             }
 
         }

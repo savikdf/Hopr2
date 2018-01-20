@@ -2,37 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SubManager.World.Platforms;
+using SubManager.World;
+using SubManager.Difficulty;
+public class Platform_Collider : MonoBehaviour
+{
 
-public class Platform_Collider : MonoBehaviour {
+    //Will expand later with Enumrables and Class contruct
+    public uint numSides = 4;
+    public Face[] CollisionFaces;
+    public Side_Collider[] sideColliders;
+    public VariableManager physicsOptions;
+    Platform platform;
+    public List<Vector3> vertices;
 
-	//Will expand later with Enumrables and Class contruct
-	public uint numSides = 4;
-	public Face[] CollisionFaces;
-	
-	Platform platform;
-	// Use this for initialization
-	void Start () {
-		
-		platform = GetComponent<Platform>();
-		CollisionFaces = new Face[4];
-		for(int i = 0; i < (int)numSides; i++)
-		{
-			Vector3 c = platform.sides[i].transform.localPosition;
-			Vector3 l = c * +1.0f;
-			Vector3 r = c * -1.0f;
-			CollisionFaces[i] = new Face(l, r, c, "Collider", false, this.gameObject);
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		for(int i = 0; i < (int)numSides; i++)
-		CollisionFaces[i].Update();
-	}
+    // Use this for initialization
+    void Start()
+    {
+        physicsOptions = GameObject.Find("GameManager").GetComponent<VariableManager>();
 
-	void OnDrawGizmos()
-	{
-		for(int i = 0; i < (int)numSides; i++)
-		CollisionFaces[i].DrawFace();
-	}
+        if(sideColliders.Length <= 0)
+        {
+            sideColliders = new Side_Collider[4];
+            sideColliders[0] = transform.GetChild(1).GetComponent<Side_Collider>();
+            sideColliders[1] = transform.GetChild(2).GetComponent<Side_Collider>();
+            sideColliders[2] = transform.GetChild(3).GetComponent<Side_Collider>();
+            sideColliders[3] = transform.GetChild(4).GetComponent<Side_Collider>();
+        }
+
+        CollisionFaces = new Face[sideColliders.Length];
+
+        for(int i = 0; i < sideColliders.Length; i++)
+            CollisionFaces[i] = sideColliders[i].face;
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+
+    }
+
+    void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+        }
+    }
 }

@@ -225,23 +225,27 @@ public static class Utils
         float sectX = (B2 * C1 - B1 * C2) / denominator;
         float sectY = (A1 * C2 - A2 * C1) / denominator;
 
-        float rx0 = (sectX - p0.x) / (p1.x - p0.x),
-              ry0 = (sectY - p0.y) / (p1.y - p0.y);
-        float rx1 = (sectX - p2.x) / (p3.x - p2.x),
-              ry1 = (sectY - p2.y) / (p3.y - p2.y);
+        float rx0 = (sectX - p0.x) / (p1.x - p0.x);
+        float ry0 = (sectY - p0.y) / (p1.y - p0.y);
 
-        if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) && ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
+        float rx1 = (sectX - p2.x) / (p3.x - p2.x);
+        float ry1 = (sectY - p2.y) / (p3.y - p2.y);
+
+       if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) &&
+            ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
         {
-            return new Vector3(sectX, sectY, p0.z);
+            return new Vector3(sectX, sectY, 0.1f);
         }
         else
-            return (usePos) ? p3 : new Vector3();
+        {
+            return default(Vector3);
+        }
        
     }
 
     public static bool IsSegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
     {
-        //A1 is the change in Y
+         //A1 is the change in Y
         //B1 is the change in X
 
         float A1 = p1.y - p0.y;
@@ -257,17 +261,21 @@ public static class Utils
         float sectX = (B2 * C1 - B1 * C2) / denominator;
         float sectY = (A1 * C2 - A2 * C1) / denominator;
 
-        float rx0 = (sectX - p0.x) / (p1.x - p0.x),
-              ry0 = (sectY - p0.y) / (p1.y - p0.y);
-        float rx1 = (sectX - p2.x) / (p3.x - p2.x),
-              ry1 = (sectY - p2.y) / (p3.y - p2.y);
+        float rx0 = (sectX - p0.x) / (p1.x - p0.x);
+        float ry0 = (sectY - p0.y) / (p1.y - p0.y);
 
-        if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) && ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
+        float rx1 = (sectX - p2.x) / (p3.x - p2.x);
+        float ry1 = (sectY - p2.y) / (p3.y - p2.y);
+
+       if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) &&
+            ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
         {
             return true;
         }
         else
+        {
             return false;
+        }
 
     }
 

@@ -21,9 +21,13 @@ namespace SubManager.World.Platforms
         private void Awake()
         {
             sides = new List<Side>();
-            thisPlatformType = WorldSubManager.PlatformTypes.Normal;    
-            thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
-            thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
+
+            if(thisPlatformType != WorldSubManager.PlatformTypes.Test)
+            {
+                thisPlatformType = WorldSubManager.PlatformTypes.Normal;    
+                thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
+                thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
+            }
             try
             {
                 //finds sides and sets them in the sides[]
@@ -84,6 +88,9 @@ namespace SubManager.World.Platforms
                     break;
                 case WorldSubManager.PlatformTypes.Warp:
 
+                    break;
+                case WorldSubManager.PlatformTypes.Test:
+                    EstablishType(WorldSubManager.PlatformTypes.Test);
                     break;
                 default:
                     EstablishType(WorldSubManager.PlatformTypes.Normal);

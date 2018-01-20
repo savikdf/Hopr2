@@ -18,8 +18,7 @@ public class PhysicsOptions
         public Vector3 rayCheckOffset = new Vector3(0, 0.2f, 0);
 		[Range(0, 5)]
         public float RestTime = 1.4f;
-        [Range(0, 1)]
-        public float CollisionDistance = .25f;
+        public bool showDebugs;
 }
 
 public class VariableManager : MonoBehaviour 

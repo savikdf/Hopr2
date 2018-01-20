@@ -261,6 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1714612634}
   - component: {fileID: 1714612635}
+  - component: {fileID: 1714612636}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -296,6 +297,28 @@ MonoBehaviour:
   isLoading: 0
   globaltimer: 0
   currentGameState: 0
+--- !u!114 &1714612636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1714612633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c9ba9aa7d6a5a429bc9df38ea6a7dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physicsOptions:
+    GRAVITY: -9.8
+    SCALEFACTOR: 0.95
+    BOUNCEDECAY: 0.55
+    force: 0.2
+    cap: 25
+    TapRange: 4.78
+    CheckMultiplier: 0.15
+    rayCheckOffset: {x: 0, y: 0.2, z: 0}
+    RestTime: 1.4
+    CollisionDistance: 0.25
 --- !u!1001 &2074654387
 Prefab:
   m_ObjectHideFlags: 0

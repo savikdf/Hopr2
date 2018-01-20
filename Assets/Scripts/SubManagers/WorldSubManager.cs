@@ -19,7 +19,7 @@ namespace SubManager.World
         public Material plat_Y = null;
         public Material plat_N = null;
         public GameObject prefab_platform;
-        short maxPlatformSpawnAmount = 30;
+        short maxPlatformSpawnAmount = 10;
         int amountSpawned = 0;
         public float distanceAppart = 1.1f;
 
@@ -34,7 +34,8 @@ namespace SubManager.World
             Special,
             Tri,
             Warp,
-            Rich
+            Rich,
+            Test
         }
         public List<Platform> platforms;
         Vector3 spawnVec3;
@@ -209,9 +210,9 @@ namespace SubManager.World
                     {
                         if (platforms[i] != null && i != PlayerSubManager.instance.currentIndex)
                         {
-                         //   platforms[i].transform.Rotate(
-                         //    new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
-                         //    );
+                            //platforms[i].transform.Rotate(
+                            // new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
+                            // );
                         }
                     }
                 }
@@ -233,7 +234,7 @@ namespace SubManager.World
                 {
                     if (platforms[i] != null)
                     {
-                        platforms[i].transform.position += MoveSpeed;
+                        //platforms[i].transform.position += MoveSpeed;
                     }
                 }
                 yield return null;
