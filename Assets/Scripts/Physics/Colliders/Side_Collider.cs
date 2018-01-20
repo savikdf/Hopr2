@@ -19,8 +19,8 @@ public class Side_Collider : MonoBehaviour
         vertices = new Vector3[this.GetComponent<MeshFilter>().mesh.vertices.Length];
         vertices = this.GetComponent<MeshFilter>().mesh.vertices;
 
-        Vector3 l = ((new Vector3(vertices[1].x, vertices[1].y, 0)));
-        Vector3 r = ((new Vector3(vertices[11].x, vertices[11].y, 0)));
+        Vector3 l = ((new Vector3(vertices[11].x, vertices[11].y, 0)));
+        Vector3 r = ((new Vector3(vertices[1].x, vertices[1].y, 0)));
 
         //face = new Face(l, r, c, Vector3.up, false, this.gameObject);
     }
@@ -38,7 +38,7 @@ public class Side_Collider : MonoBehaviour
         {
             if (physicsOptions.physicsOptions.showDebugs)
             {
-                face.DrawFace();
+                //face.DrawFace();
                 for (int j = 0; j < vertices.Length; j++)
                 {
                    // Vector3 tPoint = (transform.TransformPoint(vertices[j]));

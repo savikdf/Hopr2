@@ -89,7 +89,7 @@ public static class Utils
     }
 
     public static bool inRange(float value, float min, float max)
-        {
+    {
 
         //checks the ranges from x1 to x2 , returning true if the point is within range
         //Mathf.min and mathf.Max are used in the case of negetive values
@@ -99,7 +99,7 @@ public static class Utils
         //and vice versa
         //if max is negetive it will be the smallest value istead
         return value >= Mathf.Min(min, max) && value <= Mathf.Max(min, max);
-        }
+    }
 
     public static bool rangeIntersect(float min0, float max0, float min1, float max1)
     {
@@ -107,7 +107,7 @@ public static class Utils
              Mathf.Min(min0, max0) <= Mathf.Max(min1, max1);
     }
 
-   public static bool rectInterest(Vector2 min0, Vector2 max0, Vector2 min1, Vector2 max2)
+    public static bool rectInterest(Vector2 min0, Vector2 max0, Vector2 min1, Vector2 max2)
     {
         return Utils.rangeIntersect(min0.x, max0.x, min1.x, max2.x) &&
             Utils.rangeIntersect(min0.y, max0.y, min1.y, max2.y);
@@ -143,11 +143,11 @@ public static class Utils
         pFinal = (pFinal == default(Vector2)) ? new Vector2() : pFinal;
 
         pFinal.x = Mathf.Pow(1 - t, 2) * p0.x +
-            (1 - t) * 2 * t * p1.x + 
+            (1 - t) * 2 * t * p1.x +
             t * t * p2.x;
 
         pFinal.y = Mathf.Pow(1 - t, 2) * p0.y +
-           (1 - t) * 2 * t * p1.y + 
+           (1 - t) * 2 * t * p1.y +
            t * t * p2.y;
 
         return pFinal;
@@ -206,14 +206,15 @@ public static class Utils
     {
         return new Color(Utils.randomRange(0f, 1f), Utils.randomRange(0, 1f), Utils.randomRange(0, 1f), 1f);
     }
-
-    public static Vector3 SegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, bool usePos)
+    public static bool IsSegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, ref Vector3 intersection)
     {
         //A1 is the change in Y
         //B1 is the change in X
 
+        //Ax + By = C  => Standard Form
+
         float A1 = p1.y - p0.y;
-        float B1 = p0.x - p1.x;
+        float B1 = p0.x - p1.x; //x values are reversed
         float C1 = A1 * p0.x + B1 * p0.y;
 
         float A2 = p3.y - p2.y;
@@ -222,61 +223,35 @@ public static class Utils
 
         float denominator = A1 * B2 - A2 * B1;
 
-        float sectX = (B2 * C1 - B1 * C2) / denominator;
-        float sectY = (A1 * C2 - A2 * C1) / denominator;
+        if (denominator == 0)
+            return false;
 
-        float rx0 = (sectX - p0.x) / (p1.x - p0.x);
-        float ry0 = (sectY - p0.y) / (p1.y - p0.y);
 
-        float rx1 = (sectX - p2.x) / (p3.x - p2.x);
-        float ry1 = (sectY - p2.y) / (p3.y - p2.y);
+        float intersectX = (B2 * C1 - B1 * C2) / denominator;
+        float intersectY = (A1 * C2 - A2 * C1) / denominator;
+        float rx0 = (intersectX - p0.x) / (p1.x - p0.x),
+              ry0 = (intersectY - p0.y) / (p1.y - p0.y);
+        float rx1 = (intersectX - p2.x) / (p3.x - p2.x),
+              ry1 = (intersectY - p2.y) / (p3.y - p2.y);
 
-       if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) &&
-            ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
+        //if (((rx0 >= 0.0f && rx0 <= 1.0f) || (ry0 >= 0.0f && ry0 <= 1.0f)) && ((rx1 >= 0.0f && rx1 <= 1.0f) || (ry1 >= 0.0f && ry1 <= 1.0f)))
+        //{
+        //    intersection = new Vector3(intersectX, intersectY, 0.1f);
+        //    return true;
+        //}
+
+        if ((inRange(rx0, 0.0f, 1.0f) || inRange(ry0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(ry1, 0.0f, 1.0f))))
         {
-            return new Vector3(sectX, sectY, 0.1f);
-        }
-        else
-        {
-            return default(Vector3);
-        }
-       
-    }
-
-    public static bool IsSegmentIntersection(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
-    {
-         //A1 is the change in Y
-        //B1 is the change in X
-
-        float A1 = p1.y - p0.y;
-        float B1 = p0.x - p1.x;
-        float C1 = A1 * p0.x + B1 * p0.y;
-
-        float A2 = p3.y - p2.y;
-        float B2 = p2.x - p3.x;
-        float C2 = A2 * p2.x + B2 * p2.y;
-
-        float denominator = A1 * B2 - A2 * B1;
-
-        float sectX = (B2 * C1 - B1 * C2) / denominator;
-        float sectY = (A1 * C2 - A2 * C1) / denominator;
-
-        float rx0 = (sectX - p0.x) / (p1.x - p0.x);
-        float ry0 = (sectY - p0.y) / (p1.y - p0.y);
-
-        float rx1 = (sectX - p2.x) / (p3.x - p2.x);
-        float ry1 = (sectY - p2.y) / (p3.y - p2.y);
-
-       if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) &&
-            ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
-        {
-            return true;
-        }
-        else
-        {
+            if ((inRange(intersectX, p0.x, p1.x) && inRange(intersectY, p0.y, p1.y)))
+            {
+                intersection = new Vector3(intersectX, intersectY, 0.1f);
+                return true;
+            }
+            else
             return false;
         }
 
+        return false;
     }
 
 
@@ -285,7 +260,7 @@ public static class Utils
         return Camera.main.ViewportToWorldPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
     }
 
-   public static Vector3 ToView(Vector3 vector)
+    public static Vector3 ToView(Vector3 vector)
     {
         return Camera.main.WorldToViewportPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
     }

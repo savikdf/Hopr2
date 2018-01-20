@@ -12,9 +12,6 @@ namespace SubManager.Player
     public class PlayerSubManager : BaseSubManager
     {
 
-        //Physics Vars
-        public float GRAVITY = -9.8f;
-
         //Character Model Rendering
 
         public static Character player_Character;
@@ -30,8 +27,6 @@ namespace SubManager.Player
         bool isPlayerAlive = true;
         [HideInInspector]
         public bool isInvincible = false;
-
-
         //Data Vars
         public short playerSpawnIndex = 1;
         public int currentIndex;

@@ -21,7 +21,7 @@ namespace SubManager.World
         public GameObject prefab_platform;
         short maxPlatformSpawnAmount = 10;
         int amountSpawned = 0;
-        public float distanceAppart = 1.1f;
+        public float distanceAppart = 1.0f;
 
         //plaform vars    
         bool isSpinning;     //when is false, stops the spin coroutine
