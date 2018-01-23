@@ -20,7 +20,6 @@ namespace SubManager.Player
         public static GameObject playerModelObject;
         public static Model playerModel;
 
-        public EffectsPackageController playerEffectsManager;
 
         #region Variables
         public static PlayerSubManager instance;
@@ -28,10 +27,9 @@ namespace SubManager.Player
         [HideInInspector]
         public bool isInvincible = false;
         //Data Vars
-        public short playerSpawnIndex = 1;
+        public short playerSpawnIndex = 0;
         public int currentIndex;
         public Vector3 offsetVec3 = new Vector3(0, 0.08f, 0);
-
 
         //TODO: Real Player.
         private GameObject player_Object;
@@ -68,13 +66,11 @@ namespace SubManager.Player
         public override void OnPostInit()
         {
             InitRender();
-
         }
 
         //spawn the player on the platforms
         public override void OnGameLoad()
         {
-            playerEffectsManager = Player_Object.GetComponent<EffectsPackageController>();
             currentIndex = playerSpawnIndex;
             SpawnSubManager.instance.SpawnPlayer("one");
             isPlayerAlive = true;
@@ -145,9 +141,6 @@ namespace SubManager.Player
                     {
                         //moves player index up
                         SetPlayerOnPlatform(currentIndex + 1);
-
-                        //Call clear on effects here if needed
-                        playerEffectsManager.ResetEffects();
 
                         currentIndex++;
                         //tell the world manager that the player has jumped
@@ -235,18 +228,6 @@ namespace SubManager.Player
                     {
                         isInvincible = !isInvincible;
                     }
-
-                    if (playerEffectsManager.JumpAnimationTriggered)
-                    {
-                        if (playerEffectsManager.JumpAnimationEnded)
-                        {
-                            OnPlayerJump(true);
-                            playerEffectsManager.JumpAnimationEnded = false;
-                            playerEffectsManager.JumpAnimationTriggered = false;
-
-                        }
-                    }
-
                 }
             }
         }

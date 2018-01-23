@@ -17,6 +17,7 @@ namespace SubManager.World
         //data vars
         public Material plat_Y = null;
         public Material plat_N = null;
+        public Material plat_G = null;
         public GameObject prefab_platform;
         short maxPlatformSpawnAmount = 5;
         int amountSpawned = 0;
@@ -84,7 +85,6 @@ namespace SubManager.World
                 {
                     Platform plat = platforms[PlayerSubManager.instance.currentIndex];
                     return plat.sides.MinObject(x => x.transform.position.z).isPassable;
-
                 }
                 catch (Exception ex)
                 {
@@ -107,7 +107,9 @@ namespace SubManager.World
             //load the materials from resources
             plat_N = Resources.Load("Materials/Plat_N") as Material;  //red
             plat_Y = Resources.Load("Materials/Plat_Y") as Material;  //green 
-            if (plat_N == null || plat_Y == null)
+            plat_G = Resources.Load("Materials/Plat_G") as Material;  //gray
+
+            if (plat_N == null || plat_Y == null || plat_G == null)
             {
                 Debug.LogError("resource material not loaded!");
             }
@@ -158,7 +160,7 @@ namespace SubManager.World
 
         void SpawnInitialPlatforms()
         {
-            platHolder = new GameObject(name:"Platform_Holder");
+            platHolder = new GameObject(name: "Platform_Holder");
             platforms = new List<Platform>();
             spawnVec3 = Vector3.zero;
             for (int i = 0; i < maxPlatformSpawnAmount; i++)
@@ -166,6 +168,8 @@ namespace SubManager.World
                 SpawnSingle();
                 ApplyRandomSkew(platforms[i]);  //puts a random skew on the new platform
             }
+
+            platforms[0].SwitchOff();
         }
 
         void SpawnSingle()
@@ -209,10 +213,21 @@ namespace SubManager.World
                     {
                         if (platforms[i] != null && i != PlayerSubManager.instance.currentIndex)
                         {
-                            //platforms[i].transform.Rotate(
-                            // new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
-                            // );
+                            platforms[i].transform.Rotate(
+                             new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
+                             );
                         }
+
+                        //Turn platforms normals off and On
+                        if(i == PlayerSubManager.instance.currentIndex)
+                        {
+                            platforms[i].SwitchOff();
+                        }
+                        else
+                        {
+                            platforms[i].SwitchOn();
+                        }
+                        
                     }
                 }
                 catch (Exception ex)
@@ -244,7 +259,7 @@ namespace SubManager.World
         {
             //cycle the platform (bottom to top, like a modulus of sorts) 
             amountSpawned++;
-            PlayerSubManager.instance.currentIndex--;
+            //PlayerSubManager.instance.currentIndex--;
             cyclePlat = platforms[0];
             platforms.RemoveAt(0);
             platforms.Insert(maxPlatformSpawnAmount - 1, cyclePlat);
@@ -256,17 +271,16 @@ namespace SubManager.World
             amountSpawned = 0;
             spawnVec3 = Vector3.zero;
 
-            for(int i = 0; i < platforms.Count; i++)
+            for (int i = 0; i < platforms.Count; i++)
             {
                 platforms[i].OnIndexSet(i);
                 platforms[i].transform.position = spawnVec3;
 
                 amountSpawned++;
                 spawnVec3.y = amountSpawned * distanceAppart;
-            } 
-            
+            }
+
         }
-        
 
         #endregion 
     }

@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4579682933467930}
   - component: {fileID: 114266684698141418}
-  - component: {fileID: 114270773949271842}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -427,7 +426,7 @@ MonoBehaviour:
     p1pos: {x: 0.0037799184, y: 0.0062200823, z: 0}
     c: {x: 0.62201, y: 0.000000074506, z: 0.62201}
     cPos: {x: 0.62201, y: 0.000000074506, z: 0.62201}
-    normal: {x: 0, y: 1, z: 0}
+    normal: {x: 0, y: -1, z: 0}
     Object: {fileID: 1659459398107132}
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: 0.62201, y: 0.000000074506, z: 0.62201}
@@ -536,22 +535,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8799672025ae604d93222ee30842905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sides: []
+  sides:
+  - {fileID: 114377191859403636}
+  - {fileID: 114149085924110036}
+  - {fileID: 114084970347715452}
+  - {fileID: 114309814182904342}
   thisPlatformType: 0
   thisPlatformDifficulty: 0
   thisPlatformSpinSpeed: 0
   platformIndex: 0
---- !u!114 &114270773949271842
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1603543098803340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbcdcd9ba7c8aa04d9b68e5af9d3a919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   sideColliders:
   - {fileID: 114440139735032426}
   - {fileID: 114527980987782342}
@@ -645,7 +637,7 @@ MonoBehaviour:
     p1pos: {x: -0.003779914, y: -0.0062200855, z: 0}
     c: {x: -0.62201, y: -0.000000074506, z: -0.62201}
     cPos: {x: -0.62201, y: -0.000000074506, z: -0.62201}
-    normal: {x: 0, y: 1, z: 0}
+    normal: {x: 0, y: -1, z: 0}
     Object: {fileID: 1336134838685186}
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: -0.62201, y: -0.000000074506, z: -0.62201}

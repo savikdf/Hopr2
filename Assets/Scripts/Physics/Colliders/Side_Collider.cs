@@ -6,8 +6,6 @@ public class Side_Collider : MonoBehaviour
 {
 
     public Face[] face;
-    public VariableManager physicsOptions;
-    Vector3[] vertices;
     // Use this for initialization
     void Start()
     {

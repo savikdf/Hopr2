@@ -319,12 +319,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 114034980273087524, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
-        type: 2}
-      propertyPath: physicsOptions
-      value: 
-      objectReference: {fileID: 1959099022}
-    - target: {fileID: 114049984561348484, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
+    - target: {fileID: 114440139735032426, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
         type: 2}
       propertyPath: physicsOptions
       value: 
@@ -334,11 +329,21 @@ Prefab:
       propertyPath: physicsOptions
       value: 
       objectReference: {fileID: 1959099022}
-    - target: {fileID: 114440139735032426, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
+    - target: {fileID: 114049984561348484, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
         type: 2}
       propertyPath: physicsOptions
       value: 
       objectReference: {fileID: 1959099022}
+    - target: {fileID: 114034980273087524, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
+        type: 2}
+      propertyPath: physicsOptions
+      value: 
+      objectReference: {fileID: 1959099022}
+    - target: {fileID: 114266684698141418, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
+        type: 2}
+      propertyPath: thisPlatformType
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1603543098803340, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
       propertyPath: m_IsActive
       value: 0
@@ -548,7 +553,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1959099021}
   - component: {fileID: 1959099022}
-  - component: {fileID: 1959099020}
   - component: {fileID: 1959099023}
   m_Layer: 0
   m_Name: GameManager
@@ -557,20 +561,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1959099020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1959099019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f8059c745f62494bb70c8569e376a5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Origin: {x: 0, y: 0, z: 0}
-  Direction: {x: 0, y: 1, z: 0}
-  plat: {fileID: 0}
 --- !u!4 &1959099021
 Transform:
   m_ObjectHideFlags: 0
@@ -600,14 +590,16 @@ MonoBehaviour:
     GRAVITY: -9.8
     SCALEFACTOR: 0.95
     BOUNCEDECAY: 0.55
-    force: 0.2
+    force: 0.3
     cap: 25
     TapRange: 5
     CheckMultiplier: 0.15
-    originLeft: {x: -0.1, y: 0.2, z: 0}
-    originRight: {x: 0.1, y: 0.2, z: 0}
+    originLeft: {x: -0.1, y: 0.35, z: 0}
+    originRight: {x: 0.1, y: 0.35, z: 0}
     RestTime: 1.66
     showDebugs: 1
+  gameOptions:
+    killOnRed: 1
 --- !u!114 &1959099023
 MonoBehaviour:
   m_ObjectHideFlags: 0

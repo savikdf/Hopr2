@@ -21,16 +21,21 @@ public class PhysicsOptions
     public float RestTime = 1.4f;
     public bool showDebugs;
 }
-
+[System.Serializable]
+public class GameOptions
+{
+    public bool killOnRed = false;
+}
 public class VariableManager : MonoBehaviour
 {
     public static PhysicsOptions P_Options;
+    public static GameOptions G_Option;
     public PhysicsOptions physicsoptions;
-
-
+    public GameOptions gameOptions;
     public void OnValidate()
     {
         P_Options = physicsoptions;
+        G_Option = gameOptions;
     }
 }
 

@@ -11,6 +11,8 @@ namespace SubManager.CameraMan
         #region Variables
         public static CameraSubManager instance;
         bool followPlayer = false;
+        bool trackMouse = false;
+        public Vector3 mouseScreenPosition;
         float damping = 20.6f;
         Camera mainCamera;
         public Vector3 offsetVec3;
@@ -41,13 +43,16 @@ namespace SubManager.CameraMan
             if (mainCamera)
             {
                 followPlayer = true;
+                trackMouse = true;
                 StartCoroutine(FollowPlayer());
+                StartCoroutine(trackMousePosition());
             }
         }
 
         public override void OnGameEnd()
         {
             followPlayer = false;
+            trackMouse = false;
         }
 
         public override void OnGameReset()
@@ -66,6 +71,15 @@ namespace SubManager.CameraMan
 
         }
 
+        IEnumerator trackMousePosition()
+        {
+            while(trackMouse)
+            {
+                //Z doesnt matter for this so its set to the farplane z pos
+                mouseScreenPosition = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane));
+                yield return null;
+            }
+        }
         IEnumerator FollowPlayer()
         {
             while (followPlayer)
