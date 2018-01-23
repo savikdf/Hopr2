@@ -215,10 +215,12 @@ public static class Utils
 
         float A1 = p1.y - p0.y;
         float B1 = p0.x - p1.x; //x values are reversed
+
         float C1 = A1 * p0.x + B1 * p0.y;
 
         float A2 = p3.y - p2.y;
         float B2 = p2.x - p3.x;
+
         float C2 = A2 * p2.x + B2 * p2.y;
 
         float denominator = A1 * B2 - A2 * B1;
@@ -229,6 +231,7 @@ public static class Utils
 
         float intersectX = (B2 * C1 - B1 * C2) / denominator;
         float intersectY = (A1 * C2 - A2 * C1) / denominator;
+
         float rx0 = (intersectX - p0.x) / (p1.x - p0.x),
               ry0 = (intersectY - p0.y) / (p1.y - p0.y);
         float rx1 = (intersectX - p2.x) / (p3.x - p2.x),
@@ -242,18 +245,84 @@ public static class Utils
 
         if ((inRange(rx0, 0.0f, 1.0f) || inRange(ry0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(ry1, 0.0f, 1.0f))))
         {
-            if ((inRange(intersectX, p0.x, p1.x) && inRange(intersectY, p0.y, p1.y)))
-            {
                 intersection = new Vector3(intersectX, intersectY, 0.1f);
                 return true;
-            }
-            else
-            return false;
         }
 
         return false;
     }
 
+        public static bool IsSegmentIntersectionXZ(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, ref Vector3 intersection)
+    {
+        //A1 is the change in Y
+        //B1 is the change in X
+
+        //Ax + By = C  => Standard Form
+
+        float A1 = p1.z - p0.z;
+        float B1 = p0.x - p1.x; //x values are reversed
+
+        float C1 = A1 * p0.x + B1 * p0.z;
+
+        float A2 = p3.z - p2.z;
+        float B2 = p2.x - p3.x;
+
+        float C2 = A2 * p2.x + B2 * p2.z;
+
+        float denominator = A1 * B2 - A2 * B1;
+
+        if (denominator == 0)
+            return false;
+
+        float intersectX = (B2 * C1 - B1 * C2) / denominator;
+        float intersectZ = (A1 * C2 - A2 * C1) / denominator;
+
+        float rx0 = (intersectX - p0.x) / (p1.x - p0.x),
+              rz0 = (intersectZ - p0.z) / (p1.z - p0.z);
+        float rx1 = (intersectX - p2.x) / (p3.x - p2.x),
+              rz1 = (intersectZ - p2.z) / (p3.z - p2.z);
+
+        //if (((rx0 >= 0.0f && rx0 <= 1.0f) || (ry0 >= 0.0f && ry0 <= 1.0f)) && ((rx1 >= 0.0f && rx1 <= 1.0f) || (ry1 >= 0.0f && ry1 <= 1.0f)))
+        //{
+        //    intersection = new Vector3(intersectX, intersectY, 0.1f);
+        //    return true;
+        //}
+
+        if ((inRange(rx0, 0.0f, 1.0f) || inRange(rz0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(rz1, 0.0f, 1.0f))))
+        {
+                intersection.z = intersectZ;
+                return true;
+        }
+
+        return false;
+    }
+
+    public static bool PointInTriangle(Vector3 t0, Vector3 t1, Vector3 t2, Vector3 p)
+    {
+        //Compute Vectors
+        Vector3 v0 = t2 - t0;
+        Vector3 v1 = t1 - t0;
+        Vector3 v2 = p - t0;
+
+        //Compute dot products
+        float dot00 = Vector3.Dot(v0, v0);
+        float dot01 = Vector3.Dot(v0, v1);
+        float dot02 = Vector3.Dot(v0, v2);
+        float dot11 = Vector3.Dot(v1, v1);
+        float dot12 = Vector3.Dot(v1, v2);
+
+
+        //Compute Barycentric coordinates
+        float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+        //Check if point is in triangle
+        if ((u >= 0) && (v >= 0) && (u + v < 1))
+            return true;
+
+        return false;
+    }
 
     public static Vector3 toWorld(Vector3 vector)
     {

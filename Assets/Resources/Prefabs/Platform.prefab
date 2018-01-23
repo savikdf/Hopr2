@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33486497625361026}
   - component: {fileID: 23300021566843096}
   - component: {fileID: 114149085924110036}
-  - component: {fileID: 114906598297605318}
+  - component: {fileID: 114527980987782342}
   m_Layer: 0
   m_Name: S_02
   m_TagString: Untagged
@@ -46,7 +46,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1501887535475870
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 33198814227509014}
   - component: {fileID: 23732817314563852}
   - component: {fileID: 114084970347715452}
-  - component: {fileID: 114148485654446778}
+  - component: {fileID: 114049984561348484}
   m_Layer: 0
   m_Name: S_03
   m_TagString: Untagged
@@ -77,7 +77,7 @@ GameObject:
   - component: {fileID: 33945400287890898}
   - component: {fileID: 23557682038549528}
   - component: {fileID: 114377191859403636}
-  - component: {fileID: 114282121193119810}
+  - component: {fileID: 114440139735032426}
   m_Layer: 0
   m_Name: S_01
   m_TagString: Untagged
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4579682933467930}
   - component: {fileID: 114266684698141418}
-  - component: {fileID: 114756558890475662}
+  - component: {fileID: 114270773949271842}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 33863859650423770}
   - component: {fileID: 23477777479606688}
   - component: {fileID: 114309814182904342}
-  - component: {fileID: 114413883290394936}
+  - component: {fileID: 114034980273087524}
   m_Layer: 0
   m_Name: S_04
   m_TagString: Untagged
@@ -409,6 +409,98 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1575021549990816}
   m_Mesh: {fileID: 4300006, guid: e780673db63d89643927d6984e80f7c8, type: 3}
+--- !u!114 &114034980273087524
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1659459398107132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f18b8bcd0541384a8b748f81ac6f19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  face:
+  - p0: {x: 0.0000016093254, y: 0.00000013411065, z: 1.0000013}
+    p0pos: {x: -0.0062200837, y: -0.0037799135, z: 0}
+    p1: {x: 1.0000019, y: 0.000000014901353, z: 0.000001847744}
+    p1pos: {x: 0.0037799184, y: 0.0062200823, z: 0}
+    c: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    cPos: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1659459398107132}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    isDynamic: 0
+  - p0: {x: 1.0000019, y: 0.000000014901353, z: 0.000001847744}
+    p0pos: {x: 0.0037799184, y: 0.0062200823, z: 0}
+    p1: {x: 0, y: 0.000000014901353, z: 0.00000011920929}
+    p1pos: {x: -0.0062201, y: 0.006220099, z: 0}
+    c: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    cPos: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1659459398107132}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    isDynamic: 0
+  - p0: {x: 0.0000016093254, y: 0.00000013411065, z: 1.0000013}
+    p0pos: {x: -0.0062200837, y: -0.0037799135, z: 0}
+    p1: {x: 0, y: 0.000000014901353, z: 0.00000011920929}
+    p1pos: {x: -0.0062201, y: 0.006220099, z: 0}
+    c: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    cPos: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1659459398107132}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    isDynamic: 0
+  physicsOptions: {fileID: 0}
+--- !u!114 &114049984561348484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1501887535475870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f18b8bcd0541384a8b748f81ac6f19b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  face:
+  - p0: {x: 1.0000013, y: -0.000000014901353, z: -0.0000011920929}
+    p0pos: {x: 0.0037799135, y: -0.0062200883, z: 0}
+    p1: {x: 0.0000013113022, y: -0.00000013411065, z: -1.0000017}
+    p1pos: {x: -0.006220087, y: 0.003779917, z: 0}
+    c: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    cPos: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1501887535475870}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    isDynamic: 0
+  - p0: {x: 0.0000013113022, y: -0.00000013411065, z: -1.0000017}
+    p0pos: {x: -0.006220087, y: 0.003779917, z: 0}
+    p1: {x: 0, y: -0.000000014901353, z: -0.00000011920929}
+    p1pos: {x: -0.0062201, y: -0.006220099, z: 0}
+    c: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    cPos: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1501887535475870}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    isDynamic: 0
+  - p0: {x: 1.0000013, y: -0.000000014901353, z: -0.0000011920929}
+    p0pos: {x: 0.0037799135, y: -0.0062200883, z: 0}
+    p1: {x: 0, y: -0.000000014901353, z: -0.00000011920929}
+    p1pos: {x: -0.0062201, y: -0.006220099, z: 0}
+    c: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    cPos: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1501887535475870}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: 0.62201, y: -0.000000074506, z: -0.62201}
+    isDynamic: 0
+  physicsOptions: {fileID: 0}
 --- !u!114 &114084970347715452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -421,30 +513,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPassable: 1
---- !u!114 &114148485654446778
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1501887535475870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f18b8bcd0541384a8b748f81ac6f19b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  face:
-    p0: {x: 0.0000013113022, y: -0.00000013411065, z: -1.0000017}
-    p0pos: {x: -0.006220087, y: 0.003779917, z: 0}
-    p1: {x: 1.0000013, y: -0.000000014901353, z: -0.0000011920929}
-    p1pos: {x: 0.0037799135, y: -0.0062200883, z: 0}
-    c: {x: 0.62201, y: -0.000000074506, z: -0.62201}
-    cPos: {x: 0.62201, y: -0.000000074506, z: -0.62201}
-    normal: {x: 0, y: 1, z: 0}
-    Object: {fileID: 1501887535475870}
-    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
-    storedRefrencePosition: {x: 0.62201, y: -0.000000074506, z: -0.62201}
-    isDynamic: 0
-  physicsOptions: {fileID: 0}
 --- !u!114 &114149085924110036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -473,30 +541,22 @@ MonoBehaviour:
   thisPlatformDifficulty: 0
   thisPlatformSpinSpeed: 0
   platformIndex: 0
---- !u!114 &114282121193119810
+--- !u!114 &114270773949271842
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1575021549990816}
+  m_GameObject: {fileID: 1603543098803340}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f18b8bcd0541384a8b748f81ac6f19b, type: 3}
+  m_Script: {fileID: 11500000, guid: cbcdcd9ba7c8aa04d9b68e5af9d3a919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  face:
-    p0: {x: -0.0000015497208, y: 0.00000013411065, z: 1.0000015}
-    p0pos: {x: 0.0062200846, y: -0.003779916, z: 0}
-    p1: {x: -1.0000014, y: 0.000000014901353, z: 0.0000016093254}
-    p1pos: {x: -0.0037799145, y: 0.006220084, z: 0}
-    c: {x: -0.62201, y: 0.000000074506, z: 0.62201}
-    cPos: {x: -0.62201, y: 0.000000074506, z: 0.62201}
-    normal: {x: 0, y: 1, z: 0}
-    Object: {fileID: 1575021549990816}
-    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
-    storedRefrencePosition: {x: -0.62201, y: 0.000000074506, z: 0.62201}
-    isDynamic: 0
-  physicsOptions: {fileID: 0}
+  sideColliders:
+  - {fileID: 114440139735032426}
+  - {fileID: 114527980987782342}
+  - {fileID: 114049984561348484}
+  - {fileID: 114034980273087524}
 --- !u!114 &114309814182904342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -521,50 +581,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPassable: 1
---- !u!114 &114413883290394936
+--- !u!114 &114440139735032426
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1659459398107132}
+  m_GameObject: {fileID: 1575021549990816}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f18b8bcd0541384a8b748f81ac6f19b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   face:
-    p0: {x: 1.0000019, y: 0.000000014901353, z: 0.000001847744}
-    p0pos: {x: 0.0037799184, y: 0.0062200823, z: 0}
-    p1: {x: 0.0000016093254, y: 0.00000013411065, z: 1.0000013}
-    p1pos: {x: -0.0062200837, y: -0.0037799135, z: 0}
-    c: {x: 0.62201, y: 0.000000074506, z: 0.62201}
-    cPos: {x: 0.62201, y: 0.000000074506, z: 0.62201}
-    normal: {x: 0, y: -1, z: 0}
-    Object: {fileID: 1659459398107132}
+  - p0: {x: -1.0000014, y: 0.000000014901353, z: 0.0000016093254}
+    p0pos: {x: -0.0037799145, y: 0.006220084, z: 0}
+    p1: {x: -0.0000015497208, y: 0.00000013411065, z: 1.0000015}
+    p1pos: {x: 0.0062200846, y: -0.003779916, z: 0}
+    c: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    cPos: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1575021549990816}
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
-    storedRefrencePosition: {x: 0.62201, y: 0.000000074506, z: 0.62201}
+    storedRefrencePosition: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    isDynamic: 0
+  - p0: {x: -0.0000015497208, y: 0.00000013411065, z: 1.0000015}
+    p0pos: {x: 0.0062200846, y: -0.003779916, z: 0}
+    p1: {x: 0, y: 0.000000014901353, z: 0.00000011920929}
+    p1pos: {x: 0.0062201, y: 0.006220099, z: 0}
+    c: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    cPos: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1575021549990816}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    isDynamic: 0
+  - p0: {x: -1.0000014, y: 0.000000014901353, z: 0.0000016093254}
+    p0pos: {x: -0.0037799145, y: 0.006220084, z: 0}
+    p1: {x: 0, y: 0.000000014901353, z: 0.00000011920929}
+    p1pos: {x: 0.0062201, y: 0.006220099, z: 0}
+    c: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    cPos: {x: -0.62201, y: 0.000000074506, z: 0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1575021549990816}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: -0.62201, y: 0.000000074506, z: 0.62201}
     isDynamic: 0
   physicsOptions: {fileID: 0}
---- !u!114 &114756558890475662
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1603543098803340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbcdcd9ba7c8aa04d9b68e5af9d3a919, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numSides: 4
-  CollisionFaces: []
-  sideColliders:
-  - {fileID: 114282121193119810}
-  - {fileID: 114906598297605318}
-  - {fileID: 114148485654446778}
-  - {fileID: 114413883290394936}
-  physicsOptions: {fileID: 0}
---- !u!114 &114906598297605318
+--- !u!114 &114527980987782342
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -576,13 +639,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   face:
-    p0: {x: -1.0000014, y: -0.000000014901353, z: -0.0000014901161}
-    p0pos: {x: -0.003779914, y: -0.0062200855, z: 0}
-    p1: {x: -0.0000013709068, y: -0.00000013411065, z: -1.0000015}
-    p1pos: {x: 0.0062200865, y: 0.0037799156, z: 0}
+  - p0: {x: -0.0000013709068, y: -0.00000013411065, z: -1.0000015}
+    p0pos: {x: 0.0062200865, y: 0.0037799156, z: 0}
+    p1: {x: -1.0000014, y: -0.000000014901353, z: -0.0000014901161}
+    p1pos: {x: -0.003779914, y: -0.0062200855, z: 0}
     c: {x: -0.62201, y: -0.000000074506, z: -0.62201}
     cPos: {x: -0.62201, y: -0.000000074506, z: -0.62201}
-    normal: {x: 0, y: -1, z: 0}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1336134838685186}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: -0.62201, y: -0.000000074506, z: -0.62201}
+    isDynamic: 0
+  - p0: {x: -1.0000014, y: -0.000000014901353, z: -0.0000014901161}
+    p0pos: {x: -0.003779914, y: -0.0062200855, z: 0}
+    p1: {x: 0, y: -0.000000014901353, z: -0.00000011920929}
+    p1pos: {x: 0.0062201, y: -0.006220099, z: 0}
+    c: {x: -0.62201, y: -0.000000074506, z: -0.62201}
+    cPos: {x: -0.62201, y: -0.000000074506, z: -0.62201}
+    normal: {x: 0, y: 1, z: 0}
+    Object: {fileID: 1336134838685186}
+    storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
+    storedRefrencePosition: {x: -0.62201, y: -0.000000074506, z: -0.62201}
+    isDynamic: 0
+  - p0: {x: -0.0000013709068, y: -0.00000013411065, z: -1.0000015}
+    p0pos: {x: 0.0062200865, y: 0.0037799156, z: 0}
+    p1: {x: 0, y: -0.000000014901353, z: -0.00000011920929}
+    p1pos: {x: 0.0062201, y: -0.006220099, z: 0}
+    c: {x: -0.62201, y: -0.000000074506, z: -0.62201}
+    cPos: {x: -0.62201, y: -0.000000074506, z: -0.62201}
+    normal: {x: 0, y: 1, z: 0}
     Object: {fileID: 1336134838685186}
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: -0.62201, y: -0.000000074506, z: -0.62201}

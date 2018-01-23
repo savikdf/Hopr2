@@ -11,19 +11,18 @@ namespace SubManager.Physics
     {
         public static PhysicsSubManager instance;
 
-        VariableManager physicsOptions;
-        Platform_Collider[] colliderFaces;
+        public List<Vector3> intersections = new List<Vector3>();
         GameObject player, Arrow;
         //each sub manager will need to override these:
         Vector3 mousePos;
-        bool isGettingReady, isGrounded, isApplyingGravity, isColliding;
+        bool isGettingReady, isGrounded, isApplyingGravity;
         public float buildup;
         float angle, time;
         public Vector3 Velocity;
         [Range(0, 10)]
-        public int iterations = 1;
-        Ray CollisionRay;
-        Vector3 CollisionRayVector, FuturePosition, PastPosition, m_ScreenMosPos;
+        public int iterations = 2;
+        Vector3 FuturePosition, PastPosition, m_ScreenMosPos;
+        Vector3 OriginLeft, OriginRight, Direction;
         //use this to set local data
         public override void InitializeSubManager()
         {
@@ -41,18 +40,14 @@ namespace SubManager.Physics
         //use this to begin the setup of the game
         public override void OnGameLoad()
         {
-            physicsOptions = GameObject.Find("GameManager").GetComponent<VariableManager>();
-            player = GameObject.Find("Player_Object");
-            Arrow = (Arrow == null) ? GameObject.Find("Arrow"): Arrow;
-            colliderFaces = WorldSubManager.instance.platHolder.GetComponentsInChildren<Platform_Collider>();
-
+            player = PlayerSubManager.instance.Player_Object;
+            Arrow = (Arrow == null) ? GameObject.Find("Arrow") : Arrow;
         }
 
         //runs on the game start event from the gamemanager
         //use this to begin the process of the game
         public override void OnGameStart()
         {
-            WorldSubManager.instance.platforms[0].GetComponent<Platform_Collider>().SwitchOff();
         }
 
         //runs on the game end event from the gamemanager
@@ -81,12 +76,10 @@ namespace SubManager.Physics
 
         void CollisionCheck()
         {
-            CollisionRay = new Ray(player.transform.position, Velocity.normalized);
-            CollisionRayVector = (player.transform.position
-            + physicsOptions.physicsOptions.rayCheckOffset)
-            + (CollisionRay.direction * physicsOptions.physicsOptions.CheckMultiplier);
+            OriginLeft = player.transform.position + VariableManager.P_Options.originLeft;
+            OriginRight = player.transform.position + VariableManager.P_Options.originRight;
+            Direction = Velocity.normalized * VariableManager.P_Options.CheckMultiplier;
 
-            //GroundCheck();
             for (int i = 0; i < iterations; i++)
             {
                 CollisionDetection();
@@ -108,9 +101,9 @@ namespace SubManager.Physics
 
                 Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(getAngle() * Mathf.Deg2Rad), Mathf.Sin(getAngle() * Mathf.Deg2Rad), -1.0f));
 
-                if (buildup < physicsOptions.physicsOptions.TapRange)
+                if (buildup < VariableManager.P_Options.TapRange)
                 {
-                    buildup = physicsOptions.physicsOptions.TapRange;
+                    buildup = VariableManager.P_Options.TapRange;
                 }
 
                 if (isGrounded)
@@ -126,14 +119,22 @@ namespace SubManager.Physics
                     BuilUp();
             }
 
+            ResetPlayer();
+            ArrowRotate();
+        }
+
+        void ResetPlayer()
+        {
+
             if (player.transform.position.y < WorldSubManager.instance.platforms[0].transform.position.y - 10)
             {
-                player.transform.position = WorldSubManager.instance.platforms[0].transform.position;//physicsOptions.physicsOptions.resetPosition;
+                Vector3 PlatformPosition = new Vector3(WorldSubManager.instance.platforms[PlayerSubManager.instance.currentIndex].transform.position.x,
+                 WorldSubManager.instance.platforms[PlayerSubManager.instance.currentIndex].transform.position.y,
+                 0.5f);
+                player.transform.position = PlatformPosition;//physicsOptions.physicsOptions.resetPosition;
 
                 Velocity = Vector3.zero;
             }
-
-            ArrowRotate();
         }
 
         void Update()
@@ -142,88 +143,80 @@ namespace SubManager.Physics
                 PhysicsUpdate();
         }
 
-        void NearestPlatform(Face face)
-        {
-
-            if ((Mathf.Sign(Vector3.Dot(Velocity.normalized, face.normal)) == -1))
-            {
-                Vector3 intersection = new Vector3();
-
-                if (Utils.IsSegmentIntersection(face.p0, face.p1, player.transform.position, CollisionRayVector, ref intersection))
-                {
-                        Velocity = ReflectionTest(Velocity, Vector3.up, intersection, face.Object.transform.parent.GetComponent<Platform>().platformIndex) * physicsOptions.physicsOptions.BOUNCEDECAY;
-                }
-                else
-                    PastandFutureCheck(face.p0, face.p1, Vector3.up, face.Object.transform.parent.GetComponent<Platform>().platformIndex);
-            }
-        }
-
-        void PastandFutureCheck(Vector3 p0, Vector3 p1, Vector3 n, int index)
-        {
-            if ((Mathf.Sign(Vector3.Dot(Velocity.normalized, n.normalized)) == -1))
-            {
-                Vector3 intersection = new Vector3();
-
-                if (Utils.IsSegmentIntersection(p0, p1, PastPosition, FuturePosition, ref intersection))
-                {
-                    Velocity = ReflectionTest(Velocity, n.normalized, intersection, index) * physicsOptions.physicsOptions.BOUNCEDECAY;
-                }
-            }
-        }
-
-        Vector3 ReflectionTest(Vector3 Velocity, Vector3 n, Vector3 intersectionPoint, int index)
-        {
-            Vector3 Result = Vector3.Reflect(Velocity, n);
-
-            if (Result.magnitude < physicsOptions.physicsOptions.RestTime)
-            {
-                isGrounded = true;
-                Result = Vector3.zero;
-                isApplyingGravity = false;
-                player.transform.position = intersectionPoint;
-                PlayerSubManager.instance.currentIndex = index;
-                WorldSubManager.instance.platforms[index].GetComponent<Platform_Collider>().SwitchOff();
-            }
-            else if (Result.magnitude > physicsOptions.physicsOptions.RestTime)
-            {
-                isGrounded = false;
-            }
-
-            return Result;
-        }
-
         void CollisionDetection()
         {
-            for (int j = 0; j < colliderFaces.Length; j++)
+            for (int i = 0; i < WorldSubManager.instance.platforms.Count; i++)
             {
-                for (int k = 0; k < colliderFaces[j].CollisionFaces.Length; k++)
+                Platform platform = WorldSubManager.instance.platforms[i];
+                Platform_Collider platform_Collider = platform.GetComponent<Platform_Collider>();
+
+                for (int j = 0; j < platform_Collider.sideColliders.Length; j++)
                 {
-                    NearestPlatform(colliderFaces[j].CollisionFaces[k]);
+                    Side_Collider side = platform_Collider.sideColliders[j];
+                    CheckFace(side, platform);
                 }
             }
+        }
 
-            //  if (ToView(player.transform.position).x < 0.0f)
-            //  {
-            //      player.transform.position = new Vector3(toWorld(ToView(player.transform.position)).x - .1f, toWorld(ToView(player.transform.position)).y, player.transform.position.z);
-            //      //Velocity.x += -Velocity.x * 0.27f;
-            //      Velocity = Vector3.Reflect(Velocity, Vector3.right) * BOUNCEDECAY;
-            //  }
-            //  if (ToView(player.transform.position).x > 1.0f)
-            //  {
-            //      player.transform.position = new Vector3(toWorld(ToView(player.transform.position)).x + .1f, toWorld(ToView(player.transform.position)).y, player.transform.position.z);
-            //      //Velocity.x += -Velocity.x * 0.27f;
-            //      Velocity = Vector3.Reflect(Velocity, Vector3.left) * BOUNCEDECAY;
-            //  }
+        void CheckFace(Side_Collider side, Platform platform)
+        {
 
-            //GroundCheck();
+            float dotAngle = Vector3.Dot(side.face[0].normal.normalized, Velocity.normalized);
+
+            if (Mathf.Sign(dotAngle) == -1)
+            {
+                Vector3 interesection = new Vector3();
+
+                if(isColliding(side, interesection) || isCollidingFrameCheck(side, interesection))
+                {
+                    Debug.Log(platform.name + "on side: " + side.name);
+
+                    player.transform.position = new Vector3(player.transform.position.x,
+                    platform.transform.position.y,
+                     0.5f);
+
+                    isApplyingGravity = false;
+                    isGrounded = true;
+                    Velocity = Vector3.zero;
+                    side.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                }
+                else 
+                {
+                    isGrounded = false;
+                }
+            }
+        }
+        
+        bool isColliding(Side_Collider side, Vector3 interesection)
+        {
+            return (Utils.PointInTriangle(side.face[0].p0,
+                side.face[0].p1, side.face[1].p1, OriginLeft)
+                && Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, OriginLeft, OriginLeft + Direction, ref interesection) ||
+                Utils.PointInTriangle(side.face[0].p0,
+                side.face[0].p1, side.face[1].p1, OriginRight)
+                && Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, OriginRight, OriginRight + Direction, ref interesection));
+        }
+
+        bool isCollidingFrameCheck(Side_Collider side, Vector3 interesection)
+        {
+            return (Utils.PointInTriangle(side.face[0].p0,
+                side.face[0].p1, side.face[1].p1, OriginLeft)
+                && Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, OriginLeft, FuturePosition, ref interesection) ||
+                Utils.PointInTriangle(side.face[0].p0,
+                side.face[0].p1, side.face[1].p1, OriginRight)
+                && Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, OriginRight, FuturePosition, ref interesection));
         }
 
         void BuilUp()
         {
-            if (buildup < physicsOptions.physicsOptions.cap)
-                buildup += physicsOptions.physicsOptions.force;
+            if (buildup < VariableManager.P_Options.cap)
+                buildup += VariableManager.P_Options.force;
             else
-                buildup = physicsOptions.physicsOptions.cap;
+                buildup = VariableManager.P_Options.cap;
         }
 
         void GetMousePos()
@@ -244,7 +237,7 @@ namespace SubManager.Physics
         {
             if (!isGrounded)
             {
-                Velocity += new Vector3(0, physicsOptions.physicsOptions.GRAVITY * Time.fixedDeltaTime, 0.0f) * physicsOptions.physicsOptions.SCALEFACTOR;
+                Velocity += new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
                 isApplyingGravity = true;
             }
         }
@@ -277,23 +270,29 @@ namespace SubManager.Physics
 
         void OnDrawGizmos()
         {
-            if (Application.isPlaying && physicsOptions.physicsOptions.showDebugs)
+            if (Application.isPlaying && VariableManager.P_Options.showDebugs)
             {
-                Gizmos.color = Color.green;
+                // Gizmos.color = Color.green;
+                //To mouse Direction
+                //  Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(getAngle() * Mathf.Deg2Rad), Mathf.Sin(getAngle() * Mathf.Deg2Rad), -1.0f));
+                // Gizmos.DrawRay(new Ray(player.transform.position, direction));
+                // Gizmos.DrawSphere(direction + player.transform.position, .1f);
 
-                Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(getAngle() * Mathf.Deg2Rad), Mathf.Sin(getAngle() * Mathf.Deg2Rad), -1.0f));
-                Gizmos.DrawSphere(direction + player.transform.position, .1f);
-
-                Ray debugRay = new Ray(player.transform.position, direction);
-                Gizmos.DrawRay(debugRay);
-
-                Gizmos.color = Color.green;
-                Gizmos.DrawRay(player.transform.position, CollisionRay.direction * physicsOptions.physicsOptions.CheckMultiplier);
                 Gizmos.color = Color.red;
-                Gizmos.DrawSphere(CollisionRayVector, 0.06f);
+
+                for (int i = 0; i < intersections.Count; i++)
+                    Gizmos.DrawCube(intersections[i], new Vector3(0.1f, 0.1f, 0.1f));
+
+                // Gizmos.DrawRay(CollisionRay.origin, CollisionRay.direction);
 
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(player.transform.position, 0.07f);
+                Gizmos.DrawSphere(OriginLeft, 0.1f);
+                Gizmos.DrawSphere(OriginLeft + Direction, 0.05f);
+
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawSphere(OriginRight, 0.1f);
+                Gizmos.DrawSphere(OriginRight + Direction, 0.05f);
+
             }
 
         }

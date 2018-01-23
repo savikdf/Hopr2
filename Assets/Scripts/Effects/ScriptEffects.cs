@@ -11,8 +11,8 @@ namespace ScriptEffects {
         float storedY;
         float min = 0.2f;
         float max = 1.0f;
-        float smallStopMargin = 0.01f;
-        float bigStopMargin = 0.99f;
+       // float smallStopMargin = 0.01f;
+      //  float bigStopMargin = 0.99f;
 
 
         public JumpEffect(float _duration) : base(_duration)

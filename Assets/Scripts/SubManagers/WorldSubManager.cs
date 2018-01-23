@@ -14,14 +14,13 @@ namespace SubManager.World
         #region Variables
         //instance
         public static WorldSubManager instance;
-
         //data vars
         public Material plat_Y = null;
         public Material plat_N = null;
         public GameObject prefab_platform;
-        short maxPlatformSpawnAmount = 10;
+        short maxPlatformSpawnAmount = 5;
         int amountSpawned = 0;
-        public float distanceAppart = 1.0f;
+        public float distanceAppart = 1.5f;
 
         //plaform vars    
         bool isSpinning;     //when is false, stops the spin coroutine

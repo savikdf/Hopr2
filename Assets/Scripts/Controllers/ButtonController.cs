@@ -23,8 +23,8 @@ public class ButtonController : BaseSubManager, IPointerEnterHandler, IPointerEx
     List<Image> InnerLines = new List<Image>();
     List<Image> Body = new List<Image>();
     float time, innerTime, exitTime;
-    bool HandleMouse, HandleClick, Exit, Click, HandleInnerClick, EndInnerClick;
-
+    bool HandleMouse, Exit, Click, HandleInnerClick, EndInnerClick;
+    //HandleClick
     public override void InitializeSubManager()
     {
     }
@@ -75,7 +75,7 @@ public class ButtonController : BaseSubManager, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        HandleClick = true;
+        //HandleClick = true;
     }
 
 

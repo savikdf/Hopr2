@@ -11,7 +11,7 @@ namespace SubManager.CameraMan
         #region Variables
         public static CameraSubManager instance;
         bool followPlayer = false;
-        float damping = 1.2f;
+        float damping = 20.6f;
         Camera mainCamera;
         public Vector3 offsetVec3;
         #endregion

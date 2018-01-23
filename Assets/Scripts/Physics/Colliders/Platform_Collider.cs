@@ -6,21 +6,15 @@ using SubManager.World;
 using SubManager.Difficulty;
 public class Platform_Collider : MonoBehaviour
 {
-
     //Will expand later with Enumrables and Class contruct
-    public uint numSides = 4;
-    public Face[] CollisionFaces;
     public Side_Collider[] sideColliders;
-    public VariableManager physicsOptions;
     // Use this for initialization
 
     void Start()
     {
-        physicsOptions = GameObject.Find("GameManager").GetComponent<VariableManager>();
         SetUpCollider();
     }
 
-    
     void SetUpCollider()
     {
 
@@ -32,18 +26,12 @@ public class Platform_Collider : MonoBehaviour
             sideColliders[2] = transform.GetChild(3).GetComponent<Side_Collider>();
             sideColliders[3] = transform.GetChild(4).GetComponent<Side_Collider>();
         }
-
-        CollisionFaces = new Face[sideColliders.Length];
-
-        for(int i = 0; i < sideColliders.Length; i++)
-            CollisionFaces[i] = sideColliders[i].face;
     }
 
     public void SwitchOff()
     {
          for(int i = 0; i < sideColliders.Length; i++)
          {
-            CollisionFaces[i].normal = Vector3.up;
             sideColliders[i].GetComponent<MeshRenderer>().material.color = Color.gray;
          }
     }

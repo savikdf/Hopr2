@@ -16,15 +16,20 @@ public class Face
     //Transform parent;
     public bool isDynamic;
 
-    public Face(Vector3 _p0, Vector3 _p1, Vector3 _c, Vector3 _n,  bool _isDynamic, GameObject _object = null)
+    public Face()
     {
-        Object = (_object == null) ?  new GameObject("Collider") : _object;
-        
-		if((_object == null))
-		{
-			 Object.transform.position = c;
-			 Object.transform.rotation = new Quaternion() { eulerAngles = new Vector3(90, 0, 0) };
-		}
+
+    }
+
+    public Face(Vector3 _p0, Vector3 _p1, Vector3 _c, Vector3 _n, bool _isDynamic, GameObject _object = null)
+    {
+        Object = (_object == null) ? new GameObject("Collider") : _object;
+
+        if ((_object == null))
+        {
+            Object.transform.position = c;
+            Object.transform.rotation = new Quaternion() { eulerAngles = new Vector3(90, 0, 0) };
+        }
 
         storedRefrenceRotation = Object.transform.rotation.eulerAngles;
         storedRefrencePosition = Object.transform.position;
@@ -34,40 +39,26 @@ public class Face
         p0pos = _p0;
         p1pos = _p1;
 
-        Vector3 cM0 = Object.transform.parent.transform.TransformPoint (cPos);
-        c =   (cM0);
+        c = Object.transform.parent.TransformPoint(cPos);
+  
+        p0 = Object.transform.TransformPoint(p0pos);
 
-        Vector3 pM0 =  Object.transform.TransformPoint (p0pos);
-        p0 = (pM0);
-
-        Vector3 pM1 = Object.transform.TransformPoint (p1pos);
-        p1 =  (pM1);
-//
+        p1 = Object.transform.TransformPoint(p1pos);
 
         normal = _n;//Object.transform.parent.localToWorldMatrix * CreateNormal();
         normal.Normalize();
     }
 
     Vector3 CreateNormal()
-    {   
-        return  Vector3.Normalize(Vector3.Cross(new Vector3(p0.x, 0.0f,  p0.y), new Vector3(p1.x, 0.0f, p1.y))) ;
+    {
+        return Vector3.Normalize(Vector3.Cross(new Vector3(p0.x, 0.0f, p0.y), new Vector3(p1.x, 0.0f, p1.y)));
     }
 
     public void ApplyTransformMatrix()
     {
-        Vector3 cM0 = Object.transform.parent.transform.TransformPoint (cPos);
-        c =   (cM0);
-
-            Vector3 pM0 =  Object.transform.TransformPoint (p0pos);
-        p0 = (pM0);
-
-        Vector3 pM1 = Object.transform.TransformPoint (p1pos);
-        p1 =  (pM1);
-//
-//
-       // //normal =  Object.transform.parent.localToWorldMatrix * CreateNormal();
-        //normal.Normalize();
-
+        c = Object.transform.parent.TransformPoint(cPos);
+        p0 = Object.transform.TransformPoint(p0pos);
+        p1 = Object.transform.TransformPoint(p1pos);
     }
 
     public void UpdatePoints(Vector3 _p0, Vector3 _p1)
@@ -75,7 +66,7 @@ public class Face
         p0pos = _p0;
         p1pos = _p1;
     }
-    
+
     public void DrawFace()
     {
         Gizmos.color = Color.red;
@@ -84,7 +75,7 @@ public class Face
         Gizmos.DrawCube(p1, new Vector3(0.05f, 0.05f, 0.05f));
 
         Gizmos.DrawLine(p0, p1);
-    
+
         Gizmos.color = Color.blue;
         Gizmos.DrawCube(c, new Vector3(0.05f, 0.05f, 0.05f));
         Gizmos.color = Color.yellow;
@@ -107,7 +98,7 @@ public class Face
             ApplyTransformMatrix();
         }
     }
-    
+
 }
 
 
