@@ -16,7 +16,7 @@ namespace SubManager.Physics
         GameObject player, Arrow;
         //each sub manager will need to override these:
         Vector3 mousePos;
-        bool isGettingReady, isGrounded, isApplyingGravity;
+        bool isGettingReady, isGrounded, isApplyingGravity, PassThrough;
         public float buildup, time;
         float angle;
         public Vector3 Velocity;
@@ -205,7 +205,8 @@ namespace SubManager.Physics
             {
                 if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
                 {
-                    PassThrough(side.face[0].normal.normalized, intersection, side, platform);
+                    PassThrough = true;
+                    Pass(intersection, side, platform);
                 }
             }
         }
@@ -239,17 +240,21 @@ namespace SubManager.Physics
                 side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
         }
 
-        void PassThrough(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
+        void Pass(Vector3 intersection, Side_Collider side, Platform platform)
         {
-            if (side.GetComponent<Side>().isPassable
-                      && platform.platformIndex != PlayerSubManager.instance.currentIndex)
+            if (side.GetComponent<Side>().isPassable && PassThrough)
             {
-                if (platform.platformIndex != PlayerSubManager.instance.currentIndex)
-                    WorldSubManager.instance.OnPlayerJumped();
+                    if (WorldSubManager.instance.GetIndex(platform) != 0)
+                    {
+                        WorldSubManager.instance.OnPlayerJumped();
+                    }
 
-                platform.platformIndex = PlayerSubManager.instance.currentIndex;
+                    PassThrough = false;
             }
+
+
         }
+
         void Bounce(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
         {
             if (VariableManager.G_Option.killOnRed && !side.GetComponent<Side>().isPassable
@@ -287,6 +292,11 @@ namespace SubManager.Physics
             isApplyingGravity = false;
             isGrounded = true;
             Velocity = Vector3.zero;
+
+            if (WorldSubManager.instance.GetIndex(platform) != 0)
+            {
+                WorldSubManager.instance.OnPlayerJumped();
+            }
         }
 
         void Kill()
@@ -364,10 +374,11 @@ namespace SubManager.Physics
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawSphere(OriginLeft, 0.05f);
                 Gizmos.DrawSphere(OriginLeft + Direction, 0.05f);
-
+                Gizmos.DrawLine(OriginLeft, OriginLeft + Direction);
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawSphere(OriginRight, 0.05f);
                 Gizmos.DrawSphere(OriginRight + Direction, 0.05f);
+                Gizmos.DrawLine(OriginRight, OriginRight + Direction);
 
             }
 

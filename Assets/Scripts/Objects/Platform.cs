@@ -18,7 +18,7 @@ namespace SubManager.World.Platforms
         public float thisPlatformSpinSpeed;
         public int platformIndex;
         public Side_Collider[] sideColliders;
-
+        public bool SwitchedOff;
         private void Awake()
         {
             sides = new List<Side>();
@@ -118,6 +118,7 @@ namespace SubManager.World.Platforms
             //update the difficulty settings of the platform
             thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
             thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
+
         }
 
         public void OnReposition(int index)
@@ -128,10 +129,12 @@ namespace SubManager.World.Platforms
             thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
             thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
             gameObject.transform.position = WorldSubManager.instance.platforms[WorldSubManager.instance.platforms.Count - 2].transform.position + new Vector3(0, WorldSubManager.instance.distanceAppart, 0);
+            SwitchOn();
         }
 
         public void SwitchOff()
         {
+            SwitchedOff = true;
             for (int i = 0; i < sideColliders.Length; i++)
             {
                 sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;
@@ -143,6 +146,7 @@ namespace SubManager.World.Platforms
         {
             //If we forget to setup the prefabs, since it will be  #ofplats * 4
             //sets the side colors
+             SwitchedOff = false;
             for (int i = 0; i < sides.Count; i++)
             {
                 if (i % 2 == 0)

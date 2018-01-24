@@ -589,15 +589,15 @@ MonoBehaviour:
   physicsoptions:
     GRAVITY: -9.8
     SCALEFACTOR: 0.95
-    BOUNCEDECAY: 0.55
+    BOUNCEDECAY: 0.25
     force: 0.3
     cap: 25
     TapRange: 5
-    CheckMultiplier: 0.15
+    CheckMultiplier: 0.54
     originLeft: {x: -0.15, y: 0.35, z: 0}
     originRight: {x: 0.15, y: 0.35, z: 0}
     RestTime: 2
-    showDebugs: 0
+    showDebugs: 1
   gameOptions:
     killOnRed: 0
 --- !u!114 &1959099023
@@ -611,7 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc61defac9c91b4aa7ceb37644ba227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 0
+  debugMode: 1
   isLoading: 0
   globaltimer: 0
   currentGameState: 0

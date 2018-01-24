@@ -211,21 +211,11 @@ namespace SubManager.World
                     //cycle through each platform and rotate it based on its speed value from the GetPlatformSpeed property
                     for (int i = 0; i < platforms.Count; i++)
                     {
-                        if (platforms[i] != null && i != PlayerSubManager.instance.currentIndex)
+                        if (platforms[i] != null && !platforms[i].SwitchedOff)
                         {
                             platforms[i].transform.Rotate(
                              new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
                              );
-                        }
-
-                        //Turn platforms normals off and On
-                        if(i == PlayerSubManager.instance.currentIndex)
-                        {
-                            platforms[i].SwitchOff();
-                        }
-                        else
-                        {
-                            platforms[i].SwitchOn();
                         }
                         
                     }
@@ -258,15 +248,19 @@ namespace SubManager.World
         public void OnPlayerJumped()
         {
             //cycle the platform (bottom to top, like a modulus of sorts) 
-            amountSpawned++;
-       
+            amountSpawned++;      
             cyclePlat = platforms[0];
             platforms.RemoveAt(0);
             platforms.Insert(maxPlatformSpawnAmount - 1, cyclePlat);
             cyclePlat.OnReposition(amountSpawned - 1);
+            platforms[0].SwitchOff();
             //PlayerSubManager.instance.currentIndex -= 3;
         }
 
+        public int GetIndex(Platform platform)
+        {
+            return platforms.IndexOf(platform);
+        }
         private void ResetPlatforms()
         {
             amountSpawned = 0;
