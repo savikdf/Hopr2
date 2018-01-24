@@ -198,7 +198,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1144984107}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.07, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1412307370}
@@ -308,17 +308,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89c9ba9aa7d6a5a429bc9df38ea6a7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  physicsOptions:
+  physicsoptions:
     GRAVITY: -9.8
     SCALEFACTOR: 0.95
     BOUNCEDECAY: 0.55
     force: 0.2
     cap: 25
-    TapRange: 4.78
+    TapRange: 5
     CheckMultiplier: 0.15
-    rayCheckOffset: {x: 0, y: 0.2, z: 0}
+    originLeft: {x: 0, y: 0.2, z: 0}
+    originRight: {x: 0, y: 0.2, z: 0}
     RestTime: 1.4
-    CollisionDistance: 0.25
+    showDebugs: 0
+  gameOptions:
+    killOnRed: 0
 --- !u!1001 &2074654387
 Prefab:
   m_ObjectHideFlags: 0
