@@ -140,11 +140,11 @@ namespace SubManager.Player
                     if (isUp && WorldSubManager.instance.IsPlatformAboveJumpable)
                     {
                         //moves player index up
-                        SetPlayerOnPlatform(currentIndex + 1);
+                        //SetPlayerOnPlatform(currentIndex + 1);
 
-                        currentIndex++;
+                        //currentIndex++;
                         //tell the world manager that the player has jumped
-                        WorldSubManager.instance.OnPlayerJumped();
+                        //WorldSubManager.instance.OnPlayerJumped();
 
                     }
                     else if (!isUp && WorldSubManager.instance.IsPlatformBelowJumpable)

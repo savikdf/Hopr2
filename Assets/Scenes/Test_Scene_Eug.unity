@@ -594,12 +594,12 @@ MonoBehaviour:
     cap: 25
     TapRange: 5
     CheckMultiplier: 0.15
-    originLeft: {x: -0.1, y: 0.35, z: 0}
-    originRight: {x: 0.1, y: 0.35, z: 0}
-    RestTime: 1.66
-    showDebugs: 1
+    originLeft: {x: -0.15, y: 0.35, z: 0}
+    originRight: {x: 0.15, y: 0.35, z: 0}
+    RestTime: 2
+    showDebugs: 0
   gameOptions:
-    killOnRed: 1
+    killOnRed: 0
 --- !u!114 &1959099023
 MonoBehaviour:
   m_ObjectHideFlags: 0

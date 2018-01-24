@@ -161,7 +161,7 @@ namespace SubManager.Physics
                     Velocity = Vector3.zero;
                 }
                 else
-                Kill();
+                    Kill();
             }
         }
 
@@ -186,9 +186,11 @@ namespace SubManager.Physics
             //Face[0] is the front faces
             float dotAngle = Vector3.Dot(side.face[0].normal.normalized, Velocity.normalized);
 
+            Vector3 intersection = new Vector3();
+
             if (Mathf.Sign(dotAngle) == -1)
             {
-                Vector3 intersection = new Vector3();
+
                 if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
                 {
                     Bounce(side.face[0].normal.normalized, intersection, side, platform);
@@ -197,6 +199,13 @@ namespace SubManager.Physics
                 else
                 {
                     isGrounded = false;
+                }
+            }
+            else if (Mathf.Sign(dotAngle) == 1)
+            {
+                if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
+                {
+                    PassThrough(side.face[0].normal.normalized, intersection, side, platform);
                 }
             }
         }
@@ -230,6 +239,17 @@ namespace SubManager.Physics
                 side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
         }
 
+        void PassThrough(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
+        {
+            if (side.GetComponent<Side>().isPassable
+                      && platform.platformIndex != PlayerSubManager.instance.currentIndex)
+            {
+                if (platform.platformIndex != PlayerSubManager.instance.currentIndex)
+                    WorldSubManager.instance.OnPlayerJumped();
+
+                platform.platformIndex = PlayerSubManager.instance.currentIndex;
+            }
+        }
         void Bounce(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
         {
             if (VariableManager.G_Option.killOnRed && !side.GetComponent<Side>().isPassable
@@ -239,6 +259,7 @@ namespace SubManager.Physics
                 Kill();
                 return;
             }
+
 
             Vector3 result = Vector3.Reflect(Velocity, Normal);
 
@@ -266,10 +287,6 @@ namespace SubManager.Physics
             isApplyingGravity = false;
             isGrounded = true;
             Velocity = Vector3.zero;
-            PlayerSubManager.instance.currentIndex = platform.platformIndex;
-            //platform.SwitchOff();
-            //side.GetComponent<MeshRenderer>().material.color = Color.yellow;
-            //WorldSubManager.instance.OnPlayerJumped();
         }
 
         void Kill()

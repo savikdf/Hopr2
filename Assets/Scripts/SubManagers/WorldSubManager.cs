@@ -259,11 +259,12 @@ namespace SubManager.World
         {
             //cycle the platform (bottom to top, like a modulus of sorts) 
             amountSpawned++;
-            //PlayerSubManager.instance.currentIndex--;
+       
             cyclePlat = platforms[0];
             platforms.RemoveAt(0);
             platforms.Insert(maxPlatformSpawnAmount - 1, cyclePlat);
             cyclePlat.OnReposition(amountSpawned - 1);
+            //PlayerSubManager.instance.currentIndex -= 3;
         }
 
         private void ResetPlatforms()

@@ -109,7 +109,6 @@ namespace SubManager.World.Platforms
                 default:
                     EstablishType(WorldSubManager.PlatformTypes.Normal);
                     break;
-
             }
         }
         public void OnIndexSet(int index)
