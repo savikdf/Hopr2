@@ -135,6 +135,7 @@ namespace SubManager.World.Platforms
         public void SwitchOff()
         {
             SwitchedOff = true;
+            
             for (int i = 0; i < sideColliders.Length; i++)
             {
                 sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;

@@ -24,18 +24,31 @@ public class PhysicsOptions
 [System.Serializable]
 public class GameOptions
 {
-    public bool killOnRed = false;
+    public bool killOnRed = false, MuteSound = false;
 }
+
+[System.Serializable]
+public class ScoreOptions
+{
+    ///<summary>Rate at which the score multiply per combo</summary> 
+    public float ScoreMultipler = 2.5f;
+
+    public float ComboWindow = .1f;
+}
+
 public class VariableManager : MonoBehaviour
 {
     public static PhysicsOptions P_Options;
     public static GameOptions G_Option;
+    public static ScoreOptions S_Option;
     public PhysicsOptions physicsoptions;
     public GameOptions gameOptions;
+    public ScoreOptions scoreOptions;
     public void OnValidate()
     {
         P_Options = physicsoptions;
         G_Option = gameOptions;
+        S_Option = scoreOptions;
     }
 }
 

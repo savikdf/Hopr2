@@ -16,6 +16,7 @@ using SubManager.Menu;
 using SubManager.Difficulty;
 using SubManager.CharacterMan;
 using SubManager.Physics;
+using SubManager.Score;
 #endregion
 
 public class GameManager : MonoBehaviour
@@ -51,7 +52,8 @@ public class GameManager : MonoBehaviour
         Menu,
         Character,
         Difficulty,
-        Physics
+        Physics,
+        Score,
     }
 
     #endregion
@@ -183,6 +185,9 @@ public class GameManager : MonoBehaviour
                 case GameSubManagerTypes.Physics:
                     this.gameObject.AddComponent<PhysicsSubManager>();
                     break;
+                case GameSubManagerTypes.Score:
+                    this.gameObject.AddComponent<ScoreSubManager>();
+                    break;
                 case GameSubManagerTypes.None:
                     //nothing needs to happen hear. this is used for catching errors in the
                     //sub manager init proccess
@@ -282,7 +287,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TrackTime()
     {
-        while(currentGameState == GameStates.Intra)
+        while (currentGameState == GameStates.Intra)
         {
             globaltimer += Time.deltaTime;
             yield return null;

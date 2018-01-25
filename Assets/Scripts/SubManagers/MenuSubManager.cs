@@ -15,6 +15,7 @@ namespace SubManager.Menu
         #region Variables
         public static MenuSubManager instance;
         GameObject menuHolder;
+        public GameObject ScoreObject; 
         bool isMenuQued;    //used to track the MenuQued() corroutine
 
         public enum MenuStates
@@ -47,7 +48,7 @@ namespace SubManager.Menu
         {
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Menu;
-
+        
             menus = new List<Canvas>();
             try
             {
@@ -69,6 +70,7 @@ namespace SubManager.Menu
                         for (int i = 0; i < menus.Count; i++)
                         {
                             SetButtonEvents(menus[i]);
+                  
                         }
                     }
                     //Turn to the loading screen
@@ -78,6 +80,8 @@ namespace SubManager.Menu
                 {
                     Debug.LogError("Menu Not Loaded!");
                 }
+
+                ScoreObject = menus[2].transform.Find("Score_Object").gameObject;
 
             }
             catch (Exception ex)

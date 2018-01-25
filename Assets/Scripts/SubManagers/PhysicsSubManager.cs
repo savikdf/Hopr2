@@ -5,7 +5,7 @@ using SubManager.World;
 using SubManager.Player;
 using SubManager.World.Platforms;
 using SubManager.CameraMan;
-
+using SubManager.Score;
 namespace SubManager.Physics
 {
     public class PhysicsSubManager : BaseSubManager
@@ -293,6 +293,7 @@ namespace SubManager.Physics
                     //And Clear the current side if it isnt already been removed
                     if(trackers.Contains(side)) trackers.Remove(side);
 
+                    ScoreSubManager.instance.AddScore(1);
 
                     return;
                 }
