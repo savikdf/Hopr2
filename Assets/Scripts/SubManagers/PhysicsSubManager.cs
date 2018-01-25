@@ -13,10 +13,11 @@ namespace SubManager.Physics
         public static PhysicsSubManager instance;
 
         public List<Vector3> intersections = new List<Vector3>();
+        public List<Side_Collider> trackers = new List<Side_Collider>();
         GameObject player, Arrow;
         //each sub manager will need to override these:
         Vector3 mousePos;
-        bool isGettingReady, isGrounded, isApplyingGravity, PassThrough;
+        bool isGettingReady, isGrounded, isApplyingGravity, Tracking;
         public float buildup, time;
         float angle;
         public Vector3 Velocity;
@@ -24,7 +25,7 @@ namespace SubManager.Physics
         public int iterations = 2;
         Vector3 OriginLeft, OriginRight, Direction;
         Vector3 OriginFutureLeft, OriginFutureRight;
-        Vector3 OriginPastLeft, OriginPastRight;
+        Vector3 OriginPastLeft, OriginPastRight, directionToPlayer;
         //use this to set local data
         public override void InitializeSubManager()
         {
@@ -87,9 +88,22 @@ namespace SubManager.Physics
 
             CollisionCheck();
             Gravity();
+            TrackerClean();
             ApplyForce();
         }
 
+        //Check and Remove when there isnt any collisions
+        //When player Passes through and above
+        void TrackerClean()
+        {
+            if (trackers.Count > 0)
+            {
+                for (int i = 0; i < trackers.Count; i++)
+                {
+                    CleanPool(trackers[i]);
+                }
+            }
+        }
 
         void CollisionCheck()
         {
@@ -188,6 +202,14 @@ namespace SubManager.Physics
 
             Vector3 intersection = new Vector3();
 
+            //Gana Pass Through and Add to a tracker pool, turning off as soon as the player has passed
+            if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
+            {
+                if (side.GetComponent<Side>().isPassable && !platform.SwitchedOff)
+                    if (!trackers.Contains(side)) trackers.Add(side);
+            }
+
+            //Bounce Off If its Directactly Facing the Player
             if (Mathf.Sign(dotAngle) == -1)
             {
 
@@ -195,18 +217,6 @@ namespace SubManager.Physics
                 {
                     Bounce(side.face[0].normal.normalized, intersection, side, platform);
                     //intersections.Add(intersection);
-                }
-                else
-                {
-                    isGrounded = false;
-                }
-            }
-            else if (Mathf.Sign(dotAngle) == 1)
-            {
-                if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
-                {
-                    PassThrough = true;
-                    Pass(intersection, side, platform);
                 }
             }
         }
@@ -228,6 +238,14 @@ namespace SubManager.Physics
                 side.face[0].p0, OriginRight, OriginRight + Direction, ref intersection));
         }
 
+        bool isInterSecting(Side_Collider side, ref Vector3 intersection)
+        {
+            return (Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, OriginLeft, OriginLeft + Direction, ref intersection) ||
+                Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, OriginRight, OriginRight + Direction, ref intersection));
+        }
+
         bool isCollidingFrameCheck(Side_Collider side, ref Vector3 intersection)
         {
             return (Utils.PointInTriangle(side.face[0].p0,
@@ -240,19 +258,53 @@ namespace SubManager.Physics
                 side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
         }
 
-        void Pass(Vector3 intersection, Side_Collider side, Platform platform)
+        void CleanPool(Side_Collider side)
         {
-            if (side.GetComponent<Side>().isPassable && PassThrough)
+            if (side.GetComponent<Side>().isPassable && !side.transform.parent.GetComponent<Platform>().SwitchedOff)
             {
-                    if (WorldSubManager.instance.GetIndex(platform) != 0)
+                //Checking based the up vector for the player and the side face normal 
+
+                //  |   <--- player up Vector, above the platform
+                //
+                //
+                //-----|-------// <--- platform point up, below the player               
+
+                directionToPlayer = side.face[0].c - player.transform.position;
+                float dotAngle = Vector3.Dot(side.face[0].normal.normalized, directionToPlayer.normalized);
+                Vector3 intersection = new Vector3();
+
+                if (
+                !isColliding(side, ref intersection) &&
+                AbovePlatform(side.face[0].c)
+                )
+                {
+                    //side.GetComponentInParent<Platform>().SwitchOff();
+                    WorldSubManager.instance.OnPlayerJumped();
+
+                    //Clear any extra kids that were picked up during collisions
+                    for(int i = 0; i < 4; i++)
                     {
-                        WorldSubManager.instance.OnPlayerJumped();
+                        if(trackers.Contains(side.GetComponentInParent<Platform>().sideColliders[i]))
+                        {
+                             trackers.Remove(side.GetComponentInParent<Platform>().sideColliders[i]);
+                        }
                     }
 
-                    PassThrough = false;
+                    //And Clear the current side if it isnt already been removed
+                    if(trackers.Contains(side)) trackers.Remove(side);
+
+
+                    return;
+                }
             }
+        }
 
+        bool AbovePlatform(Vector3 c)
+        {
+            if ((player.transform.position.y + 0.1f) >= c.y)
+                return true;
 
+            return false;
         }
 
         void Bounce(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
@@ -275,28 +327,33 @@ namespace SubManager.Physics
             {
                 Velocity = result;
                 Velocity *= VariableManager.P_Options.BOUNCEDECAY;
+                isGrounded = false;
             }
             else
             {
+                //Have to Make sure it intersects 
                 ComeToRest(intersection, side, platform);
             }
         }
 
         void ComeToRest(Vector3 intersection, Side_Collider side, Platform platform)
         {
-            player.transform.position = new Vector3(
-            intersection.x,
-            intersection.y,
-            0.5f);
-
-            isApplyingGravity = false;
-            isGrounded = true;
-            Velocity = Vector3.zero;
-
-            if (WorldSubManager.instance.GetIndex(platform) != 0)
+            if (isColliding(side, ref intersection) && AbovePlatform(side.face[0].c) 
+            || isCollidingFrameCheck(side, ref intersection) && AbovePlatform(side.face[0].c))
             {
-                WorldSubManager.instance.OnPlayerJumped();
+                player.transform.position = new Vector3(
+                player.transform.position.x,
+                platform.transform.position.y,
+                0.5f);
+
+                isApplyingGravity = false;
+                isGrounded = true;
+                Velocity = Vector3.zero;
+
+                if (!platform.SwitchedOff) platform.SwitchOff();
             }
+            else
+                Debug.Log("Trying to Rest On A higher Platform");
         }
 
         void Kill()
@@ -311,7 +368,6 @@ namespace SubManager.Physics
             else
                 buildup = VariableManager.P_Options.cap;
         }
-
 
         void ApplyForce()
         {
@@ -369,6 +425,7 @@ namespace SubManager.Physics
                 for (int i = 0; i < intersections.Count; i++)
                     Gizmos.DrawCube(intersections[i], new Vector3(0.1f, 0.1f, 0.1f));
 
+                Gizmos.DrawSphere(directionToPlayer, 0.1f);
                 // Gizmos.DrawRay(CollisionRay.origin, CollisionRay.direction);
 
                 Gizmos.color = Color.yellow;
