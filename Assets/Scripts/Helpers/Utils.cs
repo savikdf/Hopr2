@@ -245,14 +245,14 @@ public static class Utils
 
         if ((inRange(rx0, 0.0f, 1.0f) || inRange(ry0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(ry1, 0.0f, 1.0f))))
         {
-                intersection = new Vector3(intersectX, intersectY, 0.1f);
-                return true;
+            intersection = new Vector3(intersectX, intersectY, 0.1f);
+            return true;
         }
 
         return false;
     }
 
-        public static bool IsSegmentIntersectionXZ(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, ref Vector3 intersection)
+    public static bool IsSegmentIntersectionXZ(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, ref Vector3 intersection)
     {
         //A1 is the change in Y
         //B1 is the change in X
@@ -290,8 +290,8 @@ public static class Utils
 
         if ((inRange(rx0, 0.0f, 1.0f) || inRange(rz0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(rz1, 0.0f, 1.0f))))
         {
-                intersection.z = intersectZ;
-                return true;
+            intersection.z = intersectZ;
+            return true;
         }
 
         return false;
@@ -324,14 +324,18 @@ public static class Utils
         return false;
     }
 
-    public static Vector3 toWorld(Vector3 vector)
+    public static Vector3 ViewtoWorld(Vector3 vector)
     {
         return Camera.main.ViewportToWorldPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
     }
 
-    public static Vector3 ToView(Vector3 vector)
+    public static Vector3 WorldToView(Vector3 vector)
     {
         return Camera.main.WorldToViewportPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
     }
 
+    public static Vector3 WorldToScreen(Vector3 vector)
+    {
+        return Camera.main.WorldToScreenPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
+    }
 }

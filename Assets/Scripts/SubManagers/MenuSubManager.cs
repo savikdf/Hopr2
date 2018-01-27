@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using SubManager.Player;
 using SubManager.CharacterMan;
-
 namespace SubManager.Menu
 {
     public class MenuSubManager : BaseSubManager
@@ -15,8 +14,8 @@ namespace SubManager.Menu
         #region Variables
         public static MenuSubManager instance;
         GameObject menuHolder;
-        public GameObject ScoreObject; 
-        bool isMenuQued;    //used to track the MenuQued() corroutine
+        public GameObject ScoreObject, MultiObject; 
+        bool isMenuQued, trackingPlayer;    //used to track the MenuQued() corroutine
 
         public enum MenuStates
         {
@@ -81,8 +80,10 @@ namespace SubManager.Menu
                     Debug.LogError("Menu Not Loaded!");
                 }
 
+                //Display Score 
                 ScoreObject = menus[2].transform.Find("Score_Object").gameObject;
-
+                //Display Number of Combo Multiplies
+                MultiObject = menus[2].transform.Find("Multiplier_Object").gameObject;
             }
             catch (Exception ex)
             {
@@ -103,6 +104,8 @@ namespace SubManager.Menu
 
         public override void OnGameStart()
         {
+            trackingPlayer = true;
+            StartCoroutine(TrackPlayer());
             //show the ingame menu
             SwitchMenu(MenuStates.Intra);
         }
@@ -121,6 +124,18 @@ namespace SubManager.Menu
         #endregion
 
         #region Specific Methods
+
+
+        IEnumerator TrackPlayer()
+        {
+            while(trackingPlayer)
+            {
+                MultiObject.transform.position = Utils.WorldToScreen(PlayerSubManager.instance.Player_Object.transform.position 
+                + VariableManager.S_Option.MultiplierPositionOffset);
+
+                yield return null;
+            }
+        }
 
         public void SetButtonEvents(Canvas setCanvas)
         {

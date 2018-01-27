@@ -6,6 +6,7 @@ using SubManager.Player;
 using SubManager.World.Platforms;
 using System;
 using System.Linq;
+using SubManager.Score;
 
 namespace SubManager.World
 {
@@ -217,7 +218,7 @@ namespace SubManager.World
                              new Vector3(0, platforms[i].thisPlatformSpinSpeed, 0)
                              );
                         }
-                        
+
                     }
                 }
                 catch (Exception ex)
@@ -248,7 +249,8 @@ namespace SubManager.World
         public void OnPlayerJumped()
         {
             //cycle the platform (bottom to top, like a modulus of sorts) 
-            amountSpawned++;      
+            amountSpawned++;
+            ScoreSubManager.instance.AddScore(1);
             cyclePlat = platforms[0];
             platforms.RemoveAt(0);
             platforms.Insert(maxPlatformSpawnAmount - 1, cyclePlat);

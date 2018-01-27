@@ -13,7 +13,7 @@ namespace SubManager.Physics
         public static PhysicsSubManager instance;
 
         public List<Vector3> intersections = new List<Vector3>();
-        public List<Side_Collider> trackers = new List<Side_Collider>();
+        public List<Platform> trackers = new List<Platform>();
         GameObject player, Arrow;
         //each sub manager will need to override these:
         Vector3 mousePos;
@@ -181,7 +181,6 @@ namespace SubManager.Physics
 
         void CollisionDetection()
         {
-
             //Gana change this to a proper search algo for the sake of speed
             for (int i = 0; i < WorldSubManager.instance.platforms.Count; i++)
             {
@@ -206,7 +205,7 @@ namespace SubManager.Physics
             if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
             {
                 if (side.GetComponent<Side>().isPassable && !platform.SwitchedOff)
-                    if (!trackers.Contains(side)) trackers.Add(side);
+                    if (!trackers.Contains(platform)) trackers.Add(platform);
             }
 
             //Bounce Off If its Directactly Facing the Player
@@ -258,9 +257,9 @@ namespace SubManager.Physics
                 side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
         }
 
-        void CleanPool(Side_Collider side)
+        void CleanPool(Platform platform)
         {
-            if (side.GetComponent<Side>().isPassable && !side.transform.parent.GetComponent<Platform>().SwitchedOff)
+            if (!platform.SwitchedOff)
             {
                 //Checking based the up vector for the player and the side face normal 
 
@@ -269,40 +268,53 @@ namespace SubManager.Physics
                 //
                 //-----|-------// <--- platform point up, below the player               
 
-                directionToPlayer = side.face[0].c - player.transform.position;
-                float dotAngle = Vector3.Dot(side.face[0].normal.normalized, directionToPlayer.normalized);
+                directionToPlayer = platform.sideColliders[0].face[0].c - player.transform.position;
+
+                float dotAngle = Vector3.Dot(platform.sideColliders[0].face[0].normal.normalized, player.transform.up);
+
                 Vector3 intersection = new Vector3();
 
-                if (
-                !isColliding(side, ref intersection) &&
-                AbovePlatform(side.face[0].c)
-                )
+                bool passed = true;
+
+                for (int i = 0; i < platform.sideColliders.Length; i++)
                 {
+                    if (
+                    isColliding(platform.sideColliders[i], ref intersection)
+                    && (Mathf.Sign(dotAngle) == 1)
+                    && !AbovePlatform(platform.sideColliders[i].face[0].c)
+                    && platform.sides[i].isPassable)
+                    {
+                        Debug.Log("Isnt Above");
+                        //passed = false;
+                        return;
+                    }
+                    if (
+                   !isColliding(platform.sideColliders[i], ref intersection)
+                   && (Mathf.Sign(dotAngle) == 1)
+                   && !AbovePlatform(platform.sideColliders[i].face[0].c))
+                    {
+                        //Debug.Log("Isnt Above");
+                        //passed = false;
+                        return;
+                    }
+                }
+
+                if (passed)
+                {
+                   // Debug.Log("Is Above");
                     //side.GetComponentInParent<Platform>().SwitchOff();
                     WorldSubManager.instance.OnPlayerJumped();
 
-                    //Clear any extra kids that were picked up during collisions
-                    for(int i = 0; i < 4; i++)
-                    {
-                        if(trackers.Contains(side.GetComponentInParent<Platform>().sideColliders[i]))
-                        {
-                             trackers.Remove(side.GetComponentInParent<Platform>().sideColliders[i]);
-                        }
-                    }
-
                     //And Clear the current side if it isnt already been removed
-                    if(trackers.Contains(side)) trackers.Remove(side);
-
-                    ScoreSubManager.instance.AddScore(1);
-
-                    return;
+                    if (trackers.Contains(platform)) trackers.Remove(platform);
+                    //trackers.Clear();
                 }
             }
         }
 
         bool AbovePlatform(Vector3 c)
         {
-            if ((player.transform.position.y + 0.1f) >= c.y)
+            if ((player.transform.position.y + 0.1f) > c.y)
                 return true;
 
             return false;
@@ -339,7 +351,7 @@ namespace SubManager.Physics
 
         void ComeToRest(Vector3 intersection, Side_Collider side, Platform platform)
         {
-            if (isColliding(side, ref intersection) && AbovePlatform(side.face[0].c) 
+            if (isColliding(side, ref intersection) && AbovePlatform(side.face[0].c)
             || isCollidingFrameCheck(side, ref intersection) && AbovePlatform(side.face[0].c))
             {
                 player.transform.position = new Vector3(
@@ -350,11 +362,25 @@ namespace SubManager.Physics
                 isApplyingGravity = false;
                 isGrounded = true;
                 Velocity = Vector3.zero;
-
+                trackers.Clear();
+                Recycle(WorldSubManager.instance.GetIndex(platform));
                 if (!platform.SwitchedOff) platform.SwitchOff();
             }
             else
                 Debug.Log("Trying to Rest On A higher Platform");
+        }
+
+        void Recycle(int index)
+        {
+            if(index != 0)
+            {
+                for(int i = 0; i < index; i++)
+                {
+                     WorldSubManager.instance.OnPlayerJumped();
+                }
+
+                Debug.Log("Clean up time baby");
+            }
         }
 
         void Kill()

@@ -32,8 +32,10 @@ public class ScoreOptions
 {
     ///<summary>Rate at which the score multiply per combo</summary> 
     public float ScoreMultipler = 2.5f;
-
+    ///<summary>Combo Window Length Per score point</summary> 
     public float ComboWindow = .1f;
+
+    public Vector3 MultiplierPositionOffset = new Vector3(0,0,0);
 }
 
 public class VariableManager : MonoBehaviour

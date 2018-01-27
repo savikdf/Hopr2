@@ -46,7 +46,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1501887535475870
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,7 +453,6 @@ MonoBehaviour:
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: 0.62201, y: 0.000000074506, z: 0.62201}
     isDynamic: 0
-  physicsOptions: {fileID: 0}
 --- !u!114 &114049984561348484
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -499,7 +498,6 @@ MonoBehaviour:
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: 0.62201, y: -0.000000074506, z: -0.62201}
     isDynamic: 0
-  physicsOptions: {fileID: 0}
 --- !u!114 &114084970347715452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -549,6 +547,7 @@ MonoBehaviour:
   - {fileID: 114527980987782342}
   - {fileID: 114049984561348484}
   - {fileID: 114034980273087524}
+  SwitchedOff: 0
 --- !u!114 &114309814182904342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -618,7 +617,6 @@ MonoBehaviour:
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: -0.62201, y: 0.000000074506, z: 0.62201}
     isDynamic: 0
-  physicsOptions: {fileID: 0}
 --- !u!114 &114527980987782342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -664,4 +662,3 @@ MonoBehaviour:
     storedRefrenceRotation: {x: 270.01978, y: -0, z: 0}
     storedRefrencePosition: {x: -0.62201, y: -0.000000074506, z: -0.62201}
     isDynamic: 0
-  physicsOptions: {fileID: 0}
