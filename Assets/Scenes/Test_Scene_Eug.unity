@@ -297,7 +297,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4579682933467930, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4579682933467930, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
       propertyPath: m_LocalRotation.x
@@ -325,7 +325,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1603543098803340, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114266684698141418, guid: 2d7301cc1a7a3984c8e14a1f4875341a,
+        type: 2}
+      propertyPath: thisPlatformType
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2d7301cc1a7a3984c8e14a1f4875341a, type: 2}
@@ -576,7 +581,7 @@ MonoBehaviour:
     originLeft: {x: -0.15, y: 0.35, z: 0}
     originRight: {x: 0.15, y: 0.35, z: 0}
     RestTime: 1.5
-    showDebugs: 0
+    showDebugs: 1
   gameOptions:
     killOnRed: 0
     MuteSound: 0

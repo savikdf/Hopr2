@@ -167,7 +167,7 @@ namespace SubManager.World
             for (int i = 0; i < maxPlatformSpawnAmount; i++)
             {
                 SpawnSingle();
-                ApplyRandomSkew(platforms[i]);  //puts a random skew on the new platform
+                //ApplyRandomSkew(platforms[i]);  //puts a random skew on the new platform
             }
 
             platforms[0].SwitchOff();
