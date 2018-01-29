@@ -51,7 +51,7 @@ namespace SubManager.Physics
         //use this to begin the process of the game
         public override void OnGameStart()
         {
-            player.transform.position = WorldSubManager.instance.platforms[0].transform.position + new Vector3(0, 0.0f, 0.5f);
+            player.transform.position = WorldSubManager.instance.platforms[0].transform.position + new Vector3(0, 0.05f, 0.5f);
             isApplyingGravity = false;
             isGrounded = true;
             isGettingReady = false;
@@ -85,11 +85,13 @@ namespace SubManager.Physics
         void FixedUpdate()
         {
             time += Time.fixedDeltaTime;
-
-            CollisionCheck();
-            Gravity();
-            TrackerClean();
-            ApplyForce();
+            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
+            { 
+                CollisionCheck();
+                Gravity();
+                TrackerClean();
+                ApplyForce();
+            }
         }
 
         //Check and Remove when there isnt any collisions

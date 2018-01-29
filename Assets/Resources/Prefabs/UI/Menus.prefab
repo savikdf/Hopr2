@@ -8648,7 +8648,7 @@ Animator:
   m_GameObject: {fileID: 1042312616253122}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d23a99cac03487e43b00056f3481d45d, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -8665,7 +8665,7 @@ Animator:
   m_GameObject: {fileID: 1667862322496684}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 65658be17e9784a4cb7e2cb7dbfca229, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -8682,7 +8682,7 @@ Animator:
   m_GameObject: {fileID: 1554059926670686}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d5118d08857f7734bbb64af448cf4915, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -14912,7 +14912,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c2236eb5cbd09974399e08d597ea513c, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -17173,7 +17173,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1050878732849004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebdd0d410bb0ec94ca3f88067fc6a72c, type: 3}
+  m_Script: {fileID: 11500000, guid: 138bf51652c05cb41a0ae888462408eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   thisSubType: 0

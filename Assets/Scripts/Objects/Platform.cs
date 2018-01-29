@@ -140,6 +140,8 @@ namespace SubManager.World.Platforms
             {
                 sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;
                 sideColliders[i].face[0].normal = new Vector3(0, 1, 0);
+                sideColliders[i].face[1].normal = new Vector3(0, 1, 0);
+                sideColliders[i].face[2].normal = new Vector3(0, 1, 0);
             }
         }
 
@@ -147,7 +149,7 @@ namespace SubManager.World.Platforms
         {
             //If we forget to setup the prefabs, since it will be  #ofplats * 4
             //sets the side colors
-             SwitchedOff = false;
+            SwitchedOff = false;
             for (int i = 0; i < sides.Count; i++)
             {
                 if (i % 2 == 0)
