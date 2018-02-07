@@ -22,7 +22,7 @@ namespace SubManager.Score
             instance = (instance == null) ? this : instance;
 
             thisSubType = GameManager.GameSubManagerTypes.None;
-            Debug.Log(thisSubType.ToString() + " is not overriding the InitializeSubManager() method.");
+            //Debug.Log(thisSubType.ToString() + " is not overriding the InitializeSubManager() method.");
         }
 
         //runs on the post init event from the gamemanager
@@ -97,14 +97,14 @@ namespace SubManager.Score
         {
             window = VariableManager.S_Option.ComboWindow;
 
-            Debug.Log(window);
+           // Debug.Log(window);
 
             if (window > 0)
             {
                 MultiText.text = "";
                 multiplierincrement += 1;
 
-                Debug.Log((float)multiplierincrement/10.0f);
+                ///Debug.Log((float)multiplierincrement/10.0f);
 
                 if (multiplierincrement > 1) MultiText.text = multiplierincrement.ToString() + " " + "X";
     

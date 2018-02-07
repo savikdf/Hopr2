@@ -39,7 +39,7 @@ namespace SubManager
         public virtual void InitializeSubManager()
         {
             thisSubType = GameManager.GameSubManagerTypes.None;
-            Debug.Log(thisSubType.ToString() + " is not overriding the InitializeSubManager() method.");
+            //Debug.Log(thisSubType.ToString() + " is not overriding the InitializeSubManager() method.");
         }
 
         //runs on the post init event from the gamemanager
