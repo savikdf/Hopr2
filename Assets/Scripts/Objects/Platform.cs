@@ -18,6 +18,7 @@ namespace SubManager.World.Platforms
         public float thisPlatformSpinSpeed;
         public int platformIndex;
         public Side_Collider[] sideColliders;
+        public Circle_Collider mainColider;
         public bool SwitchedOff;
         private void Awake()
         {
@@ -135,7 +136,7 @@ namespace SubManager.World.Platforms
         public void SwitchOff()
         {
             SwitchedOff = true;
-            
+
             for (int i = 0; i < sideColliders.Length; i++)
             {
                 sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;
@@ -143,6 +144,11 @@ namespace SubManager.World.Platforms
                 sideColliders[i].face[1].normal = new Vector3(0, 1, 0);
                 sideColliders[i].face[2].normal = new Vector3(0, 1, 0);
             }
+        }
+
+        void Update()
+        {
+            mainColider.Update();
         }
 
         public void SwitchOn()
@@ -169,6 +175,12 @@ namespace SubManager.World.Platforms
                 }
             }
 
+        }
+
+        void OnDrawGizmos()
+        {
+            if(Application.isPlaying && VariableManager.P_Options.showDebugs)
+            mainColider.DrawCircle();
         }
 
     }

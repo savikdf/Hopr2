@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Face
 {
+    public float scale;
     public Vector3 p0, p0pos;
     public Vector3 p1, p1pos;
     public Vector3 c, cPos;
@@ -21,7 +22,7 @@ public class Face
 
     }
 
-    public Face(Vector3 _p0, Vector3 _p1, Vector3 _c, Vector3 _n, bool _isDynamic, GameObject _object = null)
+    public Face(Vector3 _p0, Vector3 _p1, Vector3 _c, Vector3 _n, bool _isDynamic, float _scale, GameObject _object = null)
     {
         Object = (_object == null) ? new GameObject("Collider") : _object;
 
@@ -35,16 +36,17 @@ public class Face
         storedRefrencePosition = Object.transform.position;
         isDynamic = _isDynamic;
 
+        scale = _scale;
+
         cPos = _c;
         p0pos = _p0;
         p1pos = _p1;
 
-        c = Object.transform.parent.TransformPoint(cPos);
+        c = Object.transform.parent.TransformPoint(cPos) * scale;
   
-        p0 = Object.transform.TransformPoint(p0pos);
+        p0 = Object.transform.TransformPoint(p0pos) * scale;
 
-        p1 = Object.transform.TransformPoint(p1pos);
-
+        p1 = Object.transform.TransformPoint(p1pos) * scale;
         normal = _n;//Object.transform.parent.localToWorldMatrix * CreateNormal();
         normal.Normalize();
     }
@@ -56,9 +58,12 @@ public class Face
 
     public void ApplyTransformMatrix()
     {
-        c = Object.transform.parent.TransformPoint(cPos);
-        p0 = Object.transform.TransformPoint(p0pos);
-        p1 = Object.transform.TransformPoint(p1pos);
+
+        c = Object.transform.parent.TransformPoint(cPos) * scale;
+  
+        p0 = Object.transform.TransformPoint(p0pos) * scale;
+
+        p1 = Object.transform.TransformPoint(p1pos) * scale;
     }
 
     public void UpdatePoints(Vector3 _p0, Vector3 _p1)

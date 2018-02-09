@@ -10,19 +10,19 @@ public class Side_Collider : MonoBehaviour
     void Start()
     {
 
-       //face = new Face[3];
+     face = new Face[3];
 
-       //Vector3 c = transform.localPosition;
-       // //
-       //Vector3[] vertices = new Vector3[this.GetComponent<MeshFilter>().mesh.vertices.Length];
-       //vertices = this.GetComponent<MeshFilter>().mesh.vertices;
-//     //
-       //Vector3 l = ((new Vector3(vertices[11].x, vertices[11].y, 0)));
-       //Vector3 r = ((new Vector3(vertices[1].x, vertices[1].y, 0)));
-//     //
-       //face[0] = new Face(l, r, c, Vector3.up, false, this.gameObject);
-       //face[1] = new Face(r, transform.InverseTransformPoint(transform.parent.position), c, Vector3.up, false, this.gameObject);
-       //face[2] = new Face(l, transform.InverseTransformPoint(transform.parent.position), c, Vector3.up, false, this.gameObject);
+     Vector3 c = transform.localPosition;
+      //
+     Vector3[] vertices = new Vector3[this.GetComponent<MeshFilter>().mesh.vertices.Length];
+     vertices = this.GetComponent<MeshFilter>().mesh.vertices;
+//   
+     Vector3 l = ((new Vector3(vertices[11].x, vertices[11].y, 0)));
+     Vector3 r = ((new Vector3(vertices[1].x, vertices[1].y, 0)));
+//   
+     face[0] = new Face(l, r, c, Vector3.up, false, 1.10f, this.gameObject);
+     face[1] = new Face(r, transform.InverseTransformPoint(transform.parent.position), c, Vector3.up, false, 1.10f, this.gameObject);
+     face[2] = new Face(l, transform.InverseTransformPoint(transform.parent.position), c, Vector3.up, false, 1.10f, this.gameObject);
     }
 
     // Update is called once per frame
