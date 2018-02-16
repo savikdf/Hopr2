@@ -338,4 +338,9 @@ public static class Utils
     {
         return Camera.main.WorldToScreenPoint(new Vector3(vector.x, vector.y, Camera.main.farClipPlane));
     }
+
+    public static Vector3 MidPoint(Vector3 p0, Vector3 p1)
+    {
+        return new Vector3((p0.x + p1.x)/2, (p0.y + p1.y)/2, (p0.z + p1.z)/2);
+    }
 }
