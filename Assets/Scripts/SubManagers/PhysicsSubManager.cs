@@ -229,14 +229,18 @@ namespace SubManager.Physics
         //Do this for Left and right Collision Rays
         bool isColliding(Side_Collider side, ref Vector3 intersection)
         {
-            return (Utils.PointInTriangle(side.face[0].p0,
-                side.face[0].p1, side.face[1].p1, OriginLeft)
-                && Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, OriginLeft, OriginLeft + Direction, ref intersection) ||
-                Utils.PointInTriangle(side.face[0].p0,
-                side.face[0].p1, side.face[1].p1, OriginRight)
-                && Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, OriginRight, OriginRight + Direction, ref intersection));
+           // return (Utils.PointInTriangle(side.face[0].p0,
+           //     side.face[0].p1, side.face[1].p1, OriginLeft)
+           //     && Utils.IsSegmentIntersection(side.face[0].p1,
+           //     side.face[0].p0, OriginLeft, OriginLeft + Direction, ref intersection) ||
+           //     
+           //     Utils.PointInTriangle(side.face[0].p0,
+           //     side.face[0].p1, side.face[1].p1, OriginRight)
+           //     && Utils.IsSegmentIntersection(side.face[0].p1,
+           //     side.face[0].p0, OriginRight, OriginRight + Direction, ref intersection));
+
+           return isCollidingWithFace(side, ref intersection, OriginLeft, OriginLeft, OriginLeft + Direction) ||
+            isCollidingWithFace(side, ref intersection, OriginRight, OriginRight, OriginRight + Direction);
         }
 
         bool isInterSecting(Side_Collider side, ref Vector3 intersection)
@@ -249,14 +253,45 @@ namespace SubManager.Physics
 
         bool isCollidingFrameCheck(Side_Collider side, ref Vector3 intersection)
         {
-            return (Utils.PointInTriangle(side.face[0].p0,
-                side.face[0].p1, side.face[1].p1, OriginLeft)
-                && Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, OriginPastLeft, OriginFutureLeft, ref intersection) ||
+            //return (Utils.PointInTriangle(side.face[0].p0,
+            //    side.face[0].p1, side.face[1].p1, OriginLeft)
+            //    && Utils.IsSegmentIntersection(side.face[0].p1,
+            //    side.face[0].p0, OriginPastLeft, OriginFutureLeft, ref intersection) ||
+
+            //    Utils.PointInTriangle(side.face[0].p0,
+            //    side.face[0].p1, side.face[1].p1, OriginRight)
+            //    && Utils.IsSegmentIntersection(side.face[0].p1,
+            //    side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
+             return isCollidingWithFace(side, ref intersection, OriginLeft, OriginPastLeft, OriginFutureLeft) ||
+            isCollidingWithFace(side, ref intersection, OriginRight, OriginPastRight, OriginFutureRight);
+        }
+
+        bool isCollidingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 tri_p0, Vector3 p0, Vector3 p1)
+        {
+            return (
+                //Main
                 Utils.PointInTriangle(side.face[0].p0,
-                side.face[0].p1, side.face[1].p1, OriginRight)
+                side.face[0].p1, side.face[1].p1, tri_p0)
                 && Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
+                side.face[0].p0, p0, p1, ref intersection) ||
+                
+                //Front
+                Utils.PointInTriangle(side.face[3].p0,
+                side.face[3].p1, side.face[4].p1, tri_p0)
+                && Utils.IsSegmentIntersection(side.face[3].p1,
+                side.face[3].p0, p0, p1, ref intersection) ||
+
+                //Front Left
+                Utils.PointInTriangle(side.face[6].p0,
+                side.face[6].p1, side.face[7].p1, tri_p0)
+                && Utils.IsSegmentIntersection(side.face[6].p1,
+                side.face[6].p0, p0, p1, ref intersection) ||
+
+                //Front Right
+                Utils.PointInTriangle(side.face[9].p0,
+                side.face[9].p1, side.face[10].p1, tri_p0)
+                && Utils.IsSegmentIntersection(side.face[9].p1,
+                side.face[9].p0, p0, p1, ref intersection));
         }
 
         void CleanPool(Platform platform)

@@ -143,6 +143,9 @@ namespace SubManager.World.Platforms
                 sideColliders[i].face[0].normal = new Vector3(0, 1, 0);
                 sideColliders[i].face[1].normal = new Vector3(0, 1, 0);
                 sideColliders[i].face[2].normal = new Vector3(0, 1, 0);
+
+                foreach(Face f in sideColliders[i].face)
+                    f.normal = new Vector3(0, 1, 0);
             }
         }
 
