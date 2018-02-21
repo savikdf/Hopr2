@@ -23,9 +23,11 @@ namespace SubManager.Physics
         public Vector3 Velocity;
         [Range(0, 10)]
         public int iterations = 2;
-        Vector3 OriginLeft, OriginRight, Direction;
-        Vector3 OriginFutureLeft, OriginFutureRight;
-        Vector3 OriginPastLeft, OriginPastRight, directionToPlayer;
+        Vector3 OriginFrontLeft, OriginFrontRight, OriginBackLeft, OriginBackRight, Direction;
+        Vector3 OriginFrontFutureLeft, OriginFrontFutureRight;
+        Vector3 OriginBackFutureLeft, OriginBackFutureRight;
+        Vector3 OriginFrontPastLeft, OriginFrontPastRight;
+        Vector3 OriginBackPastLeft, OriginBackPastRight, directionToPlayer;
         //use this to set local data
         public override void InitializeSubManager()
         {
@@ -86,7 +88,7 @@ namespace SubManager.Physics
         {
             time += Time.fixedDeltaTime;
             if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
-            { 
+            {
                 CollisionCheck();
                 Gravity();
                 TrackerClean();
@@ -109,8 +111,12 @@ namespace SubManager.Physics
 
         void CollisionCheck()
         {
-            OriginLeft = player.transform.position + VariableManager.P_Options.originLeft;
-            OriginRight = player.transform.position + VariableManager.P_Options.originRight;
+            OriginBackLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
+            OriginBackRight = player.transform.position + VariableManager.P_Options.originBackRight;
+
+            OriginFrontLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
+            OriginFrontRight = player.transform.position + VariableManager.P_Options.originFrontRight;
+
             Direction = Velocity.normalized * VariableManager.P_Options.CheckMultiplier;
 
             for (int i = 0; i < iterations; i++)
@@ -229,69 +235,84 @@ namespace SubManager.Physics
         //Do this for Left and right Collision Rays
         bool isColliding(Side_Collider side, ref Vector3 intersection)
         {
-           // return (Utils.PointInTriangle(side.face[0].p0,
-           //     side.face[0].p1, side.face[1].p1, OriginLeft)
-           //     && Utils.IsSegmentIntersection(side.face[0].p1,
-           //     side.face[0].p0, OriginLeft, OriginLeft + Direction, ref intersection) ||
-           //     
-           //     Utils.PointInTriangle(side.face[0].p0,
-           //     side.face[0].p1, side.face[1].p1, OriginRight)
-           //     && Utils.IsSegmentIntersection(side.face[0].p1,
-           //     side.face[0].p0, OriginRight, OriginRight + Direction, ref intersection));
-
-           return isCollidingWithFace(side, ref intersection, OriginLeft, OriginLeft, OriginLeft + Direction) ||
-            isCollidingWithFace(side, ref intersection, OriginRight, OriginRight, OriginRight + Direction);
+            return
+             //Back
+             isCollidingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft, OriginBackLeft + Direction) ||
+             isCollidingWithFace(side, ref intersection, OriginBackRight, OriginBackRight, OriginBackRight + Direction) ||
+             //Front
+             isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft, OriginFrontLeft + Direction) ||
+             isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight, OriginFrontRight + Direction);
         }
 
         bool isInterSecting(Side_Collider side, ref Vector3 intersection)
         {
-            return (Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, OriginLeft, OriginLeft + Direction, ref intersection) ||
-                Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, OriginRight, OriginRight + Direction, ref intersection));
+            return
+            //Back
+            isIntersectingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft + Direction) ||
+            isIntersectingWithFace(side, ref intersection, OriginBackRight, OriginBackRight + Direction) ||
+            //Front
+            isIntersectingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft + Direction) ||
+            isIntersectingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight + Direction);
         }
 
         bool isCollidingFrameCheck(Side_Collider side, ref Vector3 intersection)
         {
-            //return (Utils.PointInTriangle(side.face[0].p0,
-            //    side.face[0].p1, side.face[1].p1, OriginLeft)
-            //    && Utils.IsSegmentIntersection(side.face[0].p1,
-            //    side.face[0].p0, OriginPastLeft, OriginFutureLeft, ref intersection) ||
+            return
+           //Back
+           isCollidingWithFace(side, ref intersection, OriginBackLeft, OriginBackPastLeft, OriginBackFutureLeft) ||
+           isCollidingWithFace(side, ref intersection, OriginBackRight, OriginBackPastRight, OriginBackFutureRight) ||
+           //Front
+           isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontPastLeft, OriginFrontFutureLeft) ||
+           isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontPastRight, OriginFrontFutureRight); ;
+        }
 
-            //    Utils.PointInTriangle(side.face[0].p0,
-            //    side.face[0].p1, side.face[1].p1, OriginRight)
-            //    && Utils.IsSegmentIntersection(side.face[0].p1,
-            //    side.face[0].p0, OriginPastRight, OriginFutureRight, ref intersection));
-             return isCollidingWithFace(side, ref intersection, OriginLeft, OriginPastLeft, OriginFutureLeft) ||
-            isCollidingWithFace(side, ref intersection, OriginRight, OriginPastRight, OriginFutureRight);
+        bool isIntersectingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 p0, Vector3 p1)
+        {
+            return
+                //Main
+                Utils.IsSegmentIntersection(side.face[0].p1,
+                side.face[0].p0, p0, p1, ref intersection) ||
+
+                Utils.IsSegmentIntersection(side.face[3].p1,
+                side.face[3].p0, p0, p1, ref intersection) ||
+
+                Utils.IsSegmentIntersection(side.face[6].p1,
+                side.face[6].p0, p0, p1, ref intersection) ||
+
+                Utils.IsSegmentIntersection(side.face[9].p1,
+                side.face[9].p0, p0, p1, ref intersection);
         }
 
         bool isCollidingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 tri_p0, Vector3 p0, Vector3 p1)
         {
-            return (
+            return
                 //Main
                 Utils.PointInTriangle(side.face[0].p0,
                 side.face[0].p1, side.face[1].p1, tri_p0)
-                && Utils.IsSegmentIntersection(side.face[0].p1,
+                &&
+                Utils.IsSegmentIntersection(side.face[0].p1,
                 side.face[0].p0, p0, p1, ref intersection) ||
-                
+
                 //Front
                 Utils.PointInTriangle(side.face[3].p0,
                 side.face[3].p1, side.face[4].p1, tri_p0)
-                && Utils.IsSegmentIntersection(side.face[3].p1,
+                &&
+                Utils.IsSegmentIntersection(side.face[3].p1,
                 side.face[3].p0, p0, p1, ref intersection) ||
 
                 //Front Left
                 Utils.PointInTriangle(side.face[6].p0,
                 side.face[6].p1, side.face[7].p1, tri_p0)
-                && Utils.IsSegmentIntersection(side.face[6].p1,
+                &&
+                Utils.IsSegmentIntersection(side.face[6].p1,
                 side.face[6].p0, p0, p1, ref intersection) ||
 
                 //Front Right
                 Utils.PointInTriangle(side.face[9].p0,
                 side.face[9].p1, side.face[10].p1, tri_p0)
-                && Utils.IsSegmentIntersection(side.face[9].p1,
-                side.face[9].p0, p0, p1, ref intersection));
+                &&
+                Utils.IsSegmentIntersection(side.face[9].p1,
+                side.face[9].p0, p0, p1, ref intersection);
         }
 
         void CleanPool(Platform platform)
@@ -338,7 +359,7 @@ namespace SubManager.Physics
 
                 if (passed)
                 {
-                   // Debug.Log("Is Above");
+                    // Debug.Log("Is Above");
                     //side.GetComponentInParent<Platform>().SwitchOff();
                     WorldSubManager.instance.OnPlayerJumped();
 
@@ -367,7 +388,6 @@ namespace SubManager.Physics
                 return;
             }
 
-
             Vector3 result = Vector3.Reflect(Velocity, Normal);
 
             //If the reflection is greater then the rest time
@@ -388,8 +408,9 @@ namespace SubManager.Physics
 
         void ComeToRest(Vector3 intersection, Side_Collider side, Platform platform)
         {
-            if (isColliding(side, ref intersection) && AbovePlatform(side.face[0].c)
-            || isCollidingFrameCheck(side, ref intersection) && AbovePlatform(side.face[0].c))
+            if (
+                isColliding(side, ref intersection) && AbovePlatform(side.face[0].c)
+             || isCollidingFrameCheck(side, ref intersection) && AbovePlatform(side.face[0].c))
             {
                 player.transform.position = new Vector3(
                 player.transform.position.x,
@@ -409,11 +430,11 @@ namespace SubManager.Physics
 
         void Recycle(int index)
         {
-            if(index != 0)
+            if (index != 0)
             {
-                for(int i = 0; i < index; i++)
+                for (int i = 0; i < index; i++)
                 {
-                     WorldSubManager.instance.OnPlayerJumped();
+                    WorldSubManager.instance.OnPlayerJumped();
                 }
 
                 Debug.Log("Clean up time baby");
@@ -435,13 +456,19 @@ namespace SubManager.Physics
 
         void ApplyForce()
         {
-            OriginPastLeft = player.transform.position + VariableManager.P_Options.originLeft;
-            OriginPastRight = player.transform.position + VariableManager.P_Options.originRight;
+            OriginBackPastLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
+            OriginBackPastRight = player.transform.position + VariableManager.P_Options.originBackRight;
+
+            OriginFrontPastLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
+            OriginFrontPastRight = player.transform.position + VariableManager.P_Options.originFrontRight;
 
             player.transform.position += (new Vector3(Velocity.x, Velocity.y, 0.0f) * Time.fixedDeltaTime) * 3.0f;
 
-            OriginFutureLeft = player.transform.position + VariableManager.P_Options.originLeft;
-            OriginFutureRight = player.transform.position + VariableManager.P_Options.originRight;
+            OriginBackFutureLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
+            OriginBackFutureRight = player.transform.position + VariableManager.P_Options.originBackRight;
+
+            OriginFrontFutureLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
+            OriginFrontFutureRight = player.transform.position + VariableManager.P_Options.originFrontRight;
         }
 
         void Gravity()
@@ -492,14 +519,27 @@ namespace SubManager.Physics
                 Gizmos.DrawSphere(directionToPlayer, 0.1f);
                 // Gizmos.DrawRay(CollisionRay.origin, CollisionRay.direction);
 
+                //Back
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(OriginLeft, 0.05f);
-                Gizmos.DrawSphere(OriginLeft + Direction, 0.05f);
-                Gizmos.DrawLine(OriginLeft, OriginLeft + Direction);
+                Gizmos.DrawSphere(OriginBackLeft, 0.05f);
+                Gizmos.DrawSphere(OriginBackLeft + Direction, 0.05f);
+                Gizmos.DrawLine(OriginBackLeft, OriginBackLeft + Direction);
+
                 Gizmos.color = Color.magenta;
-                Gizmos.DrawSphere(OriginRight, 0.05f);
-                Gizmos.DrawSphere(OriginRight + Direction, 0.05f);
-                Gizmos.DrawLine(OriginRight, OriginRight + Direction);
+                Gizmos.DrawSphere(OriginBackRight, 0.05f);
+                Gizmos.DrawSphere(OriginBackRight + Direction, 0.05f);
+                Gizmos.DrawLine(OriginBackRight, OriginBackRight + Direction);
+
+                //Front
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(OriginFrontLeft, 0.05f);
+                Gizmos.DrawSphere(OriginFrontLeft + Direction, 0.05f);
+                Gizmos.DrawLine(OriginFrontLeft, OriginFrontLeft + Direction);
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(OriginFrontRight, 0.05f);
+                Gizmos.DrawSphere(OriginFrontRight + Direction, 0.05f);
+                Gizmos.DrawLine(OriginFrontRight, OriginFrontRight + Direction);
 
             }
 

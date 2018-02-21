@@ -611,13 +611,15 @@ MonoBehaviour:
     cap: 25
     TapRange: 5
     CheckMultiplier: 0.5
-    originLeft: {x: 0.08, y: 0.3, z: 0}
-    originRight: {x: -0.08, y: 0.3, z: 0}
+    originBackLeft: {x: 0.1, y: 0.3, z: -0.1}
+    originFrontLeft: {x: 0.1, y: 0.3, z: 0.1}
+    originBackRight: {x: -0.1, y: 0.3, z: -0.1}
+    originFrontRight: {x: -0.1, y: 0.3, z: 0.1}
     RestTime: 2
-    showDebugs: 1
+    showDebugs: 0
   gameOptions:
     killOnRed: 0
-    MuteSound: 0
+    MuteSound: 1
   scoreOptions:
     ScoreMultipler: 2.5
     ComboWindow: 0.1
