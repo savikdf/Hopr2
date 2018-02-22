@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SubManager;
 using SubManager.Menu;
+using SubManager.Player;
 using UnityEngine.UI;
 
 namespace SubManager.Score
@@ -10,12 +11,12 @@ namespace SubManager.Score
     public class ScoreSubManager : BaseSubManager
     {
         public static ScoreSubManager instance;
-        public static float Score;
+        public static float Score, Alt;
         public float multiplier, window;
         public int multiplierincrement;
         public float multiplierShowTime = 0.20f;
         float time, lerpTime;
-        Text ScoreText, MultiText;
+        Text ScoreText, MultiText, AltitudeText;
         bool showText, resetLerpTime;
         public override void InitializeSubManager()
         {
@@ -32,6 +33,9 @@ namespace SubManager.Score
             ScoreText = MenuSubManager.instance.ScoreObject.GetComponent<Text>();
             ScoreText.text = 0.ToString();
 
+            AltitudeText = MenuSubManager.instance.AltitudeObject.GetComponent<Text>();
+            AltitudeText.text = 0.ToString();
+
             MultiText = MenuSubManager.instance.MultiObject.GetComponent<Text>();
             MultiText.text = 0.ToString();
         }
@@ -46,13 +50,15 @@ namespace SubManager.Score
         //use this to begin the process of the game
         public override void OnGameStart()
         {
-
+            Alt = 0;
             //Debug.Log("Some SubManager is running a default event (OnGameStart()), needs to !");
         }
 
         void Update()
         {
 
+            Alt = PlayerSubManager.instance.Player_Object.transform.position.y - PlayerSubManager.instance.offsetVec3.y;
+            AltitudeText.text = Utils.roundToPlaces((Alt/100.0f), 2).ToString() +" "+ "km";
 
             if (window > 0) window -= Time.deltaTime;
             else
@@ -128,6 +134,7 @@ namespace SubManager.Score
         //use this to reset the process of the game
         public override void OnGameReset()
         {
+              Alt = 0;
         }
 
     }

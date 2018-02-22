@@ -14,7 +14,7 @@ namespace SubManager.Menu
         #region Variables
         public static MenuSubManager instance;
         GameObject menuHolder;
-        public GameObject ScoreObject, MultiObject; 
+        public GameObject ScoreObject, MultiObject, AltitudeObject; 
         bool isMenuQued, trackingPlayer;    //used to track the MenuQued() corroutine
 
         public enum MenuStates
@@ -84,6 +84,8 @@ namespace SubManager.Menu
                 ScoreObject = menus[2].transform.Find("Score_Object").gameObject;
                 //Display Number of Combo Multiplies
                 MultiObject = menus[2].transform.Find("Multiplier_Object").gameObject;
+                AltitudeObject = menus[2].transform.Find("Altitude_Object").gameObject;
+
             }
             catch (Exception ex)
             {

@@ -27,6 +27,13 @@ public class PhysicsOptions
 public class GameOptions
 {
     public bool killOnRed = false, MuteSound = false;
+
+    
+    ///<summary>Type in Direction or just Stright Up</summary> 
+    public bool tapInDir = false;
+
+    ///<summary>Disable Touch Events and have the Char just jump when landed</summary> 
+    public bool RunAway = false;
 }
 
 [System.Serializable]
@@ -40,19 +47,29 @@ public class ScoreOptions
     public Vector3 MultiplierPositionOffset = new Vector3(0,0,0);
 }
 
+[System.Serializable]
+public class InputOptions
+{
+     ///<summary>Main Input For Jumping, Will Change to Touch Input Later</summary> 
+    public KeyCode MainKey = KeyCode.Mouse0;
+}
+
 public class VariableManager : MonoBehaviour
 {
     public static PhysicsOptions P_Options;
     public static GameOptions G_Option;
     public static ScoreOptions S_Option;
+    public static InputOptions I_Option;
     public PhysicsOptions physicsoptions;
     public GameOptions gameOptions;
     public ScoreOptions scoreOptions;
+    public InputOptions inputOptions;
     public void OnValidate()
     {
         P_Options = physicsoptions;
         G_Option = gameOptions;
         S_Option = scoreOptions;
+        I_Option = inputOptions;
     }
 }
 

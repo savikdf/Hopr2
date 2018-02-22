@@ -606,24 +606,28 @@ MonoBehaviour:
   physicsoptions:
     GRAVITY: -9.8
     SCALEFACTOR: 0.95
-    BOUNCEDECAY: 0.55
+    BOUNCEDECAY: 0.35
     force: 0.2
-    cap: 25
-    TapRange: 5
+    cap: 6
+    TapRange: 3.5
     CheckMultiplier: 0.5
     originBackLeft: {x: 0.1, y: 0.3, z: -0.1}
     originFrontLeft: {x: 0.1, y: 0.3, z: 0.1}
     originBackRight: {x: -0.1, y: 0.3, z: -0.1}
     originFrontRight: {x: -0.1, y: 0.3, z: 0.1}
-    RestTime: 2
+    RestTime: 2.3
     showDebugs: 0
   gameOptions:
     killOnRed: 0
     MuteSound: 1
+    tapInDir: 1
+    RunAway: 0
   scoreOptions:
     ScoreMultipler: 2.5
-    ComboWindow: 0.1
+    ComboWindow: 0.85
     MultiplierPositionOffset: {x: 0, y: 0, z: 0}
+  inputOptions:
+    MainKey: 323
 --- !u!114 &1959099023
 MonoBehaviour:
   m_ObjectHideFlags: 0

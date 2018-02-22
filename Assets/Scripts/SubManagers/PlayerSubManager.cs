@@ -19,8 +19,7 @@ namespace SubManager.Player
         [HideInInspector]
         public static GameObject playerModelObject;
         public static Model playerModel;
-
-
+        
         #region Variables
         public static PlayerSubManager instance;
         bool isPlayerAlive = true;

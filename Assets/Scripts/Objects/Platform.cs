@@ -139,11 +139,11 @@ namespace SubManager.World.Platforms
 
             for (int i = 0; i < sideColliders.Length; i++)
             {
+                //Kinda Confusing, Passable beiug on, when switched off
+                //But passable just means the face is point up
+                // meaning it will collide on the top instead of the bottom
                 sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;
-                sideColliders[i].face[0].normal = new Vector3(0, 1, 0);
-                sideColliders[i].face[1].normal = new Vector3(0, 1, 0);
-                sideColliders[i].face[2].normal = new Vector3(0, 1, 0);
-
+                sides[i].isPassable = true;
                 foreach(Face f in sideColliders[i].face)
                     f.normal = new Vector3(0, 1, 0);
             }

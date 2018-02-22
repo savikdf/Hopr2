@@ -6,12 +6,13 @@ using SubManager.Player;
 using SubManager.World.Platforms;
 using SubManager.CameraMan;
 using SubManager.Score;
+using SubManager.Inputs;
+
 namespace SubManager.Physics
 {
     public class PhysicsSubManager : BaseSubManager
     {
         public static PhysicsSubManager instance;
-
         public List<Vector3> intersections = new List<Vector3>();
         public List<Platform> trackers = new List<Platform>();
         GameObject player, Arrow;
@@ -134,28 +135,20 @@ namespace SubManager.Physics
         void PhysicsUpdate()
         {
 
-            if (Input.GetMouseButtonDown(0))
+            if (InputSubManager.instance.MainDown)
             {
-                //buildup = 0;
                 isGettingReady = true;
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (!VariableManager.G_Option.RunAway)
             {
-                isGettingReady = false;
-
-                Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(GetAngle() * Mathf.Deg2Rad), Mathf.Sin(GetAngle() * Mathf.Deg2Rad), -1.0f));
-
-                if (buildup < VariableManager.P_Options.TapRange)
-                {
-                    buildup = VariableManager.P_Options.TapRange;
-                }
-
-                if (isGrounded)
-                    Velocity += new Vector3(direction.x, direction.y, 0.0f) * buildup;
-
-                buildup = 0;
-                isGrounded = false;
+                if (InputSubManager.instance.MainUp)
+                    FireCharacter();
+            }
+            else
+            {
+                if (!InputSubManager.instance.MainDown)
+                    FireCharacter();
             }
 
             if (isGettingReady)
@@ -165,13 +158,41 @@ namespace SubManager.Physics
             }
 
             ResetPlayer();
-
             ArrowRotate();
         }
 
+
+        void FireCharacter()
+        {
+            isGettingReady = false;
+
+            Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(GetAngle() * Mathf.Deg2Rad), Mathf.Sin(GetAngle() * Mathf.Deg2Rad), -1.0f));
+
+            if (buildup < VariableManager.P_Options.TapRange)
+            {
+                if (isGrounded)
+                {
+                    if (VariableManager.G_Option.tapInDir)
+                        Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                    else
+                        Velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                }
+            }
+            else
+            {
+                if (isGrounded)
+                {
+                    Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * buildup;
+
+                }
+            }
+
+            buildup = 0;
+            isGrounded = false;
+        }
         void ResetPlayer()
         {
-
+            //Death/Reset
             if (player.transform.position.y < WorldSubManager.instance.platforms[0].transform.position.y - 10)
             {
                 if (GameManager.instance.debugMode)
@@ -321,7 +342,7 @@ namespace SubManager.Physics
             {
                 //Checking based the up vector for the player and the side face normal 
 
-                //  |   <--- player up Vector, above the platform
+                //     |   <--- player up Vector, above the platform
                 //
                 //
                 //-----|-------// <--- platform point up, below the player               
@@ -372,7 +393,7 @@ namespace SubManager.Physics
 
         bool AbovePlatform(Vector3 c)
         {
-            if ((player.transform.position.y + 0.1f) > c.y)
+            if ((player.transform.position.y + 0.05f) > c.y)
                 return true;
 
             return false;
@@ -484,8 +505,8 @@ namespace SubManager.Physics
         {
 
             Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(player.transform.position.x, player.transform.position.y, Camera.main.farClipPlane));
-            float dx = CameraSubManager.instance.mouseScreenPosition.x - screenPos.x;
-            float dy = CameraSubManager.instance.mouseScreenPosition.y - screenPos.y;
+            float dx = InputSubManager.instance.TouchCurrentPosition.x - screenPos.x;
+            float dy = InputSubManager.instance.TouchCurrentPosition.y - screenPos.y;
 
             return Mathf.Atan2(dy, -dx) * Mathf.Rad2Deg;
         }
