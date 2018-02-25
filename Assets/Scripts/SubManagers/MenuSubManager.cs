@@ -9,6 +9,7 @@ using SubManager.Player;
 using SubManager.CharacterMan;
 using SubManager.Inputs;
 
+
 namespace SubManager.Menu
 {
     public class MenuSubManager : BaseSubManager
@@ -17,7 +18,7 @@ namespace SubManager.Menu
         public static MenuSubManager instance;
         GameObject menuHolder;
         public GameObject ScoreObject, MultiObject, AltitudeObject, ChargeObject, AnchorObject, TracerObject;
-        bool isMenuQued, trackingPlayer, trackingMouse;    //used to track the MenuQued() corroutine
+        bool isMenuQued, trackingPlayer, trackingMouse, handleObjects;    //used to track the MenuQued() corroutine
 
         public enum MenuStates
         {
@@ -97,6 +98,33 @@ namespace SubManager.Menu
             }
         }
 
+
+        float GetAngle(Vector3 vector)
+        {
+            Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(
+                PlayerSubManager.instance.Player_Object.transform.position.x, 
+                PlayerSubManager.instance.Player_Object.transform.position.y, 
+                Camera.main.farClipPlane));
+
+            float dx = vector.x - screenPos.x;
+            float dy = vector.y - screenPos.y;
+
+            return Mathf.Atan2(dy, -dx) * Mathf.Rad2Deg;
+        }
+
+
+        void ZAxisRotate(Vector3 vector, GameObject obj)
+        {
+
+            Quaternion rotation = new Quaternion
+            {
+                eulerAngles = new Vector3(0, 0, GetAngle(vector))
+            };
+
+            obj.transform.rotation = rotation;
+        }
+
+
         public override void OnPostInit()
         {
 
@@ -114,12 +142,18 @@ namespace SubManager.Menu
             StartCoroutine(TrackPlayer());
             trackingMouse = true;
             StartCoroutine(TrackMouse());
+            handleObjects = true;
+            StartCoroutine(HandleMenuObjects());
             //show the ingame menu
             SwitchMenu(MenuStates.Intra);
         }
 
         public override void OnGameEnd()
         {
+            trackingPlayer = false;
+            trackingMouse = false;
+            handleObjects = false;
+
             //enable the death screen
             SwitchMenu(MenuStates.Death);
         }
@@ -148,6 +182,15 @@ namespace SubManager.Menu
             }
         }
 
+        IEnumerator HandleMenuObjects()
+        {
+            while(handleObjects)
+            {
+                Vector3 vector = Camera.main.ViewportToScreenPoint (InputSubManager.instance.GetDirectionToTracker());
+                ZAxisRotate(vector, ChargeObject);
+                yield return null;
+            }
+        }
         IEnumerator TrackMouse()
         {
             while (trackingMouse)

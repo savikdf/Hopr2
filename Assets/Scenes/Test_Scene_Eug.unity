@@ -785,7 +785,7 @@ MonoBehaviour:
     MainKey: 323
     DragDistance: 1
   menuOptions:
-    ChargePositionOffset: {x: 0, y: 0.65, z: 0}
+    ChargePositionOffset: {x: 0, y: 0.07, z: 0}
     MultiplierPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1959099023
 MonoBehaviour:

@@ -60,6 +60,13 @@ namespace SubManager.Inputs
             return (ReflectedTouchAnchorPosition - TouchAnchorPosition).normalized;
         }
 
+
+        public Vector3 GetDirectionToTracker()
+        {
+            return (TouchAnchorTrackPosition - TouchAnchorPosition).normalized;
+        }
+
+
         public float GetDistance()
         {
             return Vector3.Distance(TouchAnchorPosition, ReflectedTouchAnchorPosition);
@@ -73,12 +80,14 @@ namespace SubManager.Inputs
                 {
                     anchored = true;
                     MainDragging = true;
+
                     if (anchored)
                     {
                         TouchAnchorPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane));
                         TouchAnchorTrackPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane));
                         anchored = false;
                     }
+
                     MainDown = true;
                 }
                 else

@@ -488,7 +488,7 @@ namespace SubManager.Physics
         {
             if (buildup < VariableManager.P_Options.cap)
             {
-                buildup = InputSubManager.instance.GetDistance() *  VariableManager.P_Options.force;
+                buildup = (float)InputSubManager.instance.GetDistance() *  VariableManager.P_Options.force;
                 //buildup += VariableManager.P_Options.force;
             }
             else

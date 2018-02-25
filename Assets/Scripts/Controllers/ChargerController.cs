@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SubManager.Inputs;
+using SubManager.Physics;
 
 public class ChargerController : MonoBehaviour {
 
@@ -15,6 +16,7 @@ public class ChargerController : MonoBehaviour {
 		
 	}
 	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -29,10 +31,13 @@ public class ChargerController : MonoBehaviour {
 			SetCharge();
 		}
 	}
-	
+
 	public void SetCharge()
 	{
-		if(InputSubManager.instance.GetDistance() < VariableManager.P_Options.cap)
-		image.sprite = charges[(int)(Mathf.Round(InputSubManager.instance.GetDistance()) % 7)];
+		float val = InputSubManager.instance.GetDistance() * VariableManager.P_Options.force ;
+		float normal = Utils.Norm(val, 0, VariableManager.P_Options.cap);
+		
+		if((int)Mathf.Round((normal) * 7) < 7)
+		image.sprite = charges[(int)Mathf.Round((normal) * 7)];
 	}
 }
