@@ -19,7 +19,7 @@ namespace SubManager.World
         public Material plat_Y = null;
         public Material plat_N = null;
         public Material plat_G = null;
-        public GameObject prefab_platform;
+        public GameObject prefab_platform, prefab_coin;
         short maxPlatformSpawnAmount = 5;
         int amountSpawned = 0;
         public float distanceAppart = 1.5f;
@@ -40,7 +40,7 @@ namespace SubManager.World
         }
         public List<Platform> platforms;
         Vector3 spawnVec3;
-        GameObject trashObject;
+        GameObject trashObject, coinTrashObject;
         public GameObject platHolder;
         Platform cyclePlat;
 
@@ -121,6 +121,15 @@ namespace SubManager.World
             {
                 Debug.LogError("platform object not loaded!");
             }
+
+            prefab_coin = Resources.Load("Prefabs/Objects/Coin") as GameObject;
+            if (prefab_coin == null)
+            {
+                Debug.LogError("platform object not loaded!");
+            }
+
+
+
         }
 
 
@@ -177,6 +186,9 @@ namespace SubManager.World
         {
             try
             {
+
+
+
                 //spawn the platform and add it to the platform list
                 //awake() in the platform will run and set itself up
                 trashObject = Instantiate(prefab_platform, spawnVec3, Quaternion.identity) as GameObject;
@@ -184,6 +196,10 @@ namespace SubManager.World
                 trashObject.name = string.Format("Platform #{0}", amountSpawned.ToString());
                 trashObject.GetComponent<Platform>().platformIndex = amountSpawned;
                 platforms.Add(trashObject.GetComponent<Platform>());
+
+                //Very Very Very Temp, just testing to see coins
+
+                SpawnCoin(trashObject);
 
 
                 //moves the spawn postion up as they spawn
@@ -196,6 +212,20 @@ namespace SubManager.World
             }
 
 
+        }
+
+        void SpawnCoin(GameObject parent)
+        {
+
+            float roll = Utils.randomRange(0, 10);
+            if (roll > 5)
+            {
+                Debug.Log("Coin Spawned");
+                coinTrashObject = Instantiate(prefab_coin, spawnVec3 + VariableManager.W_Options.CoinSpawnOffset, Quaternion.identity) as GameObject;
+                coinTrashObject.transform.SetParent(parent.transform);
+                coinTrashObject.name = string.Format("Tempo-Coin");
+                trashObject.transform.SetParent(trashObject.transform);
+            }
         }
 
         void ApplyRandomSkew(Platform platToSkew)
@@ -272,6 +302,11 @@ namespace SubManager.World
             {
                 platforms[i].OnIndexSet(i);
                 platforms[i].transform.position = spawnVec3;
+
+                if (platforms[i].GetComponentsInChildren<Coin_Controller>() == null)
+                {
+                    SpawnCoin(platforms[i].gameObject);
+                }
 
                 amountSpawned++;
                 spawnVec3.y = amountSpawned * distanceAppart;

@@ -23,7 +23,7 @@ public class ChargerController : MonoBehaviour {
 		
 		if(!InputSubManager.instance.MainDragging)
 		{
-			Debug.Log("Why are you not running??");
+			//Debug.Log("Why are you not running??");
 			//image.sprite = Blank;
 		}
 		else

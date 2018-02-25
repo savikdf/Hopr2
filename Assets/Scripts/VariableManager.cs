@@ -53,6 +53,11 @@ public class MenuOptions
     public Vector3 MultiplierPositionOffset = new Vector3(0,0,0);
 }
 
+[System.Serializable]
+public class WorldOptions
+{
+    public Vector3 CoinSpawnOffset;
+}
 
 [System.Serializable]
 public class InputOptions
@@ -70,11 +75,13 @@ public class VariableManager : MonoBehaviour
     public static ScoreOptions S_Options;
     public static InputOptions I_Options;
     public static MenuOptions M_Options;
+    public static WorldOptions W_Options;
     public PhysicsOptions physicsoptions;
     public GameOptions gameOptions;
     public ScoreOptions scoreOptions;
     public InputOptions inputOptions;
     public MenuOptions menuOptions;
+    public WorldOptions worldOptions;
     public void OnValidate()
     {
         P_Options = physicsoptions;
@@ -82,6 +89,7 @@ public class VariableManager : MonoBehaviour
         S_Options = scoreOptions;
         I_Options = inputOptions;
         M_Options = menuOptions;
+        W_Options = worldOptions;
     }
 }
 
