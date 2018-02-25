@@ -101,7 +101,7 @@ namespace SubManager.Score
         }
         public void AddScore(float value)
         {
-            window = VariableManager.S_Option.ComboWindow;
+            window = VariableManager.S_Options.ComboWindow;
 
            // Debug.Log(window);
 
@@ -114,7 +114,7 @@ namespace SubManager.Score
 
                 if (multiplierincrement > 1) MultiText.text = multiplierincrement.ToString() + " " + "X";
     
-                multiplier = VariableManager.S_Option.ScoreMultipler * multiplierincrement;
+                multiplier = VariableManager.S_Options.ScoreMultipler * multiplierincrement;
                 MultiText.color = Color.black;
                 MultiText.transform.localScale = new Vector3((0.2f + ((float)multiplierincrement/20.0f)),
                 (0.2f  + ((float)multiplierincrement/20.0f)), 1);

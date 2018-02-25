@@ -140,16 +140,29 @@ namespace SubManager.Physics
                 isGettingReady = true;
             }
 
-            if (!VariableManager.G_Option.RunAway)
+            if (!VariableManager.G_Options.RunAway)
             {
                 if (InputSubManager.instance.MainUp)
+                {
+
                     FireCharacter();
+                }
+                
             }
             else
             {
                 if (!InputSubManager.instance.MainDown)
                     FireCharacter();
             }
+
+            if(InputSubManager.instance.MainDragging)
+            {
+                    Vector3 vector = Camera.main.ViewportToScreenPoint (InputSubManager.instance.GetDirection());
+                    if(InputSubManager.instance.GetDistance() > .1f)
+                    ArrowRotate(new Vector3(-vector.x, vector.y, vector.z));
+            }
+            else
+                    ArrowRotate(InputSubManager.instance.TouchCurrentPosition);
 
             if (isGettingReady)
             {
@@ -158,7 +171,7 @@ namespace SubManager.Physics
             }
 
             ResetPlayer();
-            ArrowRotate();
+
         }
 
 
@@ -166,13 +179,16 @@ namespace SubManager.Physics
         {
             isGettingReady = false;
 
-            Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(GetAngle() * Mathf.Deg2Rad), Mathf.Sin(GetAngle() * Mathf.Deg2Rad), -1.0f));
+            Vector3 direction = Vector3.Normalize(new Vector3(Mathf.Cos(GetAngle(InputSubManager.instance.TouchCurrentPosition)
+             * Mathf.Deg2Rad), Mathf.Sin(GetAngle(InputSubManager.instance.TouchCurrentPosition) * Mathf.Deg2Rad), -1.0f));
 
             if (buildup < VariableManager.P_Options.TapRange)
             {
                 if (isGrounded)
                 {
-                    if (VariableManager.G_Option.tapInDir)
+
+
+                    if (VariableManager.G_Options.tapInDir)
                         Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
                     else
                         Velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
@@ -182,7 +198,8 @@ namespace SubManager.Physics
             {
                 if (isGrounded)
                 {
-                    Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * buildup;
+                    Vector3 inputDirecetion = InputSubManager.instance.GetDirection();
+                    Velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
 
                 }
             }
@@ -401,7 +418,7 @@ namespace SubManager.Physics
 
         void Bounce(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
         {
-            if (VariableManager.G_Option.killOnRed && !side.GetComponent<Side>().isPassable
+            if (VariableManager.G_Options.killOnRed && !side.GetComponent<Side>().isPassable
             && platform.platformIndex != PlayerSubManager.instance.currentIndex)
             {
                 //Kill Player if the option is checked
@@ -470,7 +487,10 @@ namespace SubManager.Physics
         void BuilUp()
         {
             if (buildup < VariableManager.P_Options.cap)
-                buildup += VariableManager.P_Options.force;
+            {
+                buildup = InputSubManager.instance.GetDistance() *  VariableManager.P_Options.force;
+                //buildup += VariableManager.P_Options.force;
+            }
             else
                 buildup = VariableManager.P_Options.cap;
         }
@@ -501,22 +521,23 @@ namespace SubManager.Physics
             }
         }
 
-        float GetAngle()
+        float GetAngle(Vector3 vector)
         {
+            Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(
+                player.transform.position.x, player.transform.position.y, Camera.main.farClipPlane));
 
-            Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(player.transform.position.x, player.transform.position.y, Camera.main.farClipPlane));
-            float dx = InputSubManager.instance.TouchCurrentPosition.x - screenPos.x;
-            float dy = InputSubManager.instance.TouchCurrentPosition.y - screenPos.y;
+            float dx =  vector.x - screenPos.x;
+            float dy =  vector.y - screenPos.y;
 
             return Mathf.Atan2(dy, -dx) * Mathf.Rad2Deg;
         }
 
-        void ArrowRotate()
+        void ArrowRotate(Vector3 vector)
         {
 
             Quaternion rotation = new Quaternion
             {
-                eulerAngles = new Vector3(0, 0, GetAngle())
+                eulerAngles = new Vector3(0, 0, GetAngle(vector))
             };
 
             Arrow.transform.rotation = rotation;

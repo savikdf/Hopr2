@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using SubManager.Player;
 using SubManager.CharacterMan;
+using SubManager.Inputs;
+
 namespace SubManager.Menu
 {
     public class MenuSubManager : BaseSubManager
@@ -14,8 +16,8 @@ namespace SubManager.Menu
         #region Variables
         public static MenuSubManager instance;
         GameObject menuHolder;
-        public GameObject ScoreObject, MultiObject, AltitudeObject; 
-        bool isMenuQued, trackingPlayer;    //used to track the MenuQued() corroutine
+        public GameObject ScoreObject, MultiObject, AltitudeObject, ChargeObject, AnchorObject, TracerObject;
+        bool isMenuQued, trackingPlayer, trackingMouse;    //used to track the MenuQued() corroutine
 
         public enum MenuStates
         {
@@ -47,7 +49,7 @@ namespace SubManager.Menu
         {
             instance = (instance == null) ? this : instance;
             thisSubType = GameManager.GameSubManagerTypes.Menu;
-        
+
             menus = new List<Canvas>();
             try
             {
@@ -69,7 +71,7 @@ namespace SubManager.Menu
                         for (int i = 0; i < menus.Count; i++)
                         {
                             SetButtonEvents(menus[i]);
-                  
+
                         }
                     }
                     //Turn to the loading screen
@@ -85,7 +87,9 @@ namespace SubManager.Menu
                 //Display Number of Combo Multiplies
                 MultiObject = menus[2].transform.Find("Multiplier_Object").gameObject;
                 AltitudeObject = menus[2].transform.Find("Altitude_Object").gameObject;
-
+                ChargeObject = menus[2].transform.Find("Charge_Object").gameObject;
+                AnchorObject = menus[2].transform.Find("Anchor_Object").gameObject;
+                TracerObject = menus[2].transform.Find("Tracer_Object").gameObject;
             }
             catch (Exception ex)
             {
@@ -108,6 +112,8 @@ namespace SubManager.Menu
         {
             trackingPlayer = true;
             StartCoroutine(TrackPlayer());
+            trackingMouse = true;
+            StartCoroutine(TrackMouse());
             //show the ingame menu
             SwitchMenu(MenuStates.Intra);
         }
@@ -130,15 +136,39 @@ namespace SubManager.Menu
 
         IEnumerator TrackPlayer()
         {
-            while(trackingPlayer)
+            while (trackingPlayer)
             {
-                MultiObject.transform.position = Utils.WorldToScreen(PlayerSubManager.instance.Player_Object.transform.position 
-                + VariableManager.S_Option.MultiplierPositionOffset);
+                MultiObject.transform.position = Utils.WorldToScreen(PlayerSubManager.instance.Player_Object.transform.position
+                + VariableManager.M_Options.MultiplierPositionOffset);
+
+                ChargeObject.transform.position = Utils.WorldToScreen(PlayerSubManager.instance.Player_Object.transform.position
+                + VariableManager.M_Options.ChargePositionOffset);
 
                 yield return null;
             }
         }
 
+        IEnumerator TrackMouse()
+        {
+            while (trackingMouse)
+            {
+                if (InputSubManager.instance.MainDragging)
+                {
+                    AnchorObject.SetActive(true);
+                    TracerObject.SetActive(true);
+
+                    AnchorObject.transform.position = Utils.WorldToScreen(InputSubManager.instance.TouchAnchorPosition);
+                    TracerObject.transform.position = Utils.WorldToScreen(InputSubManager.instance.TouchAnchorTrackPosition);
+                }
+                else
+                {
+                    AnchorObject.SetActive(false);
+                    TracerObject.SetActive(false);
+
+                }
+                yield return null;
+            }
+        }
         public void SetButtonEvents(Canvas setCanvas)
         {
             try
@@ -198,7 +228,7 @@ namespace SubManager.Menu
                         PlayerSubManager.instance.InitRender();
                     }
                     break;
-           
+
                 #endregion
 
                 #region Intra

@@ -26,8 +26,7 @@ public class PhysicsOptions
 [System.Serializable]
 public class GameOptions
 {
-    public bool killOnRed = false, MuteSound = false;
-
+    public bool killOnRed = false, MuteSound = false, killOnFall = false;
     
     ///<summary>Type in Direction or just Stright Up</summary> 
     public bool tapInDir = false;
@@ -44,32 +43,45 @@ public class ScoreOptions
     ///<summary>Combo Window Length Per score point</summary> 
     public float ComboWindow = .1f;
 
+
+}
+
+[System.Serializable]
+public class MenuOptions
+{
+    public Vector3 ChargePositionOffset = new Vector3(0,0,0);
     public Vector3 MultiplierPositionOffset = new Vector3(0,0,0);
 }
+
 
 [System.Serializable]
 public class InputOptions
 {
      ///<summary>Main Input For Jumping, Will Change to Touch Input Later</summary> 
     public KeyCode MainKey = KeyCode.Mouse0;
+
+    public float DragDistance = 1.0f;
 }
 
 public class VariableManager : MonoBehaviour
 {
     public static PhysicsOptions P_Options;
-    public static GameOptions G_Option;
-    public static ScoreOptions S_Option;
-    public static InputOptions I_Option;
+    public static GameOptions G_Options;
+    public static ScoreOptions S_Options;
+    public static InputOptions I_Options;
+    public static MenuOptions M_Options;
     public PhysicsOptions physicsoptions;
     public GameOptions gameOptions;
     public ScoreOptions scoreOptions;
     public InputOptions inputOptions;
+    public MenuOptions menuOptions;
     public void OnValidate()
     {
         P_Options = physicsoptions;
-        G_Option = gameOptions;
-        S_Option = scoreOptions;
-        I_Option = inputOptions;
+        G_Options = gameOptions;
+        S_Options = scoreOptions;
+        I_Options = inputOptions;
+        M_Options = menuOptions;
     }
 }
 
