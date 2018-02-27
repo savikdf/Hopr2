@@ -104,6 +104,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4862191415561220}
+  - component: {fileID: 114236697149944544}
   m_Layer: 8
   m_Name: forestWalker
   m_TagString: Untagged
@@ -399,3 +400,309 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1290633593206532}
   m_Mesh: {fileID: 4300004, guid: 101e5c8a637b77b4cb39272c7412a77b, type: 3}
+--- !u!114 &114236697149944544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1753204793371298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f6c030f24e5834bb7f23e1477a57a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faces:
+  - segments:
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.55}
+      p0pos: {x: -2, y: 15, z: 1}
+      p1: {x: 0.1, y: 3.89, z: 0.55}
+      p1pos: {x: 2, y: 15, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.14, z: 0.55}
+      p0pos: {x: -2, y: 0, z: 1}
+      p1: {x: 0.1, y: 3.14, z: 0.55}
+      p1pos: {x: 2, y: 0, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.55}
+      p0pos: {x: -2, y: 15, z: 1}
+      p1: {x: -0.1, y: 3.14, z: 0.55}
+      p1pos: {x: -2, y: 0, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.89, z: 0.55}
+      p0pos: {x: 2, y: 15, z: 1}
+      p1: {x: 0.1, y: 3.14, z: 0.55}
+      p1pos: {x: 2, y: 0, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+  - segments:
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.4}
+      p0pos: {x: -2, y: 15, z: -2}
+      p1: {x: 0.1, y: 3.89, z: 0.4}
+      p1pos: {x: 2, y: 15, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.14, z: 0.4}
+      p0pos: {x: -2, y: 0, z: -2}
+      p1: {x: 0.1, y: 3.14, z: 0.4}
+      p1pos: {x: 2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.4}
+      p0pos: {x: -2, y: 15, z: -2}
+      p1: {x: -0.1, y: 3.14, z: 0.4}
+      p1pos: {x: -2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.89, z: 0.4}
+      p0pos: {x: 2, y: 15, z: -2}
+      p1: {x: 0.1, y: 3.14, z: 0.4}
+      p1pos: {x: 2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+  - segments:
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.55}
+      p0pos: {x: -2, y: 15, z: 1}
+      p1: {x: 0.1, y: 3.89, z: 0.55}
+      p1pos: {x: 2, y: 15, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.4}
+      p0pos: {x: -2, y: 15, z: -2}
+      p1: {x: 0.1, y: 3.89, z: 0.4}
+      p1pos: {x: 2, y: 15, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.55}
+      p0pos: {x: -2, y: 15, z: 1}
+      p1: {x: -0.1, y: 3.89, z: 0.4}
+      p1pos: {x: -2, y: 15, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.89, z: 0.55}
+      p0pos: {x: 2, y: 15, z: 1}
+      p1: {x: 0.1, y: 3.89, z: 0.4}
+      p1pos: {x: 2, y: 15, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+  - segments:
+    - scale: 1
+      p0: {x: -0.1, y: 3.14, z: 0.55}
+      p0pos: {x: -2, y: 0, z: 1}
+      p1: {x: 0.1, y: 3.14, z: 0.55}
+      p1pos: {x: 2, y: 0, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.14, z: 0.4}
+      p0pos: {x: -2, y: 0, z: -2}
+      p1: {x: 0.1, y: 3.14, z: 0.4}
+      p1pos: {x: 2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.14, z: 0.55}
+      p0pos: {x: -2, y: 0, z: 1}
+      p1: {x: -0.1, y: 3.14, z: 0.4}
+      p1pos: {x: -2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.14, z: 0.55}
+      p0pos: {x: 2, y: 0, z: 1}
+      p1: {x: 0.1, y: 3.14, z: 0.4}
+      p1pos: {x: 2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+  - segments:
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.55}
+      p0pos: {x: -2, y: 15, z: 1}
+      p1: {x: -0.1, y: 3.89, z: 0.4}
+      p1pos: {x: -2, y: 15, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.14, z: 0.55}
+      p0pos: {x: -2, y: 0, z: 1}
+      p1: {x: -0.1, y: 3.14, z: 0.4}
+      p1pos: {x: -2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.55}
+      p0pos: {x: -2, y: 15, z: 1}
+      p1: {x: -0.1, y: 3.14, z: 0.55}
+      p1pos: {x: -2, y: 0, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: -0.1, y: 3.89, z: 0.4}
+      p0pos: {x: -2, y: 15, z: -2}
+      p1: {x: -0.1, y: 3.14, z: 0.4}
+      p1pos: {x: -2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+  - segments:
+    - scale: 1
+      p0: {x: 0.1, y: 3.89, z: 0.55}
+      p0pos: {x: 2, y: 15, z: 1}
+      p1: {x: 0.1, y: 3.89, z: 0.4}
+      p1pos: {x: 2, y: 15, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.14, z: 0.55}
+      p0pos: {x: 2, y: 0, z: 1}
+      p1: {x: 0.1, y: 3.14, z: 0.4}
+      p1pos: {x: 2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.89, z: 0.55}
+      p0pos: {x: 2, y: 15, z: 1}
+      p1: {x: 0.1, y: 3.14, z: 0.55}
+      p1pos: {x: 2, y: 0, z: 1}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0
+    - scale: 1
+      p0: {x: 0.1, y: 3.89, z: 0.4}
+      p0pos: {x: 2, y: 15, z: -2}
+      p1: {x: 0.1, y: 3.14, z: 0.4}
+      p1pos: {x: 2, y: 0, z: -2}
+      c: {x: 0, y: 6.28, z: 1}
+      cPos: {x: 0, y: 3.14, z: 0.5}
+      normal: {x: 0, y: 1, z: 0}
+      Object: {fileID: 1753204793371298}
+      storedRefrenceRotation: {x: -0, y: 0, z: 0}
+      storedRefrencePosition: {x: 0, y: 3.14, z: 0.5}
+      isDynamic: 0

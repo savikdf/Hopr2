@@ -14,6 +14,7 @@ namespace SubManager.Player
 
         //Character Model Rendering
 
+        public Character_Collider c_Collider;
         public static Character player_Character;
 
         [HideInInspector]
@@ -78,9 +79,7 @@ namespace SubManager.Player
         //begin input detection
         public override void OnGameStart()
         {
-
-            if (Player_Object != null) player_Character.Effects[0].Set(Player_Object.transform);
-            //player_Character.Effects[2].Set(player_Object.transform);
+ 
         }
 
         //player dies, this runs after
@@ -108,7 +107,6 @@ namespace SubManager.Player
 
             player_Character = CharacterSubManager.instance.GetCurrentActiveCharacter();
 
-
             if (playerModelObject != null)
             {
                 Destroy(playerModelObject);
@@ -126,6 +124,8 @@ namespace SubManager.Player
             playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
             playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
             playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
+
+            c_Collider = playerModelObject.GetComponent<Character_Collider>();
         }
 
         void OnPlayerJump(bool isUp)

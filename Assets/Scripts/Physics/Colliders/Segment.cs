@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Face
+public class Segment
 {
     public float scale;
     public Vector3 p0, p0pos;
@@ -17,12 +17,12 @@ public class Face
     //Transform parent;
     public bool isDynamic;
 
-    public Face()
+    public Segment()
     {
 
     }
 
-    public Face(Vector3 _p0, Vector3 _p1, Vector3 _c, Vector3 _n, bool _isDynamic, float _scale, GameObject _object = null)
+    public Segment(Vector3 _p0, Vector3 _p1, Vector3 _c, Vector3 _n, bool _isDynamic, float _scale, GameObject _object = null)
     {
         Object = (_object == null) ? new GameObject("Collider") : _object;
 
@@ -72,7 +72,7 @@ public class Face
         p1pos = _p1;
     }
 
-    public void DrawFace()
+    public void DrawSegment()
     {
         Gizmos.color = Color.red;
 
@@ -91,7 +91,7 @@ public class Face
     }
 
 
-    public void Update()
+    public void UpdateSegment()
     {
         if (Object.transform.rotation.eulerAngles != storedRefrenceRotation || Object.transform.position != storedRefrencePosition)
         {

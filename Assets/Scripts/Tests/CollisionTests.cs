@@ -26,10 +26,10 @@ public class CollisionTests : MonoBehaviour
         {
             Vector3 interesection = new Vector3(0, 0, 0);
 
-            if (Utils.PointInTriangle(plat.transform.GetChild(i).GetComponent<Side_Collider>().face[0].p0,
-            plat.transform.GetChild(i).GetComponent<Side_Collider>().face[0].p1, plat.transform.GetChild(i).GetComponent<Side_Collider>().face[1].p1, Origin)
-            && Utils.IsSegmentIntersection(plat.transform.GetChild(i).GetComponent<Side_Collider>().face[0].p1,
-            plat.transform.GetChild(i).GetComponent<Side_Collider>().face[0].p0, Origin, Origin + Direction, ref interesection))
+            if (Utils.PointInTriangle(plat.transform.GetChild(i).GetComponent<Side_Collider>().segment[0].p0,
+            plat.transform.GetChild(i).GetComponent<Side_Collider>().segment[0].p1, plat.transform.GetChild(i).GetComponent<Side_Collider>().segment[1].p1, Origin)
+            && Utils.IsSegmentIntersection(plat.transform.GetChild(i).GetComponent<Side_Collider>().segment[0].p1,
+            plat.transform.GetChild(i).GetComponent<Side_Collider>().segment[0].p0, Origin, Origin + Direction, ref interesection))
             {
                 Debug.Log("Points in Yo" + i);
             }

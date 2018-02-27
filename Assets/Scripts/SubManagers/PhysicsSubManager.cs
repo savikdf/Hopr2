@@ -147,7 +147,7 @@ namespace SubManager.Physics
 
                     FireCharacter();
                 }
-                
+
             }
             else
             {
@@ -155,14 +155,14 @@ namespace SubManager.Physics
                     FireCharacter();
             }
 
-            if(InputSubManager.instance.MainDragging)
+            if (InputSubManager.instance.MainDragging)
             {
-                    Vector3 vector = Camera.main.ViewportToScreenPoint (InputSubManager.instance.GetDirection());
-                    if(InputSubManager.instance.GetDistance() > .1f)
+                Vector3 vector = Camera.main.ViewportToScreenPoint(InputSubManager.instance.GetDirection());
+                if (InputSubManager.instance.GetDistance() > .1f)
                     ArrowRotate(new Vector3(-vector.x, vector.y, vector.z));
             }
             else
-                    ArrowRotate(InputSubManager.instance.TouchCurrentPosition);
+                ArrowRotate(InputSubManager.instance.TouchCurrentPosition);
 
             if (isGettingReady)
             {
@@ -186,8 +186,6 @@ namespace SubManager.Physics
             {
                 if (isGrounded)
                 {
-
-
                     if (VariableManager.G_Options.tapInDir)
                         Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
                     else
@@ -200,7 +198,6 @@ namespace SubManager.Physics
                 {
                     Vector3 inputDirecetion = InputSubManager.instance.GetDirection();
                     Velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
-
                 }
             }
 
@@ -242,8 +239,8 @@ namespace SubManager.Physics
 
         void CheckFace(Side_Collider side, Platform platform)
         {
-            //Face[0] is the front faces
-            float dotAngle = Vector3.Dot(side.face[0].normal.normalized, Velocity.normalized);
+            //Segment[0] is the front faces
+            float dotAngle = Vector3.Dot(side.segment[0].normal.normalized, Velocity.normalized);
 
             Vector3 intersection = new Vector3();
 
@@ -257,10 +254,9 @@ namespace SubManager.Physics
             //Bounce Off If its Directactly Facing the Player
             if (Mathf.Sign(dotAngle) == -1)
             {
-
                 if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
                 {
-                    Bounce(side.face[0].normal.normalized, intersection, side, platform);
+                    Bounce(side.segment[0].normal.normalized, intersection, side, platform);
                     //intersections.Add(intersection);
                 }
             }
@@ -273,24 +269,59 @@ namespace SubManager.Physics
         //Do this for Left and right Collision Rays
         bool isColliding(Side_Collider side, ref Vector3 intersection)
         {
-            return
-             //Back
-             isCollidingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft, OriginBackLeft + Direction) ||
-             isCollidingWithFace(side, ref intersection, OriginBackRight, OriginBackRight, OriginBackRight + Direction) ||
-             //Front
-             isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft, OriginFrontLeft + Direction) ||
-             isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight, OriginFrontRight + Direction);
+            //return
+            // //Back
+            // isCollidingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft, OriginBackLeft + Direction) ||
+            // isCollidingWithFace(side, ref intersection, OriginBackRight, OriginBackRight, OriginBackRight + Direction) ||
+            // //Front
+            // isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft, OriginFrontLeft + Direction) ||
+            // isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight, OriginFrontRight + Direction);
+
+            Character_Collider c = PlayerSubManager.instance.c_Collider;
+
+            for (int i = 0; i < c.faces.Length; i++)
+            {
+                for (int j = 0; j < c.faces[i].segments.Length; j++)
+                {
+                    if (isCollidingWithFace(side, ref intersection,
+                        c.faces[i].segments[j].p0,
+                        c.faces[i].segments[j].p0,
+                        c.faces[i].segments[j].p1))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         bool isInterSecting(Side_Collider side, ref Vector3 intersection)
         {
-            return
-            //Back
-            isIntersectingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft + Direction) ||
-            isIntersectingWithFace(side, ref intersection, OriginBackRight, OriginBackRight + Direction) ||
-            //Front
-            isIntersectingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft + Direction) ||
-            isIntersectingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight + Direction);
+            //return
+            ////Back
+            //isIntersectingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft + Direction) ||
+            //isIntersectingWithFace(side, ref intersection, OriginBackRight, OriginBackRight + Direction) ||
+            ////Front
+            //isIntersectingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft + Direction) ||
+            //isIntersectingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight + Direction);
+
+            Character_Collider c = PlayerSubManager.instance.c_Collider;
+
+            for (int i = 0; i < c.faces.Length; i++)
+            {
+                for (int j = 0; j < c.faces[i].segments.Length; j++)
+                {
+                    if (isIntersectingWithFace(side, ref intersection,
+                        c.faces[i].segments[j].p0,
+                        c.faces[i].segments[j].p1))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         bool isCollidingFrameCheck(Side_Collider side, ref Vector3 intersection)
@@ -302,71 +333,89 @@ namespace SubManager.Physics
            //Front
            isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontPastLeft, OriginFrontFutureLeft) ||
            isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontPastRight, OriginFrontFutureRight); ;
+
+            //  Character_Collider c = PlayerSubManager.instance.c_Collider;
+            //
+            //  for (int i = 0; i < c.faces.Length; i++)
+            //  {
+            //      for (int j = 0; j < c.faces[i].segments.Length; j++)
+            //      {
+            //          if (isCollidingWithFace(side, ref intersection,
+            //              c.faces[i].segments[j].p0,
+            //              c.faces[i].segments[j].p0,
+            //              c.faces[i].segments[j].p1))
+            //          {
+            //              return true;
+            //          }
+            //      }
+            //  }
+            //
+            //  return false;
         }
 
         bool isIntersectingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 p0, Vector3 p1)
         {
             return
                 //Main
-                Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, p0, p1, ref intersection) ||
+                Utils.IsSegmentIntersection(side.segment[0].p1,
+                side.segment[0].p0, p0, p1, ref intersection) ||
 
-                Utils.IsSegmentIntersection(side.face[3].p1,
-                side.face[3].p0, p0, p1, ref intersection) ||
+                Utils.IsSegmentIntersection(side.segment[3].p1,
+                side.segment[3].p0, p0, p1, ref intersection) ||
 
-                Utils.IsSegmentIntersection(side.face[6].p1,
-                side.face[6].p0, p0, p1, ref intersection) ||
+                Utils.IsSegmentIntersection(side.segment[6].p1,
+                side.segment[6].p0, p0, p1, ref intersection) ||
 
-                Utils.IsSegmentIntersection(side.face[9].p1,
-                side.face[9].p0, p0, p1, ref intersection);
+                Utils.IsSegmentIntersection(side.segment[9].p1,
+                side.segment[9].p0, p0, p1, ref intersection);
         }
 
         bool isCollidingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 tri_p0, Vector3 p0, Vector3 p1)
         {
             return
                 //Main
-                Utils.PointInTriangle(side.face[0].p0,
-                side.face[0].p1, side.face[1].p1, tri_p0)
+                Utils.PointInTriangle(side.segment[0].p0,
+                side.segment[0].p1, side.segment[1].p1, tri_p0)
                 &&
-                Utils.IsSegmentIntersection(side.face[0].p1,
-                side.face[0].p0, p0, p1, ref intersection) ||
+                Utils.IsSegmentIntersection(side.segment[0].p1,
+                side.segment[0].p0, p0, p1, ref intersection) ||
 
                 //Front
-                Utils.PointInTriangle(side.face[3].p0,
-                side.face[3].p1, side.face[4].p1, tri_p0)
+                Utils.PointInTriangle(side.segment[3].p0,
+                side.segment[3].p1, side.segment[4].p1, tri_p0)
                 &&
-                Utils.IsSegmentIntersection(side.face[3].p1,
-                side.face[3].p0, p0, p1, ref intersection) ||
+                Utils.IsSegmentIntersection(side.segment[3].p1,
+                side.segment[3].p0, p0, p1, ref intersection) ||
 
                 //Front Left
-                Utils.PointInTriangle(side.face[6].p0,
-                side.face[6].p1, side.face[7].p1, tri_p0)
+                Utils.PointInTriangle(side.segment[6].p0,
+                side.segment[6].p1, side.segment[7].p1, tri_p0)
                 &&
-                Utils.IsSegmentIntersection(side.face[6].p1,
-                side.face[6].p0, p0, p1, ref intersection) ||
+                Utils.IsSegmentIntersection(side.segment[6].p1,
+                side.segment[6].p0, p0, p1, ref intersection) ||
 
                 //Front Right
-                Utils.PointInTriangle(side.face[9].p0,
-                side.face[9].p1, side.face[10].p1, tri_p0)
+                Utils.PointInTriangle(side.segment[9].p0,
+                side.segment[9].p1, side.segment[10].p1, tri_p0)
                 &&
-                Utils.IsSegmentIntersection(side.face[9].p1,
-                side.face[9].p0, p0, p1, ref intersection);
+                Utils.IsSegmentIntersection(side.segment[9].p1,
+                side.segment[9].p0, p0, p1, ref intersection);
         }
 
         void CleanPool(Platform platform)
         {
             if (!platform.SwitchedOff)
             {
-                //Checking based the up vector for the player and the side face normal 
+                //Checking based the up vector for the player and the side segment normal 
 
                 //     |   <--- player up Vector, above the platform
                 //
                 //
                 //-----|-------// <--- platform point up, below the player               
 
-                directionToPlayer = platform.sideColliders[0].face[0].c - player.transform.position;
+                directionToPlayer = platform.sideColliders[0].segment[0].c - player.transform.position;
 
-                float dotAngle = Vector3.Dot(platform.sideColliders[0].face[0].normal.normalized, player.transform.up);
+                float dotAngle = Vector3.Dot(platform.sideColliders[0].segment[0].normal.normalized, player.transform.up);
 
                 Vector3 intersection = new Vector3();
 
@@ -377,7 +426,7 @@ namespace SubManager.Physics
                     if (
                     isColliding(platform.sideColliders[i], ref intersection)
                     && (Mathf.Sign(dotAngle) == 1)
-                    && !AbovePlatform(platform.sideColliders[i].face[0].c)
+                    && !AbovePlatform(platform.sideColliders[i].segment[0].c)
                     && platform.sides[i].isPassable)
                     {
                         Debug.Log("Isnt Above");
@@ -387,7 +436,7 @@ namespace SubManager.Physics
                     if (
                    !isColliding(platform.sideColliders[i], ref intersection)
                    && (Mathf.Sign(dotAngle) == 1)
-                   && !AbovePlatform(platform.sideColliders[i].face[0].c))
+                   && !AbovePlatform(platform.sideColliders[i].segment[0].c))
                     {
                         //Debug.Log("Isnt Above");
                         //passed = false;
@@ -446,13 +495,14 @@ namespace SubManager.Physics
 
         void ComeToRest(Vector3 intersection, Side_Collider side, Platform platform)
         {
-            if (
-                isColliding(side, ref intersection) && AbovePlatform(side.face[0].c)
-             || isCollidingFrameCheck(side, ref intersection) && AbovePlatform(side.face[0].c))
+            if (isColliding(side, ref intersection)
+             || isCollidingFrameCheck(side, ref intersection))
             {
+                //need to fix way repositions, taking into account the intersection and the platform
+                //else it only pushes a little past halfway
                 player.transform.position = new Vector3(
                 player.transform.position.x,
-                platform.transform.position.y,
+                platform.transform.position.y + .02f,
                 0.5f);
 
                 isApplyingGravity = false;
@@ -488,7 +538,7 @@ namespace SubManager.Physics
         {
             if (buildup < VariableManager.P_Options.cap)
             {
-                buildup = (float)InputSubManager.instance.GetDistance() *  VariableManager.P_Options.force;
+                buildup = (float)InputSubManager.instance.GetDistance() * VariableManager.P_Options.force;
                 //buildup += VariableManager.P_Options.force;
             }
             else
@@ -526,8 +576,8 @@ namespace SubManager.Physics
             Vector3 screenPos = Camera.main.WorldToViewportPoint(new Vector3(
                 player.transform.position.x, player.transform.position.y, Camera.main.farClipPlane));
 
-            float dx =  vector.x - screenPos.x;
-            float dy =  vector.y - screenPos.y;
+            float dx = vector.x - screenPos.x;
+            float dy = vector.y - screenPos.y;
 
             return Mathf.Atan2(dy, -dx) * Mathf.Rad2Deg;
         }

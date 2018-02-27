@@ -144,8 +144,8 @@ namespace SubManager.World.Platforms
                 // meaning it will collide on the top instead of the bottom
                 sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;
                 sides[i].isPassable = true;
-                foreach(Face f in sideColliders[i].face)
-                    f.normal = new Vector3(0, 1, 0);
+                foreach(Segment s in sideColliders[i].segment)
+                    s.normal = new Vector3(0, 1, 0);
             }
         }
 
@@ -166,7 +166,7 @@ namespace SubManager.World.Platforms
                     //true, green
                     sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_Y;
                     sides[i].isPassable = true;
-                    sides[i].GetComponent<Side_Collider>().face[0].normal = new Vector3(0, 1, 0);
+                    sides[i].GetComponent<Side_Collider>().segment[0].normal = new Vector3(0, 1, 0);
 
                 }
                 else if (i % 2 != 0)
@@ -174,7 +174,7 @@ namespace SubManager.World.Platforms
                     //false, red
                     sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_N;
                     sides[i].isPassable = false;
-                    sides[i].GetComponent<Side_Collider>().face[0].normal = new Vector3(0, -1, 0);
+                    sides[i].GetComponent<Side_Collider>().segment[0].normal = new Vector3(0, -1, 0);
                 }
             }
 

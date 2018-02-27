@@ -18,13 +18,13 @@ public class ChargerController : MonoBehaviour {
 	
 
 	// Update is called once per frame
-	void Update () {
-
+	void Update () 
+	{
 		
 		if(!InputSubManager.instance.MainDragging)
 		{
 			//Debug.Log("Why are you not running??");
-			//image.sprite = Blank;
+			image.sprite = Blank;
 		}
 		else
 		{
