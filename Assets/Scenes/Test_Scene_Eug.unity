@@ -769,7 +769,7 @@ MonoBehaviour:
   physicsoptions:
     GRAVITY: -9.8
     SCALEFACTOR: 0.95
-    BOUNCEDECAY: 0.35
+    BOUNCEDECAY: 0.65
     force: 4.5
     cap: 10
     TapRange: 1
@@ -777,7 +777,7 @@ MonoBehaviour:
     originBackLeft: {x: 0.1, y: 0.3, z: -0.1}
     originFrontLeft: {x: 0.1, y: 0.3, z: 0.1}
     originBackRight: {x: -0.1, y: 0.3, z: -0.1}
-    originFrontRight: {x: -0.1, y: 0.3, z: 0.1}
+    originFrontRight: {x: 0, y: 0, z: 0}
     RestTime: 2.3
     showDebugs: 0
   gameOptions:

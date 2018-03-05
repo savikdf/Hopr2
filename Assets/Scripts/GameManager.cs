@@ -15,6 +15,7 @@ using SubManager.World;
 using SubManager.Menu;
 using SubManager.Difficulty;
 using SubManager.CharacterMan;
+using SubManager.Physics.Collision;
 using SubManager.Physics;
 using SubManager.Score;
 using SubManager.Inputs;
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
         Physics,
         Score,
         Inputs,
+        Collision,
     }
 
     #endregion
@@ -186,6 +188,9 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameSubManagerTypes.Physics:
                     this.gameObject.AddComponent<PhysicsSubManager>();
+                    break;
+                case GameSubManagerTypes.Collision:
+                    this.gameObject.AddComponent<CollisionSubManager>();
                     break;
                 case GameSubManagerTypes.Score:
                     this.gameObject.AddComponent<ScoreSubManager>();

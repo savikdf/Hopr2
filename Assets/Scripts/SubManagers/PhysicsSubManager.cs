@@ -24,11 +24,11 @@ namespace SubManager.Physics
         public Vector3 Velocity;
         [Range(0, 10)]
         public int iterations = 2;
-        Vector3 OriginFrontLeft, OriginFrontRight, OriginBackLeft, OriginBackRight, Direction;
-        Vector3 OriginFrontFutureLeft, OriginFrontFutureRight;
-        Vector3 OriginBackFutureLeft, OriginBackFutureRight;
-        Vector3 OriginFrontPastLeft, OriginFrontPastRight;
-        Vector3 OriginBackPastLeft, OriginBackPastRight, directionToPlayer;
+        public Vector3 OriginFrontLeft, OriginFrontRight, OriginBackLeft, OriginBackRight, Direction;
+        public Vector3 OriginFrontFutureLeft, OriginFrontFutureRight;
+        public Vector3 OriginBackFutureLeft, OriginBackFutureRight;
+        public Vector3 OriginFrontPastLeft, OriginFrontPastRight;
+        public Vector3 OriginBackPastLeft, OriginBackPastRight, directionToPlayer;
         //use this to set local data
         public override void InitializeSubManager()
         {
@@ -87,49 +87,23 @@ namespace SubManager.Physics
 
         void FixedUpdate()
         {
+
             time += Time.fixedDeltaTime;
             if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
             {
-                CollisionCheck();
+                OriginBackLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
+                OriginBackRight = player.transform.position + VariableManager.P_Options.originBackRight;
+
+                OriginFrontLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
+                OriginFrontRight = player.transform.position + VariableManager.P_Options.originFrontRight;
+
+                Direction = Velocity.normalized * VariableManager.P_Options.CheckMultiplier;
+
+
+                PhysicsUpdate();
                 Gravity();
-                TrackerClean();
                 ApplyForce();
             }
-        }
-
-        //Check and Remove when there isnt any collisions
-        //When player Passes through and above
-        void TrackerClean()
-        {
-            if (trackers.Count > 0)
-            {
-                for (int i = 0; i < trackers.Count; i++)
-                {
-                    CleanPool(trackers[i]);
-                }
-            }
-        }
-
-        void CollisionCheck()
-        {
-            OriginBackLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
-            OriginBackRight = player.transform.position + VariableManager.P_Options.originBackRight;
-
-            OriginFrontLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
-            OriginFrontRight = player.transform.position + VariableManager.P_Options.originFrontRight;
-
-            Direction = Velocity.normalized * VariableManager.P_Options.CheckMultiplier;
-
-            for (int i = 0; i < iterations; i++)
-            {
-                CollisionDetection();
-            }
-        }
-
-        void Update()
-        {
-            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
-                PhysicsUpdate();
         }
 
         void PhysicsUpdate()
@@ -169,9 +143,6 @@ namespace SubManager.Physics
                 if (isGrounded)
                     BuilUp();
             }
-
-            ResetPlayer();
-
         }
 
 
@@ -204,316 +175,56 @@ namespace SubManager.Physics
             buildup = 0;
             isGrounded = false;
         }
-        void ResetPlayer()
+        public void ResetPlayer()
         {
             //Death/Reset
-            if (player.transform.position.y < WorldSubManager.instance.platforms[0].transform.position.y - 10)
+
+            if (GameManager.instance.debugMode)
             {
-                if (GameManager.instance.debugMode)
-                {
-                    Vector3 PlatformPosition = new Vector3(WorldSubManager.instance.platforms[PlayerSubManager.instance.currentIndex].transform.position.x,
-                     WorldSubManager.instance.platforms[PlayerSubManager.instance.currentIndex].transform.position.y,
-                     0.5f);
-                    player.transform.position = PlatformPosition;//physicsOptions.physicsOptions.resetPosition;
-                    Velocity = Vector3.zero;
-                }
-                else
-                    Kill();
+                Vector3 PlatformPosition = new Vector3(
+                    WorldSubManager.instance.platforms[0].transform.position.x,
+                    WorldSubManager.instance.platforms[0].transform.position.y + 0.05f,
+                    0.5f);
+                player.transform.position = PlatformPosition;//physicsOptions.physicsOptions.resetPosition;
+                Velocity = Vector3.zero;
             }
-        }
-
-        void CollisionDetection()
-        {
-            //Gana change this to a proper search algo for the sake of speed
-            for (int i = 0; i < WorldSubManager.instance.platforms.Count; i++)
-            {
-                Platform platform = WorldSubManager.instance.platforms[i];
-
-                for (int j = 0; j < platform.sideColliders.Length; j++)
-                {
-                    Side_Collider side = platform.sideColliders[j];
-                    CheckFace(side, platform);
-                }
-            }
-        }
-
-        void CheckFace(Side_Collider side, Platform platform)
-        {
-            //Segment[0] is the front faces
-            float dotAngle = Vector3.Dot(side.segment[0].normal.normalized, Velocity.normalized);
-
-            Vector3 intersection = new Vector3();
-
-            //Gana Pass Through and Add to a tracker pool, turning off as soon as the player has passed
-            if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
-            {
-                if (side.GetComponent<Side>().isPassable && !platform.SwitchedOff)
-                    if (!trackers.Contains(platform)) trackers.Add(platform);
-            }
-
-            //Bounce Off If its Directactly Facing the Player
-            if (Mathf.Sign(dotAngle) == -1)
-            {
-                if (isColliding(side, ref intersection) || isCollidingFrameCheck(side, ref intersection))
-                {
-                    Bounce(side.segment[0].normal.normalized, intersection, side, platform);
-                    //intersections.Add(intersection);
-                }
-            }
-        }
-
-        //Juicy Mega Bool, 
-        //Check #1, are they in the collider Traingle?
-        //Check #2 Are they Near enough the triangle?
-        //If yes too all, return true and a intersection in the XY,
-        //Do this for Left and right Collision Rays
-        bool isColliding(Side_Collider side, ref Vector3 intersection)
-        {
-            //return
-            // //Back
-            // isCollidingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft, OriginBackLeft + Direction) ||
-            // isCollidingWithFace(side, ref intersection, OriginBackRight, OriginBackRight, OriginBackRight + Direction) ||
-            // //Front
-            // isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft, OriginFrontLeft + Direction) ||
-            // isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight, OriginFrontRight + Direction);
-
-            Character_Collider c = PlayerSubManager.instance.c_Collider;
-
-            for (int i = 0; i < c.faces.Length; i++)
-            {
-                for (int j = 0; j < c.faces[i].segments.Length; j++)
-                {
-                    if (isCollidingWithFace(side, ref intersection,
-                        c.faces[i].segments[j].p0,
-                        c.faces[i].segments[j].p0,
-                        c.faces[i].segments[j].p1))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        bool isInterSecting(Side_Collider side, ref Vector3 intersection)
-        {
-            //return
-            ////Back
-            //isIntersectingWithFace(side, ref intersection, OriginBackLeft, OriginBackLeft + Direction) ||
-            //isIntersectingWithFace(side, ref intersection, OriginBackRight, OriginBackRight + Direction) ||
-            ////Front
-            //isIntersectingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontLeft + Direction) ||
-            //isIntersectingWithFace(side, ref intersection, OriginFrontRight, OriginFrontRight + Direction);
-
-            Character_Collider c = PlayerSubManager.instance.c_Collider;
-
-            for (int i = 0; i < c.faces.Length; i++)
-            {
-                for (int j = 0; j < c.faces[i].segments.Length; j++)
-                {
-                    if (isIntersectingWithFace(side, ref intersection,
-                        c.faces[i].segments[j].p0,
-                        c.faces[i].segments[j].p1))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        bool isCollidingFrameCheck(Side_Collider side, ref Vector3 intersection)
-        {
-            return
-           //Back
-           isCollidingWithFace(side, ref intersection, OriginBackLeft, OriginBackPastLeft, OriginBackFutureLeft) ||
-           isCollidingWithFace(side, ref intersection, OriginBackRight, OriginBackPastRight, OriginBackFutureRight) ||
-           //Front
-           isCollidingWithFace(side, ref intersection, OriginFrontLeft, OriginFrontPastLeft, OriginFrontFutureLeft) ||
-           isCollidingWithFace(side, ref intersection, OriginFrontRight, OriginFrontPastRight, OriginFrontFutureRight); ;
-
-            //  Character_Collider c = PlayerSubManager.instance.c_Collider;
-            //
-            //  for (int i = 0; i < c.faces.Length; i++)
-            //  {
-            //      for (int j = 0; j < c.faces[i].segments.Length; j++)
-            //      {
-            //          if (isCollidingWithFace(side, ref intersection,
-            //              c.faces[i].segments[j].p0,
-            //              c.faces[i].segments[j].p0,
-            //              c.faces[i].segments[j].p1))
-            //          {
-            //              return true;
-            //          }
-            //      }
-            //  }
-            //
-            //  return false;
-        }
-
-        bool isIntersectingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 p0, Vector3 p1)
-        {
-            return
-                //Main
-                Utils.IsSegmentIntersection(side.segment[0].p1,
-                side.segment[0].p0, p0, p1, ref intersection) ||
-
-                Utils.IsSegmentIntersection(side.segment[3].p1,
-                side.segment[3].p0, p0, p1, ref intersection) ||
-
-                Utils.IsSegmentIntersection(side.segment[6].p1,
-                side.segment[6].p0, p0, p1, ref intersection) ||
-
-                Utils.IsSegmentIntersection(side.segment[9].p1,
-                side.segment[9].p0, p0, p1, ref intersection);
-        }
-
-        bool isCollidingWithFace(Side_Collider side, ref Vector3 intersection, Vector3 tri_p0, Vector3 p0, Vector3 p1)
-        {
-            return
-                //Main
-                Utils.PointInTriangle(side.segment[0].p0,
-                side.segment[0].p1, side.segment[1].p1, tri_p0)
-                &&
-                Utils.IsSegmentIntersection(side.segment[0].p1,
-                side.segment[0].p0, p0, p1, ref intersection) ||
-
-                //Front
-                Utils.PointInTriangle(side.segment[3].p0,
-                side.segment[3].p1, side.segment[4].p1, tri_p0)
-                &&
-                Utils.IsSegmentIntersection(side.segment[3].p1,
-                side.segment[3].p0, p0, p1, ref intersection) ||
-
-                //Front Left
-                Utils.PointInTriangle(side.segment[6].p0,
-                side.segment[6].p1, side.segment[7].p1, tri_p0)
-                &&
-                Utils.IsSegmentIntersection(side.segment[6].p1,
-                side.segment[6].p0, p0, p1, ref intersection) ||
-
-                //Front Right
-                Utils.PointInTriangle(side.segment[9].p0,
-                side.segment[9].p1, side.segment[10].p1, tri_p0)
-                &&
-                Utils.IsSegmentIntersection(side.segment[9].p1,
-                side.segment[9].p0, p0, p1, ref intersection);
-        }
-
-        void CleanPool(Platform platform)
-        {
-            if (!platform.SwitchedOff)
-            {
-                //Checking based the up vector for the player and the side segment normal 
-
-                //     |   <--- player up Vector, above the platform
-                //
-                //
-                //-----|-------// <--- platform point up, below the player               
-
-                directionToPlayer = platform.sideColliders[0].segment[0].c - player.transform.position;
-
-                float dotAngle = Vector3.Dot(platform.sideColliders[0].segment[0].normal.normalized, player.transform.up);
-
-                Vector3 intersection = new Vector3();
-
-                bool passed = true;
-
-                for (int i = 0; i < platform.sideColliders.Length; i++)
-                {
-                    if (
-                    isColliding(platform.sideColliders[i], ref intersection)
-                    && (Mathf.Sign(dotAngle) == 1)
-                    && !AbovePlatform(platform.sideColliders[i].segment[0].c)
-                    && platform.sides[i].isPassable)
-                    {
-                        Debug.Log("Isnt Above");
-                        //passed = false;
-                        return;
-                    }
-                    if (
-                   !isColliding(platform.sideColliders[i], ref intersection)
-                   && (Mathf.Sign(dotAngle) == 1)
-                   && !AbovePlatform(platform.sideColliders[i].segment[0].c))
-                    {
-                        //Debug.Log("Isnt Above");
-                        //passed = false;
-                        return;
-                    }
-                }
-
-                if (passed)
-                {
-                    // Debug.Log("Is Above");
-                    //side.GetComponentInParent<Platform>().SwitchOff();
-                    WorldSubManager.instance.OnPlayerJumped();
-
-                    //And Clear the current side if it isnt already been removed
-                    if (trackers.Contains(platform)) trackers.Remove(platform);
-                    //trackers.Clear();
-                }
-            }
-        }
-
-        bool AbovePlatform(Vector3 c)
-        {
-            if ((player.transform.position.y + 0.05f) > c.y)
-                return true;
-
-            return false;
-        }
-
-        void Bounce(Vector3 Normal, Vector3 intersection, Side_Collider side, Platform platform)
-        {
-            if (VariableManager.G_Options.killOnRed && !side.GetComponent<Side>().isPassable
-            && platform.platformIndex != PlayerSubManager.instance.currentIndex)
-            {
-                //Kill Player if the option is checked
+            else
                 Kill();
-                return;
-            }
+        }
 
+
+        public void Rest(Vector3 intersection, Side_Collider side, Platform platform)
+        {
+            //need to fix way repositions, taking into account the intersection and the platform
+            //else it only pushes a little past halfway
+            player.transform.position = new Vector3(
+            player.transform.position.x,
+            platform.transform.position.y + .05f,
+            0.5f);
+
+            isApplyingGravity = false;
+            isGrounded = true;
+            Velocity = Vector3.zero;
+
+            Recycle(WorldSubManager.instance.GetIndex(platform));
+            if (!platform.SwitchedOff) platform.SwitchOff();
+
+        }
+
+        public bool Reflect(Vector3 Normal)
+        {
             Vector3 result = Vector3.Reflect(Velocity, Normal);
 
-            //If the reflection is greater then the rest time
-            //then keep bouncing baby
-            //else just chill untill the next jump
             if (result.magnitude > VariableManager.P_Options.RestTime)
             {
                 Velocity = result;
                 Velocity *= VariableManager.P_Options.BOUNCEDECAY;
                 isGrounded = false;
-            }
-            else
-            {
-                //Have to Make sure it intersects 
-                ComeToRest(intersection, side, platform);
-            }
-        }
 
-        void ComeToRest(Vector3 intersection, Side_Collider side, Platform platform)
-        {
-            if (isColliding(side, ref intersection)
-             || isCollidingFrameCheck(side, ref intersection))
-            {
-                //need to fix way repositions, taking into account the intersection and the platform
-                //else it only pushes a little past halfway
-                player.transform.position = new Vector3(
-                player.transform.position.x,
-                platform.transform.position.y + .02f,
-                0.5f);
-
-                isApplyingGravity = false;
-                isGrounded = true;
-                Velocity = Vector3.zero;
-                trackers.Clear();
-                Recycle(WorldSubManager.instance.GetIndex(platform));
-                if (!platform.SwitchedOff) platform.SwitchOff();
+                return true;
             }
-            else
-                Debug.Log("Trying to Rest On A higher Platform");
+
+            return false;
         }
 
         void Recycle(int index)
@@ -529,7 +240,7 @@ namespace SubManager.Physics
             }
         }
 
-        void Kill()
+        public void Kill()
         {
             if (!PlayerSubManager.instance.isInvincible || !GameManager.instance.debugMode)
                 GameManager.instance.StartEvent("OnGameEnd");
