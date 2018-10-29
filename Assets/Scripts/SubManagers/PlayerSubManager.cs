@@ -13,8 +13,6 @@ namespace SubManager.Player
     {
 
         //Character Model Rendering
-
-        public Character_Collider c_Collider;
         public static Character player_Character;
 
         [HideInInspector]
@@ -79,7 +77,7 @@ namespace SubManager.Player
         //begin input detection
         public override void OnGameStart()
         {
- 
+            //c_Collider = playerModelObject.GetComponentInChildren<Character_Collider>();
         }
 
         //player dies, this runs after
@@ -125,7 +123,7 @@ namespace SubManager.Player
             playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
             playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
 
-            c_Collider = playerModelObject.GetComponent<Character_Collider>();
+            //c_Collider = playerModelObject.GetComponentInChildren<Character_Collider>();
         }
 
         void OnPlayerJump(bool isUp)

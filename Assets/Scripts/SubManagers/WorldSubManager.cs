@@ -170,25 +170,25 @@ namespace SubManager.World
 
         void SpawnInitialPlatforms()
         {
-            platHolder = new GameObject(name: "Platform_Holder");
-            platforms = new List<Platform>();
             spawnVec3 = Vector3.zero;
+            platforms = new List<Platform>();
+
+            platHolder = new GameObject(name: "Platform_Holder");
+            
+
             for (int i = 0; i < maxPlatformSpawnAmount; i++)
             {
                 SpawnSingle();
-                //ApplyRandomSkew(platforms[i]);  //puts a random skew on the new platform
+                ApplyRandomSkew(platforms[i]);  //puts a random skew on the new platform
             }
 
-            platforms[0].SwitchOff();
+            //platforms[0].SwitchOff();
         }
 
         void SpawnSingle()
         {
             try
             {
-
-
-
                 //spawn the platform and add it to the platform list
                 //awake() in the platform will run and set itself up
                 trashObject = Instantiate(prefab_platform, spawnVec3, Quaternion.identity) as GameObject;
@@ -199,7 +199,7 @@ namespace SubManager.World
 
                 //Very Very Very Temp, just testing to see coins
 
-                SpawnCoin(trashObject);
+                //SpawnCoin(trashObject);
 
 
                 //moves the spawn postion up as they spawn

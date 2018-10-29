@@ -17,7 +17,6 @@ namespace SubManager.World.Platforms
         public DifficultySubManager.PlatformDifficulties thisPlatformDifficulty;
         public float thisPlatformSpinSpeed;
         public int platformIndex;
-        public Side_Collider[] sideColliders;
         public Circle_Collider mainColider;
         public bool SwitchedOff;
         private void Awake()
@@ -50,26 +49,21 @@ namespace SubManager.World.Platforms
                             //true, green
                             sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_Y;
                             sides[i].isPassable = true;
-
+                            sides[i].GetComponentsInChildren<MeshCollider>()[0].enabled = false;
+                            sides[i].GetComponentsInChildren<MeshCollider>()[1].enabled = false;    
                         }
                         else if (i % 2 != 0)
                         {
                             //false, red
                             sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_N;
                             sides[i].isPassable = false;
+                            sides[i].GetComponentsInChildren<MeshCollider>()[0].enabled = true;
+                            sides[i].GetComponentsInChildren<MeshCollider>()[1].enabled = true;  
 
                         }
                     }
                 }
 
-                if (sideColliders.Length <= 0)
-                {
-                    sideColliders = new Side_Collider[4];
-                    sideColliders[0] = transform.GetChild(1).GetComponent<Side_Collider>();
-                    sideColliders[1] = transform.GetChild(2).GetComponent<Side_Collider>();
-                    sideColliders[2] = transform.GetChild(3).GetComponent<Side_Collider>();
-                    sideColliders[3] = transform.GetChild(4).GetComponent<Side_Collider>();
-                }
             }
             catch (Exception ex)
             {
@@ -136,17 +130,6 @@ namespace SubManager.World.Platforms
         public void SwitchOff()
         {
             SwitchedOff = true;
-
-            for (int i = 0; i < sideColliders.Length; i++)
-            {
-                //Kinda Confusing, Passable beiug on, when switched off
-                //But passable just means the face is point up
-                // meaning it will collide on the top instead of the bottom
-                sideColliders[i].GetComponent<MeshRenderer>().material = WorldSubManager.instance.plat_G;
-                sides[i].isPassable = true;
-                foreach(Segment s in sideColliders[i].segment)
-                    s.normal = new Vector3(0, 1, 0);
-            }
         }
 
         void Update()
@@ -166,15 +149,12 @@ namespace SubManager.World.Platforms
                     //true, green
                     sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_Y;
                     sides[i].isPassable = true;
-                    sides[i].GetComponent<Side_Collider>().segment[0].normal = new Vector3(0, 1, 0);
-
                 }
                 else if (i % 2 != 0)
                 {
                     //false, red
                     sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_N;
                     sides[i].isPassable = false;
-                    sides[i].GetComponent<Side_Collider>().segment[0].normal = new Vector3(0, -1, 0);
                 }
             }
 

@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace SubManager.World.Platforms
 {
-    public class Side : MonoBehaviour      {
+    public class Side : MonoBehaviour{
 
         public bool isPassable = true;
 
+        
     }                       
 }
 

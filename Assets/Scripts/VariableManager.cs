@@ -33,6 +33,8 @@ public class GameOptions
 
     ///<summary>Disable Touch Events and have the Char just jump when landed</summary> 
     public bool RunAway = false;
+
+    public bool customPlatforms;
 }
 
 [System.Serializable]

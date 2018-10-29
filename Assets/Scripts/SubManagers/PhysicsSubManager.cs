@@ -13,22 +13,17 @@ namespace SubManager.Physics
     public class PhysicsSubManager : BaseSubManager
     {
         public static PhysicsSubManager instance;
-        public List<Vector3> intersections = new List<Vector3>();
-        public List<Platform> trackers = new List<Platform>();
         GameObject player, Arrow;
         //each sub manager will need to override these:
         Vector3 mousePos;
-        bool isGettingReady, isGrounded, isApplyingGravity, Tracking;
+        public bool isGettingReady, isGrounded, isApplyingGravity, Tracking;
         public float buildup, time;
         float angle;
-        public Vector3 Velocity;
+        //=public Vector3 Velocity;
         [Range(0, 10)]
         public int iterations = 2;
-        public Vector3 OriginFrontLeft, OriginFrontRight, OriginBackLeft, OriginBackRight, Direction;
-        public Vector3 OriginFrontFutureLeft, OriginFrontFutureRight;
-        public Vector3 OriginBackFutureLeft, OriginBackFutureRight;
-        public Vector3 OriginFrontPastLeft, OriginFrontPastRight;
-        public Vector3 OriginBackPastLeft, OriginBackPastRight, directionToPlayer;
+        public Vector3 Direction, directionToPlayer;
+
         //use this to set local data
         public override void InitializeSubManager()
         {
@@ -58,7 +53,9 @@ namespace SubManager.Physics
             isApplyingGravity = false;
             isGrounded = true;
             isGettingReady = false;
-            Velocity = Vector3.zero;
+            //Velocity = Vector3.zero;
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            
             time = 0;
 
         }
@@ -70,7 +67,8 @@ namespace SubManager.Physics
             isApplyingGravity = false;
             isGrounded = true;
             isGettingReady = false;
-            Velocity = Vector3.zero;
+            //Velocity = Vector3.zero;
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
             player.transform.position = WorldSubManager.instance.platforms[0].transform.position + new Vector3(0, 0.05f, 0);
         }
 
@@ -82,32 +80,25 @@ namespace SubManager.Physics
             isApplyingGravity = false;
             isGrounded = true;
             isGettingReady = false;
-            Velocity = Vector3.zero;
+            //Velocity = Vector3.zero;
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
-        void FixedUpdate()
-        {
+        void FixedUpdate(){
 
             time += Time.fixedDeltaTime;
-            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra)
-            {
-                OriginBackLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
-                OriginBackRight = player.transform.position + VariableManager.P_Options.originBackRight;
-
-                OriginFrontLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
-                OriginFrontRight = player.transform.position + VariableManager.P_Options.originFrontRight;
-
-                Direction = Velocity.normalized * VariableManager.P_Options.CheckMultiplier;
-
-
+            CheckForGround();
+            if (GameManager.instance.currentGameState == GameManager.GameStates.Intra){
+                //Velocity = Vector3.zero;
+                Direction = player.GetComponent<Rigidbody>().velocity.normalized * VariableManager.P_Options.CheckMultiplier;
                 PhysicsUpdate();
                 Gravity();
                 ApplyForce();
             }
+            CheckForGround();
         }
 
-        void PhysicsUpdate()
-        {
+        void PhysicsUpdate(){
 
             if (InputSubManager.instance.MainDown)
             {
@@ -118,7 +109,6 @@ namespace SubManager.Physics
             {
                 if (InputSubManager.instance.MainUp)
                 {
-
                     FireCharacter();
                 }
 
@@ -158,9 +148,19 @@ namespace SubManager.Physics
                 if (isGrounded)
                 {
                     if (VariableManager.G_Options.tapInDir)
-                        Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                    {
+                        //player.GetComponent<Rigidbody>().AddForce(new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange, ForceMode.Impulse);
+                        player.GetComponent<Rigidbody>().velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                        //Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                    }
+                       
                     else
-                        Velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                    {
+                        //player.GetComponent<Rigidbody>().AddForce( new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange, ForceMode.Impulse);
+                        player.GetComponent<Rigidbody>().velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                        //Velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                    }
+                        
                 }
             }
             else
@@ -168,63 +168,62 @@ namespace SubManager.Physics
                 if (isGrounded)
                 {
                     Vector3 inputDirecetion = InputSubManager.instance.GetDirection();
-                    Velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
+                    player.GetComponent<Rigidbody>().AddForce(new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup, ForceMode.Impulse);
+                    //player.GetComponent<Rigidbody>().velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
+                    //Velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
                 }
             }
 
             buildup = 0;
-            isGrounded = false;
+            //isGrounded = false;
         }
         public void ResetPlayer()
         {
             //Death/Reset
-
             if (GameManager.instance.debugMode)
             {
+                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 Vector3 PlatformPosition = new Vector3(
                     WorldSubManager.instance.platforms[0].transform.position.x,
                     WorldSubManager.instance.platforms[0].transform.position.y + 0.05f,
                     0.5f);
                 player.transform.position = PlatformPosition;//physicsOptions.physicsOptions.resetPosition;
-                Velocity = Vector3.zero;
+                //Velocity = Vector3.zero;
+      
             }
             else
                 Kill();
         }
 
+        public void CheckForGround(){
 
+            //Gravity is always applied
+            //so removing gravity in the
+            //is grounded check since velicoty is always -.2 in the y
+            Vector3 velCheck = player.GetComponent<Rigidbody>().velocity - new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
+
+            if(Mathf.Abs(player.GetComponent<Rigidbody>().velocity.magnitude) <= 0.2f){
+                //isApplyingGravity = false;
+                isGrounded = true;
+               // Debug.Log("Poop");
+            } 
+
+            if(Mathf.Abs(player.GetComponent<Rigidbody>().velocity.magnitude) > 0.2f){
+                //isApplyingGravity = false;
+                isGrounded = false;
+                //Debug.Log("Poop2");
+            }
+        }
         public void Rest(Vector3 intersection, Side_Collider side, Platform platform)
         {
-            //need to fix way repositions, taking into account the intersection and the platform
-            //else it only pushes a little past halfway
-            player.transform.position = new Vector3(
-            player.transform.position.x,
-            platform.transform.position.y + .05f,
-            0.5f);
-
-            isApplyingGravity = false;
-            isGrounded = true;
-            Velocity = Vector3.zero;
-
-            Recycle(WorldSubManager.instance.GetIndex(platform));
-            if (!platform.SwitchedOff) platform.SwitchOff();
 
         }
 
         public bool Reflect(Vector3 Normal)
         {
-            Vector3 result = Vector3.Reflect(Velocity, Normal);
 
-            if (result.magnitude > VariableManager.P_Options.RestTime)
-            {
-                Velocity = result;
-                Velocity *= VariableManager.P_Options.BOUNCEDECAY;
-                isGrounded = false;
-
-                return true;
-            }
-
-            return false;
+            
+            return true;
         }
 
         void Recycle(int index)
@@ -236,7 +235,7 @@ namespace SubManager.Physics
                     WorldSubManager.instance.OnPlayerJumped();
                 }
 
-                Debug.Log("Clean up time baby");
+                //Debug.Log("Clean up time baby");
             }
         }
 
@@ -258,28 +257,15 @@ namespace SubManager.Physics
 
         void ApplyForce()
         {
-            OriginBackPastLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
-            OriginBackPastRight = player.transform.position + VariableManager.P_Options.originBackRight;
-
-            OriginFrontPastLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
-            OriginFrontPastRight = player.transform.position + VariableManager.P_Options.originFrontRight;
-
-            player.transform.position += (new Vector3(Velocity.x, Velocity.y, 0.0f) * Time.fixedDeltaTime) * 3.0f;
-
-            OriginBackFutureLeft = player.transform.position + VariableManager.P_Options.originBackLeft;
-            OriginBackFutureRight = player.transform.position + VariableManager.P_Options.originBackRight;
-
-            OriginFrontFutureLeft = player.transform.position + VariableManager.P_Options.originFrontLeft;
-            OriginFrontFutureRight = player.transform.position + VariableManager.P_Options.originFrontRight;
+            //player.GetComponent<Rigidbody>().velocity = Velocity; 
+            //player.transform.position += (new Vector3(Velocity.x, Velocity.y, 0.0f) * Time.fixedDeltaTime) * 4.0f;
         }
 
         void Gravity()
         {
-            if (!isGrounded)
-            {
-                Velocity += new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
+                player.GetComponent<Rigidbody>().velocity += new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
+                //Velocity += new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
                 isApplyingGravity = true;
-            }
         }
 
         float GetAngle(Vector3 vector)
@@ -316,33 +302,11 @@ namespace SubManager.Physics
 
                 Gizmos.color = Color.red;
 
-                for (int i = 0; i < intersections.Count; i++)
-                    Gizmos.DrawCube(intersections[i], new Vector3(0.1f, 0.1f, 0.1f));
+                //for (int i = 0; i < intersections.Count; i++)
+                //    Gizmos.DrawCube(intersections[i], new Vector3(0.1f, 0.1f, 0.1f));
 
                 Gizmos.DrawSphere(directionToPlayer, 0.1f);
                 // Gizmos.DrawRay(CollisionRay.origin, CollisionRay.direction);
-
-                //Back
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(OriginBackLeft, 0.05f);
-                Gizmos.DrawSphere(OriginBackLeft + Direction, 0.05f);
-                Gizmos.DrawLine(OriginBackLeft, OriginBackLeft + Direction);
-
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawSphere(OriginBackRight, 0.05f);
-                Gizmos.DrawSphere(OriginBackRight + Direction, 0.05f);
-                Gizmos.DrawLine(OriginBackRight, OriginBackRight + Direction);
-
-                //Front
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(OriginFrontLeft, 0.05f);
-                Gizmos.DrawSphere(OriginFrontLeft + Direction, 0.05f);
-                Gizmos.DrawLine(OriginFrontLeft, OriginFrontLeft + Direction);
-
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(OriginFrontRight, 0.05f);
-                Gizmos.DrawSphere(OriginFrontRight + Direction, 0.05f);
-                Gizmos.DrawLine(OriginFrontRight, OriginFrontRight + Direction);
 
             }
 

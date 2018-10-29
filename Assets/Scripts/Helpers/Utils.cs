@@ -237,17 +237,17 @@ public static class Utils
         float rx1 = (intersectX - p2.x) / (p3.x - p2.x),
               ry1 = (intersectY - p2.y) / (p3.y - p2.y);
 
-        //if (((rx0 >= 0.0f && rx0 <= 1.0f) || (ry0 >= 0.0f && ry0 <= 1.0f)) && ((rx1 >= 0.0f && rx1 <= 1.0f) || (ry1 >= 0.0f && ry1 <= 1.0f)))
-        //{
-        //    intersection = new Vector3(intersectX, intersectY, 0.1f);
-        //    return true;
-        //}
-
-        if ((inRange(rx0, 0.0f, 1.0f) || inRange(ry0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(ry1, 0.0f, 1.0f))))
+        if (((rx0 >= 0.0f && rx0 <= 1.0f) || (ry0 >= 0.0f && ry0 <= 1.0f)) && ((rx1 >= 0.0f && rx1 <= 1.0f) || (ry1 >= 0.0f && ry1 <= 1.0f)))
         {
             intersection = new Vector3(intersectX, intersectY, 0.1f);
             return true;
         }
+
+        //if ((inRange(rx0, 0.0f, 1.0f) || inRange(ry0, 0.0f, 1.0f)) && ((inRange(rx1, 0.0f, 1.0f) || inRange(ry1, 0.0f, 1.0f))))
+        //{
+        //    intersection = new Vector3(intersectX, intersectY, 0.1f);
+        //    return true;
+        //}
 
         return false;
     }

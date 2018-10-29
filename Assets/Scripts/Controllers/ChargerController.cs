@@ -37,7 +37,9 @@ public class ChargerController : MonoBehaviour {
 		float val = InputSubManager.instance.GetDistance() * VariableManager.P_Options.force ;
 		float normal = Utils.Norm(val, 0, VariableManager.P_Options.cap);
 		
-		if((int)Mathf.Round((normal) * 7) < 7)
-		image.sprite = charges[(int)Mathf.Round((normal) * 7)];
+		if((int)Mathf.Round((normal) * 7) < 7){
+			image.sprite = charges[(int)Mathf.Round((normal) * 7)];
+		}
+
 	}
 }
