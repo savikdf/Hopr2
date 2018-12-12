@@ -17,8 +17,10 @@ namespace SubManager.World.Platforms
         public DifficultySubManager.PlatformDifficulties thisPlatformDifficulty;
         public float thisPlatformSpinSpeed;
         public int platformIndex;
-        public Circle_Collider mainColider;
         public bool SwitchedOff;
+
+        public bool isColliding;
+
         private void Awake()
         {
             sides = new List<Side>();
@@ -49,17 +51,14 @@ namespace SubManager.World.Platforms
                             //true, green
                             sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_Y;
                             sides[i].isPassable = true;
-                            sides[i].GetComponentsInChildren<MeshCollider>()[0].enabled = false;
-                            sides[i].GetComponentsInChildren<MeshCollider>()[1].enabled = false;    
+                            if (sides[i].col.enabled) sides[i].col.isTrigger = true;
                         }
                         else if (i % 2 != 0)
                         {
                             //false, red
                             sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_N;
                             sides[i].isPassable = false;
-                            sides[i].GetComponentsInChildren<MeshCollider>()[0].enabled = true;
-                            sides[i].GetComponentsInChildren<MeshCollider>()[1].enabled = true;  
-
+                            if (sides[i].col.enabled) sides[i].col.isTrigger = false;
                         }
                     }
                 }
@@ -113,7 +112,6 @@ namespace SubManager.World.Platforms
             //update the difficulty settings of the platform
             thisPlatformDifficulty = DifficultySubManager.instance.GetPlatformDifficulty(this);
             thisPlatformSpinSpeed = DifficultySubManager.instance.GetPlatformSpinSpeed(thisPlatformDifficulty);
-
         }
 
         public void OnReposition(int index)
@@ -127,14 +125,65 @@ namespace SubManager.World.Platforms
             SwitchOn();
         }
 
+        public void HighlightSides()
+        {
+            if (isColliding)
+            {
+                for (int i = 0; i < sides.Count; i++)
+                {
+                    sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_F;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < sides.Count; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        //true, green
+                        sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_Y;
+                    }
+                    else if (i % 2 != 0)
+                    {
+                        //false, red
+                        sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_N;
+                    }
+                }
+            }
+        }
+
+        public void CheckForCollisions()
+        {
+            //Assume no Collsions for now
+            isColliding = false;
+
+            //if any collisions are taking place, we can break the loop and say a collision is happening
+            //if not isColliding stays false until another check is done
+            for (int i = 0; i < sides.Count; i++)
+            {
+                if (sides[i].isColliding)
+                {
+                    isColliding = true;
+                    break;
+                }
+            }
+        }
         public void SwitchOff()
         {
             SwitchedOff = true;
+
+            for (int i = 0; i < sides.Count; i++)
+            {
+                //Turned Off
+                sides[i].gameObject.GetComponent<Renderer>().material = WorldSubManager.instance.plat_G;
+                sides[i].isPassable = false;
+                if (sides[i].col.enabled) sides[i].col.isTrigger = false;
+            }
         }
 
         void Update()
         {
-            mainColider.Update();
+
         }
 
         public void SwitchOn()
@@ -162,8 +211,8 @@ namespace SubManager.World.Platforms
 
         void OnDrawGizmos()
         {
-            if(Application.isPlaying && VariableManager.P_Options.showDebugs)
-            mainColider.DrawCircle();
+            //if(Application.isPlaying && VariableManager.P_Options.showDebugs)
+            // mainColider.DrawCircle();
         }
 
     }

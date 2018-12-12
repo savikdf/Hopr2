@@ -54,7 +54,7 @@ namespace SubManager.Physics
             isGrounded = true;
             isGettingReady = false;
             //Velocity = Vector3.zero;
-            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             
             time = 0;
 
@@ -89,13 +89,11 @@ namespace SubManager.Physics
             time += Time.fixedDeltaTime;
             CheckForGround();
             if (GameManager.instance.currentGameState == GameManager.GameStates.Intra){
-                //Velocity = Vector3.zero;
-                Direction = player.GetComponent<Rigidbody>().velocity.normalized * VariableManager.P_Options.CheckMultiplier;
+                Direction = player.GetComponent<Rigidbody2D>().velocity.normalized * VariableManager.P_Options.CheckMultiplier;
                 PhysicsUpdate();
                 Gravity();
                 ApplyForce();
             }
-            CheckForGround();
         }
 
         void PhysicsUpdate(){
@@ -111,7 +109,6 @@ namespace SubManager.Physics
                 {
                     FireCharacter();
                 }
-
             }
             else
             {
@@ -149,16 +146,11 @@ namespace SubManager.Physics
                 {
                     if (VariableManager.G_Options.tapInDir)
                     {
-                        //player.GetComponent<Rigidbody>().AddForce(new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange, ForceMode.Impulse);
-                        player.GetComponent<Rigidbody>().velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
-                        //Velocity += new Vector3(direction.x, direction.y, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                        player.GetComponent<Rigidbody2D>().velocity += new Vector2(direction.x, direction.y).normalized * VariableManager.P_Options.TapRange;
                     }
-                       
                     else
                     {
-                        //player.GetComponent<Rigidbody>().AddForce( new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange, ForceMode.Impulse);
-                        player.GetComponent<Rigidbody>().velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
-                        //Velocity += new Vector3(0.0f, 1.0f, 0.0f).normalized * VariableManager.P_Options.TapRange;
+                        player.GetComponent<Rigidbody2D>().velocity += new Vector2(0.0f, 1.0f).normalized * VariableManager.P_Options.TapRange;
                     }
                         
                 }
@@ -168,9 +160,7 @@ namespace SubManager.Physics
                 if (isGrounded)
                 {
                     Vector3 inputDirecetion = InputSubManager.instance.GetDirection();
-                    player.GetComponent<Rigidbody>().AddForce(new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup, ForceMode.Impulse);
-                    //player.GetComponent<Rigidbody>().velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
-                    //Velocity += new Vector3(inputDirecetion.x, inputDirecetion.y, 0.0f).normalized * buildup;
+                    player.GetComponent<Rigidbody2D>().AddForce(new Vector2(inputDirecetion.x, inputDirecetion.y).normalized * buildup, ForceMode2D.Impulse);
                 }
             }
 
@@ -182,7 +172,7 @@ namespace SubManager.Physics
             //Death/Reset
             if (GameManager.instance.debugMode)
             {
-                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 Vector3 PlatformPosition = new Vector3(
                     WorldSubManager.instance.platforms[0].transform.position.x,
                     WorldSubManager.instance.platforms[0].transform.position.y + 0.05f,
@@ -197,22 +187,22 @@ namespace SubManager.Physics
 
         public void CheckForGround(){
 
-            //Gravity is always applied
-            //so removing gravity in the
-            //is grounded check since velicoty is always -.2 in the y
-            Vector3 velCheck = player.GetComponent<Rigidbody>().velocity - new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
+           //Gravity is always applied
+           //so removing gravity in the
+           //is grounded check since velicoty is always -.2 in the y
+           Vector3 velCheck = player.GetComponent<Rigidbody2D>().velocity - new Vector2(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime) * VariableManager.P_Options.SCALEFACTOR;
 
-            if(Mathf.Abs(player.GetComponent<Rigidbody>().velocity.magnitude) <= 0.2f){
-                //isApplyingGravity = false;
-                isGrounded = true;
-               // Debug.Log("Poop");
-            } 
+           if(Mathf.Abs(player.GetComponent<Rigidbody2D>().velocity.magnitude) <= 0.2f){
+               //isApplyingGravity = false;
+               isGrounded = true;
+              // Debug.Log("Poop");
+           } 
 
-            if(Mathf.Abs(player.GetComponent<Rigidbody>().velocity.magnitude) > 0.2f){
-                //isApplyingGravity = false;
-                isGrounded = false;
-                //Debug.Log("Poop2");
-            }
+           if(Mathf.Abs(player.GetComponent<Rigidbody2D>().velocity.magnitude) > 0.2f){
+               //isApplyingGravity = false;
+               isGrounded = false;
+               //Debug.Log("Poop2");
+           }
         }
         public void Rest(Vector3 intersection, Side_Collider side, Platform platform)
         {
@@ -249,7 +239,6 @@ namespace SubManager.Physics
             if (buildup < VariableManager.P_Options.cap)
             {
                 buildup = (float)InputSubManager.instance.GetDistance() * VariableManager.P_Options.force;
-                //buildup += VariableManager.P_Options.force;
             }
             else
                 buildup = VariableManager.P_Options.cap;
@@ -263,8 +252,9 @@ namespace SubManager.Physics
 
         void Gravity()
         {
-                player.GetComponent<Rigidbody>().velocity += new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
-                //Velocity += new Vector3(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime, 0.0f) * VariableManager.P_Options.SCALEFACTOR;
+                player.GetComponent<Rigidbody2D>().velocity += new Vector2(0, VariableManager.P_Options.GRAVITY * Time.fixedDeltaTime) 
+                * VariableManager.P_Options.SCALEFACTOR;
+
                 isApplyingGravity = true;
         }
 

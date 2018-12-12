@@ -102,15 +102,12 @@ namespace SubManager.Player
 
         public void InitRender()
         {
-
             player_Character = CharacterSubManager.instance.GetCurrentActiveCharacter();
 
             if (playerModelObject != null)
             {
                 Destroy(playerModelObject);
             }
-
-            //playerModelObject = new GameObject();
 
             playerModelObject = Instantiate(player_Character.Model.mainObject, player_Object.transform.position, Quaternion.identity);
             playerModelObject.transform.parent = player_Object.transform;
@@ -122,8 +119,6 @@ namespace SubManager.Player
             playerModel.Lleg = (playerModelObject).transform.GetChild(2).gameObject;
             playerModel.Rarm = (playerModelObject).transform.GetChild(3).gameObject;
             playerModel.Rleg = (playerModelObject).transform.GetChild(4).gameObject;
-
-            //c_Collider = playerModelObject.GetComponentInChildren<Character_Collider>();
         }
 
         void OnPlayerJump(bool isUp)

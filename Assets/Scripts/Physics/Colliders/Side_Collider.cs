@@ -1,74 +1,117 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SubManager.World.Platforms;
 
 public class Side_Collider : MonoBehaviour
 {
 
-    public Segment[] segment;
-    //public Vector3[] vertices;
-    // Use this for initialization
-    //public Vector3 testPoint;
+    public Vector3[] vertices;
+    public Color color;
+    
     void Start()
     {
-
-     // segment = new Segment[12];
-//
-     // Vector3 c = transform.localPosition;
-     // //
-     // vertices = new Vector3[this.GetComponent<MeshFilter>().mesh.vertices.Length];
-     // vertices = this.GetComponent<MeshFilter>().mesh.vertices;
-     // //   
-     // Vector3 l = ((new Vector3(vertices[11].x, vertices[11].y, 0)));
-     // Vector3 r = ((new Vector3(vertices[1].x, vertices[1].y, 0)));
-     // //   
-//
-     // Vector3 innerr = ((new Vector3(vertices[3].x, vertices[3].y, 0)));
-     // Vector3 innerl = ((new Vector3(vertices[10].x, vertices[10].y, 0)));
-//
-     // Vector3 innerc = Utils.MidPoint(l, r);
-     // //Vertices index 3 and 10
-//
-     // // Big Triangle
-     // segment[0] = new Segment(l, r, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[1] = new Segment(r, transform.InverseTransformPoint(transform.parent.position), c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[2] = new Segment(l, transform.InverseTransformPoint(transform.parent.position), c, Vector3.up, false, 1.0f, this.gameObject);
-//
-     // //front traingle
-     // segment[3] = new Segment(innerl, innerr, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[4] = new Segment(innerr, innerc, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[5] = new Segment(innerl, innerc, c, Vector3.up, false, 1.0f, this.gameObject);
-//
-     // //front right traingle
-     // segment[6] = new Segment(innerl, l, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[7] = new Segment(innerl, innerc, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[8] = new Segment(l, innerc, c, Vector3.up, false, 1.0f, this.gameObject);
-//
-//
-     // //front left traingle
-     // segment[9] = new Segment(innerr, r, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[10] = new Segment(innerr, innerc, c, Vector3.up, false, 1.0f, this.gameObject);
-     // segment[11] = new Segment(r, innerc, c, Vector3.up, false, 1.0f, this.gameObject);
+        //vertices = this.GetComponent<MeshFilter>().mesh.vertices;
+        //Debug.Log(vertices.Length);
     }
 
     // Update is called once per frame
     void Update()
     {
-        foreach (Segment s in segment)
-            s.UpdateSegment();
+        ManageCollider();
     }
+
+    void ManageCollider()
+    {
+        //Lock col Object Rotation to stop col Warping
+        this.GetComponent<Side>().col.transform.rotation = Quaternion.identity;
+
+        bool pointsIn = false;
+        Vector3 transformedPointCentre = transform.TransformPoint(new Vector3(0, 0, 0));
+
+        //Confirming that points are beyond Z and ready to make a col or not
+        //-------------------------------------------------------------------------
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Vector3 transformedPoint = transform.TransformPoint(vertices[i]);
+
+            if (transformedPoint.z > 0)
+            {
+                pointsIn = true;
+                break;
+            }
+        }
+        //-------------------------------------------------------------------------
+
+        if (pointsIn)
+        {
+            if (transformedPointCentre.z > 0)
+            {
+                this.GetComponent<Side>().col.enabled = true;
+            }
+            else
+                this.GetComponent<Side>().col.enabled = false;
+        }
+
+        Vector3 p0 = transform.TransformPoint(vertices[0]);
+        Vector3 p1 = transform.TransformPoint(vertices[1]);
+        Vector3 p2 = transform.TransformPoint(vertices[2]);
+        Vector3 p3 = transform.TransformPoint(vertices[3]);
+        //
+        p0.z = 1;
+        p1.z = 1;
+        p2.z = 1;
+        p3.z = 1;
+
+        this.GetComponent<Side>().col.size = new Vector2(Mathf.Abs(Vector3.Distance(p2, p3)), Mathf.Abs((p0.y - p2.y)));
+    }
+
+    //Keep this here as a back Up System incase checking via centre location proves to be problomatic
+    //if (ShowDebugData)
+    //{
+    //    float dx = transformedPointCentre.x;
+    //    float dy = transformedPointCentre.y;
+    //
+    //    Debug.Log(this.name + ": " + Mathf.Atan2(dy, -dx) * Mathf.Rad2Deg);
+    //}
 
     void OnDrawGizmos()
     {
+        //Draw Points and Sort Points
         if (Application.isPlaying && VariableManager.P_Options.showDebugs)
         {
-            //foreach (Vector3 vert in vertices)
-            //    Gizmos.DrawSphere(transform.TransformPoint(vert), .01f);
+            bool pointsIn = false;
+            Vector3 transformedPointCentre = transform.TransformPoint(new Vector3(0, 0, 0));
 
-                for (int i = 0; i < segment.Length; i++)
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector3 transformedPoint = transform.TransformPoint(vertices[i]);
+
+                if (transformedPoint.z > 0)
                 {
-                    segment[i].DrawSegment();
-                }           
+                    pointsIn = true;
+                    break;
+                }
+            }
+
+            for (int j = 0; j < vertices.Length; j++)
+            {
+                if (pointsIn)
+                {
+                    if (transformedPointCentre.z > 0)
+                    {
+                        Vector3 transformedPoint = transform.TransformPoint(vertices[j]);
+                        Vector3 finalPoint = transformedPoint;
+
+                        finalPoint.z = 1;
+
+                        Gizmos.color = color;
+                        Gizmos.DrawCube(finalPoint, new Vector3(0.05f, 0.05f, 0.05f));
+                        Gizmos.DrawCube(transformedPointCentre, new Vector3(0.05f, 0.05f, 0.05f));
+                        Gizmos.DrawRay(transformedPointCentre, transform.TransformPoint(this.GetComponent<MeshFilter>().mesh.normals[0]) / 100.0f);
+                    }
+                }
+            }
         }
     }
 }

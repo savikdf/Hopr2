@@ -19,6 +19,7 @@ namespace SubManager.World
         public Material plat_Y = null;
         public Material plat_N = null;
         public Material plat_G = null;
+        public Material plat_F = null;
         public GameObject prefab_platform, prefab_coin;
         short maxPlatformSpawnAmount = 5;
         int amountSpawned = 0;
@@ -109,6 +110,7 @@ namespace SubManager.World
             plat_N = Resources.Load("Materials/Plat_N") as Material;  //red
             plat_Y = Resources.Load("Materials/Plat_Y") as Material;  //green 
             plat_G = Resources.Load("Materials/Plat_G") as Material;  //gray
+            plat_F = Resources.Load("Materials/Plat_F") as Material;  //Yellow, for debugging and collisions checking
 
             if (plat_N == null || plat_Y == null || plat_G == null)
             {
@@ -116,7 +118,8 @@ namespace SubManager.World
             }
 
             //load the platform prefab 
-            prefab_platform = Resources.Load("Prefabs/Platform") as GameObject;
+            //Changed platform prefab to 02, 
+            prefab_platform = Resources.Load("Prefabs/Platform_02") as GameObject;
             if (prefab_platform == null)
             {
                 Debug.LogError("platform object not loaded!");
@@ -174,8 +177,7 @@ namespace SubManager.World
             platforms = new List<Platform>();
 
             platHolder = new GameObject(name: "Platform_Holder");
-            
-
+        
             for (int i = 0; i < maxPlatformSpawnAmount; i++)
             {
                 SpawnSingle();
@@ -195,12 +197,15 @@ namespace SubManager.World
                 trashObject.transform.SetParent(platHolder.transform);
                 trashObject.name = string.Format("Platform #{0}", amountSpawned.ToString());
                 trashObject.GetComponent<Platform>().platformIndex = amountSpawned;
+
                 platforms.Add(trashObject.GetComponent<Platform>());
+                
+                if(amountSpawned == 0){
+                     trashObject.GetComponent<Platform>().SwitchOff();
+                }
 
                 //Very Very Very Temp, just testing to see coins
-
-                //SpawnCoin(trashObject);
-
+                SpawnCoin(trashObject);
 
                 //moves the spawn postion up as they spawn
                 amountSpawned++;
@@ -210,14 +215,12 @@ namespace SubManager.World
             {
                 Debug.Log("SpawnSingle(): " + ex.Message);
             }
-
-
         }
 
         void SpawnCoin(GameObject parent)
         {
-
             float roll = Utils.randomRange(0, 10);
+
             if (roll > 5)
             {
                 Debug.Log("Coin Spawned");
@@ -269,6 +272,8 @@ namespace SubManager.World
                 {
                     if (platforms[i] != null)
                     {
+                        platforms[i].CheckForCollisions();
+                        platforms[i].HighlightSides();
                         //platforms[i].transform.position += MoveSpeed;
                     }
                 }
